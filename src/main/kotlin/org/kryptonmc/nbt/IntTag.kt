@@ -1,0 +1,43 @@
+package org.kryptonmc.nbt
+
+import org.kryptonmc.nbt.io.TagReader
+import org.kryptonmc.nbt.io.TagWriter
+import java.io.DataInput
+import java.io.DataOutput
+
+class IntTag private constructor(override val value: Int) : NumberTag<IntTag>(value) {
+
+    override val id = 3
+    override val type = TYPE
+    override val reader = READER
+    override val writer = WRITER
+
+    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineInt(this)
+
+    override fun copy() = this
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return value == (other as IntTag).value
+    }
+
+    override fun hashCode() = value
+
+    companion object {
+
+        private val CACHE = Array(1153) { IntTag(-128 + it) }
+
+        val TYPE = TagType("TAG_Int", true)
+        val READER = object : TagReader<IntTag> {
+
+            override fun read(input: DataInput) = of(input.readInt())
+        }
+        val WRITER = object : TagWriter<IntTag> {
+
+            override fun write(output: DataOutput, tag: IntTag) = output.writeInt(tag.value)
+        }
+
+        fun of(value: Int) = if (value in -128..1024) CACHE[value] else IntTag(value)
+    }
+}
