@@ -95,7 +95,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
     fun putBoolean(name: String, value: Boolean) = put(name, ByteTag.of(value))
 
     fun merge(other: CompoundTag): CompoundTag = apply {
-        tags.forEach { (key, tag) ->
+        other.forEach { (key, tag) ->
             if (tag.id != ID) {
                 put(key, tag.copy())
                 return@forEach
