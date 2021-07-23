@@ -37,27 +37,27 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
 
     fun getByte(name: String) = getNumber(name)?.toByte() ?: 0
 
-    fun putByte(name: String, value: Byte) = put(name, ByteTag.of(value))
+    fun putByte(name: String, value: Byte) = apply { put(name, ByteTag.of(value)) }
 
     fun getShort(name: String) = getNumber(name)?.toShort() ?: 0
 
-    fun putShort(name: String, value: Short) = put(name, ShortTag.of(value))
+    fun putShort(name: String, value: Short) = apply { put(name, ShortTag.of(value)) }
 
     fun getInt(name: String) = getNumber(name)?.toInt() ?: 0
 
-    fun putInt(name: String, value: Int) = put(name, IntTag.of(value))
+    fun putInt(name: String, value: Int) = apply { put(name, IntTag.of(value)) }
 
     fun getLong(name: String) = getNumber(name)?.toLong() ?: 0
 
-    fun putLong(name: String, value: Long) = put(name, LongTag.of(value))
+    fun putLong(name: String, value: Long) = apply { put(name, LongTag.of(value)) }
 
     fun getFloat(name: String) = getNumber(name)?.toFloat() ?: 0
 
-    fun putFloat(name: String, value: Float) = put(name, FloatTag.of(value))
+    fun putFloat(name: String, value: Float) = apply { put(name, FloatTag.of(value)) }
 
     fun getDouble(name: String) = getNumber(name)?.toDouble() ?: 0
 
-    fun putDouble(name: String, value: Double) = put(name, DoubleTag.of(value))
+    fun putDouble(name: String, value: Double) = apply { put(name, DoubleTag.of(value)) }
 
     fun getString(name: String) = try {
         if (contains(name, StringTag.ID)) tags[name]!!.asString() else ""
@@ -65,23 +65,23 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
         ""
     }
 
-    fun putString(name: String, value: String) = put(name, StringTag.of(value))
+    fun putString(name: String, value: String) = apply { put(name, StringTag.of(value)) }
 
     fun getUUID(name: String) = get(name)!!.toUUID()
 
-    fun putUUID(name: String, value: UUID) = put(name, value.toTag())
+    fun putUUID(name: String, value: UUID) = apply { put(name, value.toTag()) }
 
     fun getByteArray(name: String) = if (contains(name, ByteArrayTag.ID)) (tags[name] as ByteArrayTag).data else ByteArray(0)
 
-    fun putByteArray(name: String, value: ByteArray) = put(name, ByteArrayTag(value))
+    fun putByteArray(name: String, value: ByteArray) = apply { put(name, ByteArrayTag(value)) }
 
     fun getIntArray(name: String) = if (contains(name, IntArrayTag.ID)) (tags[name] as IntArrayTag).data else IntArray(0)
 
-    fun putIntArray(name: String, value: IntArray) = put(name, IntArrayTag(value))
+    fun putIntArray(name: String, value: IntArray) = apply { put(name, IntArrayTag(value)) }
 
     fun getLongArray(name: String) = if (contains(name, LongArrayTag.ID)) (tags[name] as LongArrayTag).data else LongArray(0)
 
-    fun putLongArray(name: String, value: LongArray) = put(name, LongArrayTag(value))
+    fun putLongArray(name: String, value: LongArray) = apply { put(name, LongArrayTag(value)) }
 
     fun getCompound(name: String) = if (contains(name, ID)) tags[name] as CompoundTag else CompoundTag()
 
@@ -92,7 +92,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
 
     fun getBoolean(name: String) = getByte(name) != 0.toByte()
 
-    fun putBoolean(name: String, value: Boolean) = put(name, ByteTag.of(value))
+    fun putBoolean(name: String, value: Boolean) = apply { put(name, ByteTag.of(value)) }
 
     fun merge(other: CompoundTag): CompoundTag = apply {
         other.forEach { (key, tag) ->

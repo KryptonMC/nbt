@@ -26,6 +26,102 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
     override val size: Int
         get() = data.size
 
+    fun getByte(index: Int): Byte {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == ByteTag.ID) return (tag as ByteTag).value
+        }
+        return 0
+    }
+
+    fun getShort(index: Int): Short {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == ShortTag.ID) return (tag as ShortTag).value
+        }
+        return 0
+    }
+
+    fun getInt(index: Int): Int {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == IntTag.ID) return (tag as IntTag).value
+        }
+        return 0
+    }
+
+    fun getLong(index: Int): Long {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == LongTag.ID) return (tag as LongTag).value
+        }
+        return 0
+    }
+
+    fun getFloat(index: Int): Float {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == FloatTag.ID) return (tag as FloatTag).value
+        }
+        return 0F
+    }
+
+    fun getDouble(index: Int): Double {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == DoubleTag.ID) return (tag as DoubleTag).value
+        }
+        return 0.0
+    }
+
+    fun getString(index: Int): String {
+        if (index in data.indices) {
+            val tag = get(index)
+            return if (tag.id == StringTag.ID) tag.asString() else tag.toString()
+        }
+        return ""
+    }
+
+    fun getByteArray(index: Int): ByteArray {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == ByteArrayTag.ID) return (tag as ByteArrayTag).data
+        }
+        return ByteArray(0)
+    }
+
+    fun getIntArray(index: Int): IntArray {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == IntArrayTag.ID) return (tag as IntArrayTag).data
+        }
+        return IntArray(0)
+    }
+
+    fun getLongArray(index: Int): LongArray {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == LongArrayTag.ID) return (tag as LongArrayTag).data
+        }
+        return LongArray(0)
+    }
+
+    fun getList(index: Int): ListTag {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == ID) return tag as ListTag
+        }
+        return ListTag()
+    }
+
+    fun getCompound(index: Int): CompoundTag {
+        if (index in data.indices) {
+            val tag = get(index)
+            if (tag.id == CompoundTag.ID) return tag as CompoundTag
+        }
+        return CompoundTag()
+    }
+
     override fun get(index: Int) = data[index]
 
     override fun set(index: Int, element: Tag): Tag {
@@ -110,7 +206,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
                 tag.elementType = if (tag.data.isEmpty()) 0 else tag.data[0].id
                 output.writeByte(tag.elementType)
                 output.writeInt(tag.data.size)
-                tag.data.forEach { (it.writer as TagWriter<Tag>).write(output, it) }
+                tag.data.forEach { it.writer.write(output, it) }
             }
         }
     }
