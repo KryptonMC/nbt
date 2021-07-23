@@ -52,8 +52,6 @@ private fun invalidReader(type: Int) = object : TagReader<EndTag> {
     }
 }
 
-@JvmSynthetic
-internal fun Int.toTagType(): TagType = if (this in TYPES.indices) TYPES[this] else INVALID_TYPE
+fun Int.toTagType(): TagType = if (this in TYPES.indices) TYPES[this] else INVALID_TYPE
 
-@JvmSynthetic
-internal fun Int.toTagReader(): TagReader<*> = if (this in READERS.indices) READERS[this] else invalidReader(this)
+fun Int.toTagReader(): TagReader<*> = if (this in READERS.indices) READERS[this] else invalidReader(this)
