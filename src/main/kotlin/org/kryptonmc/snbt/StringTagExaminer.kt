@@ -18,6 +18,7 @@ import org.kryptonmc.nbt.IntTag
 import org.kryptonmc.nbt.LongArrayTag
 import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
+import org.kryptonmc.nbt.StringTag
 import org.kryptonmc.nbt.Tag
 import org.kryptonmc.nbt.TagExaminer
 
@@ -66,6 +67,10 @@ class StringTagExaminer : TagExaminer<String> {
             builder.append(data[i]).append('B')
         }
         builder.append(']')
+    }
+
+    override fun examineString(tag: StringTag) {
+        builder.append(tag.value.quoteAndEscape())
     }
 
     override fun examineIntArray(tag: IntArrayTag) {
