@@ -106,7 +106,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
 
     override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineCompound(this)
 
-    override fun copy(): Tag {
+    override fun copy(): CompoundTag {
         val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
         return CompoundTag(copy)
     }

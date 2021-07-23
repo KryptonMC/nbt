@@ -152,7 +152,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
 
     override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineList(this)
 
-    override fun copy(): Tag {
+    override fun copy(): ListTag {
         val iterable = if (elementType.toTagType().isValue) data else data.map { it.copy() }
         val list = ArrayList(iterable)
         return ListTag(list, elementType)
