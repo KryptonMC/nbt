@@ -13,9 +13,9 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-class ShortTag private constructor(override val value: Short) : NumberTag<ShortTag>(value) {
+class ShortTag private constructor(override val value: Short) : NumberTag(value) {
 
-    override val id = 2
+    override val id = ID
     override val type = TYPE
     override val reader = READER
     override val writer = WRITER
@@ -36,10 +36,11 @@ class ShortTag private constructor(override val value: Short) : NumberTag<ShortT
 
         private val CACHE = Array(1153) { ShortTag((-128 + it).toShort()) }
 
+        const val ID = 2
         val TYPE = TagType("TAG_Short", true)
         val READER = object : TagReader<ShortTag> {
 
-            override fun read(input: DataInput) = of(input.readShort())
+            override fun read(input: DataInput, depth: Int) = of(input.readShort())
         }
         val WRITER = object : TagWriter<ShortTag> {
 

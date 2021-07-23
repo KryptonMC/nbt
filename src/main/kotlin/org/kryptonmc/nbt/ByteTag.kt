@@ -13,9 +13,9 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-class ByteTag private constructor(override val value: Byte) : NumberTag<ByteTag>(value) {
+class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
 
-    override val id = 1
+    override val id = ID
     override val type = TYPE
     override val reader = READER
     override val writer = WRITER
@@ -38,10 +38,11 @@ class ByteTag private constructor(override val value: Byte) : NumberTag<ByteTag>
         val ZERO = of(0)
         val ONE = of(1)
 
+        const val ID = 1
         val TYPE = TagType("TAG_Byte", true)
         val READER = object : TagReader<ByteTag> {
 
-            override fun read(input: DataInput) = of(input.readByte())
+            override fun read(input: DataInput, depth: Int) = of(input.readByte())
         }
         val WRITER = object : TagWriter<ByteTag> {
 

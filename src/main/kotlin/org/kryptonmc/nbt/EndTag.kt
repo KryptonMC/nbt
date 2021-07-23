@@ -16,17 +16,17 @@ import java.io.DataOutput
 import java.io.InputStream
 import java.io.OutputStream
 
-object EndTag : Tag<EndTag> {
+object EndTag : Tag {
 
     override val id = 0
     override val type = TagType("TAG_End", true)
     override val reader = object : TagReader<EndTag> {
 
-        override fun read(input: DataInput) = EndTag
+        override fun read(input: DataInput, depth: Int) = EndTag
 
-        override fun read(input: InputStream) = EndTag
+        override fun read(input: InputStream, depth: Int) = EndTag
 
-        override fun read(input: InputStream, compression: TagCompression) = EndTag
+        override fun read(input: InputStream, depth: Int, compression: TagCompression) = EndTag
     }
     override val writer = object : TagWriter<EndTag> {
 

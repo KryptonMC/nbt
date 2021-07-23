@@ -13,11 +13,11 @@ import java.io.DataInput
 import java.io.DataInputStream
 import java.io.InputStream
 
-interface TagReader<T : Tag<T>> {
+interface TagReader<T : Tag> {
 
-    fun read(input: DataInput): T
+    fun read(input: DataInput, depth: Int): T
 
-    fun read(input: InputStream): T = read(DataInputStream(input) as DataInput)
+    fun read(input: InputStream, depth: Int): T = read(DataInputStream(input) as DataInput, depth)
 
-    fun read(input: InputStream, compression: TagCompression): T = read(compression.decompress(input))
+    fun read(input: InputStream, depth: Int, compression: TagCompression): T = read(compression.decompress(input), depth)
 }

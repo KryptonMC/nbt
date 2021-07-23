@@ -10,7 +10,7 @@ package org.kryptonmc.nbt
 
 interface TagExaminer<T> {
 
-    fun examine(tag: Tag<*>): T
+    fun examine(tag: Tag): T
 
     fun examineEnd(tag: EndTag)
 
@@ -25,4 +25,10 @@ interface TagExaminer<T> {
     fun examineFloat(tag: FloatTag)
 
     fun examineDouble(tag: DoubleTag)
+
+    fun examineByteArray(tag: ByteArrayTag)
+
+    fun examineIntArray(tag: IntArrayTag)
+
+    fun examineLongArray(tag: LongArrayTag)
 }

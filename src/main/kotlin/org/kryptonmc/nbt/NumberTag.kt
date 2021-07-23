@@ -8,7 +8,7 @@
  */
 package org.kryptonmc.nbt
 
-abstract class NumberTag<T : NumberTag<T>> protected constructor(open val value: Number) : Tag<T> {
+abstract class NumberTag protected constructor(open val value: Number) : Tag {
 
     open fun toDouble() = value.toDouble()
 

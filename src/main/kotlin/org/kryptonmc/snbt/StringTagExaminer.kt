@@ -8,11 +8,14 @@
  */
 package org.kryptonmc.snbt
 
+import org.kryptonmc.nbt.ByteArrayTag
 import org.kryptonmc.nbt.ByteTag
 import org.kryptonmc.nbt.DoubleTag
 import org.kryptonmc.nbt.EndTag
 import org.kryptonmc.nbt.FloatTag
+import org.kryptonmc.nbt.IntArrayTag
 import org.kryptonmc.nbt.IntTag
+import org.kryptonmc.nbt.LongArrayTag
 import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.Tag
@@ -22,7 +25,7 @@ class StringTagExaminer : TagExaminer<String> {
 
     private val builder = StringBuilder()
 
-    override fun examine(tag: Tag<*>): String {
+    override fun examine(tag: Tag): String {
         tag.examine(this)
         return builder.toString()
     }
@@ -53,6 +56,36 @@ class StringTagExaminer : TagExaminer<String> {
 
     override fun examineDouble(tag: DoubleTag) {
         builder.append(tag.value).append('d')
+    }
+
+    override fun examineByteArray(tag: ByteArrayTag) {
+        builder.append("[B;")
+        val data = tag.data
+        for (i in data.indices) {
+            if (i != 0) builder.append(',')
+            builder.append(data[i]).append('B')
+        }
+        builder.append(']')
+    }
+
+    override fun examineIntArray(tag: IntArrayTag) {
+        builder.append("[I;")
+        val data = tag.data
+        for (i in data.indices) {
+            if (i != 0) builder.append(',')
+            builder.append(data[i])
+        }
+        builder.append(']')
+    }
+
+    override fun examineLongArray(tag: LongArrayTag) {
+        builder.append("[L;")
+        val data = tag.data
+        for (i in data.indices) {
+            if (i != 0) builder.append(',')
+            builder.append(data[i])
+        }
+        builder.append(']')
     }
 }
 

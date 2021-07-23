@@ -14,9 +14,9 @@ import org.kryptonmc.nbt.util.floor
 import java.io.DataInput
 import java.io.DataOutput
 
-class FloatTag(override val value: Float) : NumberTag<FloatTag>(value) {
+class FloatTag(override val value: Float) : NumberTag(value) {
 
-    override val id = 5
+    override val id = ID
     override val type = TYPE
     override val reader = READER
     override val writer = WRITER
@@ -42,10 +42,11 @@ class FloatTag(override val value: Float) : NumberTag<FloatTag>(value) {
     companion object {
 
         val ZERO = FloatTag(0F)
+        const val ID = 5
         val TYPE = TagType("TAG_Float", true)
         val READER = object : TagReader<FloatTag> {
 
-            override fun read(input: DataInput) = FloatTag(input.readFloat())
+            override fun read(input: DataInput, depth: Int) = FloatTag(input.readFloat())
         }
         val WRITER = object : TagWriter<FloatTag> {
 

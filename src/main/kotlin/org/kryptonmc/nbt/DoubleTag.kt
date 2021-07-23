@@ -14,9 +14,9 @@ import org.kryptonmc.nbt.util.floor
 import java.io.DataInput
 import java.io.DataOutput
 
-class DoubleTag(override val value: Double) : NumberTag<DoubleTag>(value) {
+class DoubleTag(override val value: Double) : NumberTag(value) {
 
-    override val id = 6
+    override val id = ID
     override val type = TYPE
     override val reader = READER
     override val writer = WRITER
@@ -47,10 +47,11 @@ class DoubleTag(override val value: Double) : NumberTag<DoubleTag>(value) {
     companion object {
 
         val ZERO = DoubleTag(0.0)
+        const val ID = 6
         val TYPE = TagType("TAG_Double", true)
         val READER = object : TagReader<DoubleTag> {
 
-            override fun read(input: DataInput) = DoubleTag(input.readDouble())
+            override fun read(input: DataInput, depth: Int) = DoubleTag(input.readDouble())
         }
         val WRITER = object : TagWriter<DoubleTag> {
 

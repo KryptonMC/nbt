@@ -13,9 +13,9 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-class LongTag private constructor(override val value: Long) : NumberTag<LongTag>(value) {
+class LongTag private constructor(override val value: Long) : NumberTag(value) {
 
-    override val id = 4
+    override val id = ID
     override val type = TYPE
     override val reader = READER
     override val writer = WRITER
@@ -36,10 +36,11 @@ class LongTag private constructor(override val value: Long) : NumberTag<LongTag>
 
         private val CACHE = Array(1153) { LongTag((-128 + it).toLong()) }
 
+        const val ID = 4
         val TYPE = TagType("TAG_Long", true)
         val READER = object : TagReader<LongTag> {
 
-            override fun read(input: DataInput) = of(input.readLong())
+            override fun read(input: DataInput, depth: Int) = of(input.readLong())
         }
         val WRITER = object : TagWriter<LongTag> {
 

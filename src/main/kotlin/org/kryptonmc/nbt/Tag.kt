@@ -12,19 +12,19 @@ import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.snbt.StringTagExaminer
 
-interface Tag<T : Tag<T>> {
+interface Tag {
 
     val id: Int
 
     val type: TagType
 
-    val reader: TagReader<T>
+    val reader: TagReader<out Tag>
 
-    val writer: TagWriter<T>
+    val writer: TagWriter<out Tag>
 
     fun <T> examine(examiner: TagExaminer<T>)
 
     fun asString() = StringTagExaminer().examine(this)
 
-    fun copy(): T
+    fun copy(): Tag
 }
