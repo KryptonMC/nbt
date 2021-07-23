@@ -33,13 +33,13 @@ class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
         data = data.add(index, element.value)
     }
 
-    override fun set(index: Int, tag: Tag): Boolean {
+    override fun setTag(index: Int, tag: Tag): Boolean {
         if (tag !is NumberTag) return false
         data[index] = tag.toByte()
         return true
     }
 
-    override fun add(index: Int, tag: Tag): Boolean {
+    override fun addTag(index: Int, tag: Tag): Boolean {
         if (tag !is NumberTag) return false
         data = data.add(index, tag.toByte())
         return true

@@ -13,7 +13,7 @@ import java.io.DataInput
 import java.io.DataInputStream
 import java.io.InputStream
 
-interface TagReader<T : Tag> {
+interface TagReader<out T : Tag> {
 
     fun read(input: DataInput, depth: Int): T
 

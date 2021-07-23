@@ -30,6 +30,8 @@ interface TagExaminer<T> {
 
     fun examineString(tag: StringTag)
 
+    fun examineList(tag: ListTag)
+
     fun examineIntArray(tag: IntArrayTag)
 
     fun examineLongArray(tag: LongArrayTag)

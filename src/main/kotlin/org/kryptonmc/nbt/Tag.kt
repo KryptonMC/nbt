@@ -18,9 +18,9 @@ interface Tag {
 
     val type: TagType
 
-    val reader: TagReader<out Tag>
+    val reader: TagReader<*>
 
-    val writer: TagWriter<out Tag>
+    val writer: TagWriter<*>
 
     fun <T> examine(examiner: TagExaminer<T>)
 

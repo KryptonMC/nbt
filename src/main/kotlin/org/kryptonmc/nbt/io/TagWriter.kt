@@ -14,7 +14,7 @@ import java.io.DataOutput
 import java.io.DataOutputStream
 import java.io.OutputStream
 
-interface TagWriter<T : Tag> {
+interface TagWriter<in T : Tag> {
 
     fun write(output: DataOutput, tag: T)
 
