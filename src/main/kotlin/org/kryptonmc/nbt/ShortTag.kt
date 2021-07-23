@@ -13,12 +13,13 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
+@Suppress("UNCHECKED_CAST")
 class ShortTag private constructor(override val value: Short) : NumberTag(value) {
 
     override val id = ID
     override val type = TYPE
     override val reader = READER
-    override val writer = WRITER
+    override val writer = WRITER as TagWriter<Tag>
 
     override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineShort(this)
 

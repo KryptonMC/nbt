@@ -4,7 +4,7 @@ import org.kryptonmc.nbt.io.TagReader
 import java.io.DataInput
 
 private val TYPES = arrayOf(
-    EndTag.type,
+    EndTag.TYPE,
     ByteTag.TYPE,
     ShortTag.TYPE,
     IntTag.TYPE,
@@ -14,13 +14,13 @@ private val TYPES = arrayOf(
     ByteArrayTag.TYPE,
     StringTag.TYPE,
     ListTag.TYPE,
-    TagType("TAG_Compound"), // TODO: Replace with CompoundTag.TYPE
+    CompoundTag.TYPE,
     IntArrayTag.TYPE,
     LongArrayTag.TYPE
 )
 
 private val READERS = arrayOf(
-    EndTag.reader,
+    EndTag.READER,
     ByteTag.READER,
     ShortTag.READER,
     IntTag.READER,
@@ -30,7 +30,7 @@ private val READERS = arrayOf(
     ByteArrayTag.READER,
     StringTag.READER,
     ListTag.READER,
-    EndTag.reader, // TODO: Replace with CompoundTag.READER
+    CompoundTag.READER,
     IntArrayTag.READER,
     LongArrayTag.READER
 )

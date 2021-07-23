@@ -10,7 +10,6 @@ package org.kryptonmc.nbt
 
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
-import org.kryptonmc.snbt.StringTagExaminer
 
 interface Tag {
 
@@ -18,9 +17,9 @@ interface Tag {
 
     val type: TagType
 
-    val reader: TagReader<*>
+    val reader: TagReader<Tag>
 
-    val writer: TagWriter<*>
+    val writer: TagWriter<Tag>
 
     fun <T> examine(examiner: TagExaminer<T>)
 

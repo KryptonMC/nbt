@@ -7,6 +7,7 @@ import org.kryptonmc.nbt.util.remove
 import java.io.DataInput
 import java.io.DataOutput
 
+@Suppress("UNCHECKED_CAST")
 class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
 
     var data = data
@@ -15,7 +16,7 @@ class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
     override val id = ID
     override val type = TYPE
     override val reader = READER
-    override val writer = WRITER
+    override val writer = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 

@@ -20,7 +20,5 @@ interface TagWriter<in T : Tag> {
 
     fun write(output: OutputStream, tag: T) = write(DataOutputStream(output) as DataOutput, tag)
 
-    fun write(output: OutputStream, tag: T, compression: TagCompression) = write(compression.compress(output), tag)
-
     fun write(tag: T): OutputStream = ByteArrayOutputStream().apply { write(this, tag) }
 }

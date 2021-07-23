@@ -6,22 +6,7 @@
  * This project is licensed under the terms of the MIT license.
  * For more details, please reference the LICENSE file in the top-level directory.
  */
-package org.kryptonmc.snbt
-
-import org.kryptonmc.nbt.ByteArrayTag
-import org.kryptonmc.nbt.ByteTag
-import org.kryptonmc.nbt.DoubleTag
-import org.kryptonmc.nbt.EndTag
-import org.kryptonmc.nbt.FloatTag
-import org.kryptonmc.nbt.IntArrayTag
-import org.kryptonmc.nbt.IntTag
-import org.kryptonmc.nbt.ListTag
-import org.kryptonmc.nbt.LongArrayTag
-import org.kryptonmc.nbt.LongTag
-import org.kryptonmc.nbt.ShortTag
-import org.kryptonmc.nbt.StringTag
-import org.kryptonmc.nbt.Tag
-import org.kryptonmc.nbt.TagExaminer
+package org.kryptonmc.nbt
 
 class StringTagExaminer : TagExaminer<String> {
 
@@ -81,6 +66,16 @@ class StringTagExaminer : TagExaminer<String> {
             builder.append(StringTagExaminer().examine(tag[i]))
         }
         builder.append(']')
+    }
+
+    override fun examineCompound(tag: CompoundTag) {
+        builder.append('{')
+        val keys = tag.keys.toMutableList().apply { sort() }
+        keys.forEach {
+            if (builder.length != 1) builder.append(',')
+            builder.append(it.escape()).append(':').append(StringTagExaminer().examine(tag[it]!!))
+        }
+        builder.append('}')
     }
 
     override fun examineIntArray(tag: IntArrayTag) {

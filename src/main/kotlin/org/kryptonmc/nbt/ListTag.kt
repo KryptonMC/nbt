@@ -5,7 +5,8 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-class ListTag(private val data: MutableList<Tag>, elementType: Int) : CollectionTag<Tag>(elementType) {
+@Suppress("UNCHECKED_CAST")
+class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType: Int = 0) : CollectionTag<Tag>(elementType) {
 
     override var elementType = elementType
         @JvmSynthetic internal set
@@ -13,7 +14,7 @@ class ListTag(private val data: MutableList<Tag>, elementType: Int) : Collection
     override val id = ID
     override val type = TYPE
     override val reader = READER
-    override val writer = WRITER
+    override val writer = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 

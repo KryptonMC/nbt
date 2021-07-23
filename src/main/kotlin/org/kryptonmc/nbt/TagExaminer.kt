@@ -32,6 +32,8 @@ interface TagExaminer<T> {
 
     fun examineList(tag: ListTag)
 
+    fun examineCompound(tag: CompoundTag)
+
     fun examineIntArray(tag: IntArrayTag)
 
     fun examineLongArray(tag: LongArrayTag)

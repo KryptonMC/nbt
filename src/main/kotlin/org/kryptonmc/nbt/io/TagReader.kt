@@ -18,6 +18,4 @@ interface TagReader<out T : Tag> {
     fun read(input: DataInput, depth: Int): T
 
     fun read(input: InputStream, depth: Int): T = read(DataInputStream(input) as DataInput, depth)
-
-    fun read(input: InputStream, depth: Int, compression: TagCompression): T = read(compression.decompress(input), depth)
 }

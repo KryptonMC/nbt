@@ -14,12 +14,13 @@ import org.kryptonmc.nbt.util.floor
 import java.io.DataInput
 import java.io.DataOutput
 
-class DoubleTag(override val value: Double) : NumberTag(value) {
+@Suppress("UNCHECKED_CAST")
+class DoubleTag private constructor(override val value: Double) : NumberTag(value) {
 
     override val id = ID
     override val type = TYPE
     override val reader = READER
-    override val writer = WRITER
+    override val writer = WRITER as TagWriter<Tag>
 
     override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineDouble(this)
 
@@ -57,5 +58,7 @@ class DoubleTag(override val value: Double) : NumberTag(value) {
 
             override fun write(output: DataOutput, tag: DoubleTag) = output.writeDouble(tag.value)
         }
+
+        fun of(value: Double) = if (value == 0.0) ZERO else DoubleTag(value)
     }
 }

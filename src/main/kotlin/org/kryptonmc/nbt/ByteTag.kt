@@ -13,12 +13,13 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
+@Suppress("UNCHECKED_CAST")
 class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
 
     override val id = ID
     override val type = TYPE
     override val reader = READER
-    override val writer = WRITER
+    override val writer = WRITER as TagWriter<Tag>
 
     override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineByte(this)
 
@@ -50,5 +51,7 @@ class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
         }
 
         fun of(value: Byte) = CACHE[value.toInt()]
+
+        fun of(value: Boolean) = if (value) ONE else ZERO
     }
 }
