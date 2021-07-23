@@ -21,7 +21,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
     fun contains(name: String, typeId: Int): Boolean {
         val type = type(name)
         if (type == typeId) return true
-        if (type != 99) return false
+        if (typeId != 99) return false
         return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID || type == FloatTag.ID || type == DoubleTag.ID
     }
 

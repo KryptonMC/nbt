@@ -12,6 +12,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk7"))
+    implementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("test-junit5"))
 }
 
 tasks.compileKotlin {
@@ -19,6 +22,10 @@ tasks.compileKotlin {
         jvmTarget = "16"
         freeCompilerArgs = listOf("-Xjvm-default=all")
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 license {

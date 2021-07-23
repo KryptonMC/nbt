@@ -50,7 +50,7 @@ class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
             override fun write(output: DataOutput, tag: ByteTag) = output.writeByte(tag.value.toInt())
         }
 
-        fun of(value: Byte) = CACHE[value.toInt()]
+        fun of(value: Byte) = CACHE[value.toInt() + 128]
 
         fun of(value: Boolean) = if (value) ONE else ZERO
     }
