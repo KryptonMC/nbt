@@ -48,6 +48,6 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
             override fun write(output: DataOutput, tag: LongTag) = output.writeLong(tag.value)
         }
 
-        public fun of(value: Long): LongTag = if (value in -128..1024) CACHE[value.toInt()] else LongTag(value)
+        public fun of(value: Long): LongTag = if (value in -128..1024) CACHE[value.toInt() + 128] else LongTag(value)
     }
 }

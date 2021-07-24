@@ -48,6 +48,6 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
             override fun write(output: DataOutput, tag: ShortTag) = output.writeShort(tag.value.toInt())
         }
 
-        public fun of(value: Short): ShortTag = if (value in -128..1024) CACHE[value.toInt()] else ShortTag(value)
+        public fun of(value: Short): ShortTag = if (value in -128..1024) CACHE[value.toInt() + 128] else ShortTag(value)
     }
 }

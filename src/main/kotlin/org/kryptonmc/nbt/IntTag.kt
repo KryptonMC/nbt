@@ -48,6 +48,6 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
             override fun write(output: DataOutput, tag: IntTag) = output.writeInt(tag.value)
         }
 
-        public fun of(value: Int): IntTag = if (value in -128..1024) CACHE[value] else IntTag(value)
+        public fun of(value: Int): IntTag = if (value in -128..1024) CACHE[value + 128] else IntTag(value)
     }
 }
