@@ -15,7 +15,7 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import java.util.zip.InflaterInputStream
 
-enum class TagCompression(
+public enum class TagCompression(
     private val decompressor: (InputStream) -> InputStream,
     private val compressor: (OutputStream) -> OutputStream
 ) {
@@ -24,7 +24,7 @@ enum class TagCompression(
     GZIP(::GZIPInputStream, ::GZIPOutputStream),
     ZLIB(::InflaterInputStream, ::DeflaterOutputStream);
 
-    fun decompress(input: InputStream) = decompressor(input)
+    public fun decompress(input: InputStream): InputStream = decompressor(input)
 
-    fun compress(output: OutputStream) = compressor(output)
+    public fun compress(output: OutputStream): OutputStream = compressor(output)
 }

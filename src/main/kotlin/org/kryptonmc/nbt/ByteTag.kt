@@ -14,16 +14,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
+public class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<ByteTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineByte(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineByte(this)
 
-    override fun copy() = this
+    override fun copy(): ByteTag = this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,27 +31,27 @@ class ByteTag private constructor(override val value: Byte) : NumberTag(value) {
         return value == (other as ByteTag).value
     }
 
-    override fun hashCode() = value.toInt()
+    override fun hashCode(): Int = value.toInt()
 
-    companion object {
+    public companion object {
 
         private val CACHE = Array(256) { ByteTag((it - 128).toByte()) }
-        val ZERO = of(0)
-        val ONE = of(1)
+        public val ZERO: ByteTag = of(0)
+        public val ONE: ByteTag = of(1)
 
-        const val ID = 1
-        val TYPE = TagType("TAG_Byte", true)
-        val READER = object : TagReader<ByteTag> {
+        public const val ID: Int = 1
+        public val TYPE: TagType = TagType("TAG_Byte", true)
+        public val READER: TagReader<ByteTag> = object : TagReader<ByteTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readByte())
         }
-        val WRITER = object : TagWriter<ByteTag> {
+        public val WRITER: TagWriter<ByteTag> = object : TagWriter<ByteTag> {
 
             override fun write(output: DataOutput, tag: ByteTag) = output.writeByte(tag.value.toInt())
         }
 
-        fun of(value: Byte) = CACHE[value.toInt() + 128]
+        public fun of(value: Byte): ByteTag = CACHE[value.toInt() + 128]
 
-        fun of(value: Boolean) = if (value) ONE else ZERO
+        public fun of(value: Boolean): ByteTag = if (value) ONE else ZERO
     }
 }

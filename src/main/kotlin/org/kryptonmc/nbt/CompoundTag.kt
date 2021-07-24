@@ -17,84 +17,84 @@ import java.io.DataOutput
 import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
-class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : Tag, MutableMap<String, Tag> by tags {
+public class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : Tag, MutableMap<String, Tag> by tags {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<CompoundTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    fun type(name: String): Int = tags[name]?.id ?: 0
+    public fun type(name: String): Int = tags[name]?.id ?: 0
 
-    fun contains(name: String, typeId: Int): Boolean {
+    public fun contains(name: String, typeId: Int): Boolean {
         val type = type(name)
         if (type == typeId) return true
         if (typeId != 99) return false
         return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID || type == FloatTag.ID || type == DoubleTag.ID
     }
 
-    fun hasUUID(name: String) = tags[name]?.let { it.type === IntArrayTag.TYPE && (it as IntArrayTag).data.size == 4 } ?: false
+    public fun hasUUID(name: String): Boolean = tags[name]?.let { it.type === IntArrayTag.TYPE && (it as IntArrayTag).data.size == 4 } ?: false
 
-    fun getByte(name: String) = getNumber(name)?.toByte() ?: 0
+    public fun getByte(name: String): Byte = getNumber(name)?.toByte() ?: 0
 
-    fun putByte(name: String, value: Byte) = apply { put(name, ByteTag.of(value)) }
+    public fun putByte(name: String, value: Byte): CompoundTag = apply { put(name, ByteTag.of(value)) }
 
-    fun getShort(name: String) = getNumber(name)?.toShort() ?: 0
+    public fun getShort(name: String): Short = getNumber(name)?.toShort() ?: 0
 
-    fun putShort(name: String, value: Short) = apply { put(name, ShortTag.of(value)) }
+    public fun putShort(name: String, value: Short): CompoundTag = apply { put(name, ShortTag.of(value)) }
 
-    fun getInt(name: String) = getNumber(name)?.toInt() ?: 0
+    public fun getInt(name: String): Int = getNumber(name)?.toInt() ?: 0
 
-    fun putInt(name: String, value: Int) = apply { put(name, IntTag.of(value)) }
+    public fun putInt(name: String, value: Int): CompoundTag = apply { put(name, IntTag.of(value)) }
 
-    fun getLong(name: String) = getNumber(name)?.toLong() ?: 0
+    public fun getLong(name: String): Long = getNumber(name)?.toLong() ?: 0
 
-    fun putLong(name: String, value: Long) = apply { put(name, LongTag.of(value)) }
+    public fun putLong(name: String, value: Long): CompoundTag = apply { put(name, LongTag.of(value)) }
 
-    fun getFloat(name: String) = getNumber(name)?.toFloat() ?: 0F
+    public fun getFloat(name: String): Float = getNumber(name)?.toFloat() ?: 0F
 
-    fun putFloat(name: String, value: Float) = apply { put(name, FloatTag.of(value)) }
+    public fun putFloat(name: String, value: Float): CompoundTag = apply { put(name, FloatTag.of(value)) }
 
-    fun getDouble(name: String) = getNumber(name)?.toDouble() ?: 0.0
+    public fun getDouble(name: String): Double = getNumber(name)?.toDouble() ?: 0.0
 
-    fun putDouble(name: String, value: Double) = apply { put(name, DoubleTag.of(value)) }
+    public fun putDouble(name: String, value: Double): CompoundTag = apply { put(name, DoubleTag.of(value)) }
 
-    fun getString(name: String) = try {
+    public fun getString(name: String): String = try {
         if (contains(name, StringTag.ID)) tags[name]!!.asString() else ""
     } catch (exception: ClassCastException) {
         ""
     }
 
-    fun putString(name: String, value: String) = apply { put(name, StringTag.of(value)) }
+    public fun putString(name: String, value: String): CompoundTag = apply { put(name, StringTag.of(value)) }
 
-    fun getUUID(name: String) = get(name)?.toUUID()
+    public fun getUUID(name: String): UUID? = get(name)?.toUUID()
 
-    fun putUUID(name: String, value: UUID) = apply { put(name, value.toTag()) }
+    public fun putUUID(name: String, value: UUID): CompoundTag = apply { put(name, value.toTag()) }
 
-    fun getByteArray(name: String) = if (contains(name, ByteArrayTag.ID)) (tags[name] as ByteArrayTag).data else ByteArray(0)
+    public fun getByteArray(name: String): ByteArray = if (contains(name, ByteArrayTag.ID)) (tags[name] as ByteArrayTag).data else ByteArray(0)
 
-    fun putByteArray(name: String, value: ByteArray) = apply { put(name, ByteArrayTag(value)) }
+    public fun putByteArray(name: String, value: ByteArray): CompoundTag = apply { put(name, ByteArrayTag(value)) }
 
-    fun getIntArray(name: String) = if (contains(name, IntArrayTag.ID)) (tags[name] as IntArrayTag).data else IntArray(0)
+    public fun getIntArray(name: String): IntArray = if (contains(name, IntArrayTag.ID)) (tags[name] as IntArrayTag).data else IntArray(0)
 
-    fun putIntArray(name: String, value: IntArray) = apply { put(name, IntArrayTag(value)) }
+    public fun putIntArray(name: String, value: IntArray): CompoundTag = apply { put(name, IntArrayTag(value)) }
 
-    fun getLongArray(name: String) = if (contains(name, LongArrayTag.ID)) (tags[name] as LongArrayTag).data else LongArray(0)
+    public fun getLongArray(name: String): LongArray = if (contains(name, LongArrayTag.ID)) (tags[name] as LongArrayTag).data else LongArray(0)
 
-    fun putLongArray(name: String, value: LongArray) = apply { put(name, LongArrayTag(value)) }
+    public fun putLongArray(name: String, value: LongArray): CompoundTag = apply { put(name, LongArrayTag(value)) }
 
-    fun getCompound(name: String) = if (contains(name, ID)) tags[name] as CompoundTag else CompoundTag()
+    public fun getCompound(name: String): CompoundTag = if (contains(name, ID)) tags[name] as CompoundTag else CompoundTag()
 
-    fun getList(name: String, elementType: Int) = if (type(name) == ListTag.ID) {
+    public fun getList(name: String, elementType: Int): ListTag = if (type(name) == ListTag.ID) {
         val tag = (tags[name] as ListTag)
         if (!tag.isEmpty() && tag.elementType != elementType) ListTag() else tag
     } else ListTag()
 
-    fun getBoolean(name: String) = getByte(name) != 0.toByte()
+    public fun getBoolean(name: String): Boolean = getByte(name) != 0.toByte()
 
-    fun putBoolean(name: String, value: Boolean) = apply { put(name, ByteTag.of(value)) }
+    public fun putBoolean(name: String, value: Boolean): CompoundTag = apply { put(name, ByteTag.of(value)) }
 
-    fun merge(other: CompoundTag): CompoundTag = apply {
+    public fun merge(other: CompoundTag): CompoundTag = apply {
         other.forEach { (key, tag) ->
             if (tag.id != ID) {
                 put(key, tag.copy())
@@ -104,7 +104,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
         }
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineCompound(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineCompound(this)
 
     override fun copy(): CompoundTag {
         val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
@@ -117,9 +117,9 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
         return tags == (other as CompoundTag).tags
     }
 
-    override fun hashCode() = tags.hashCode()
+    override fun hashCode(): Int = tags.hashCode()
 
-    override fun toString() = asString()
+    override fun toString(): String = asString()
 
     private fun getNumber(name: String): NumberTag? = try {
         if (contains(name, 99)) tags[name] as NumberTag else null
@@ -127,11 +127,11 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
         null
     }
 
-    companion object {
+    public companion object {
 
-        const val ID = 10
-        val TYPE = TagType("TAG_Compound")
-        val READER = object : TagReader<CompoundTag> {
+        public const val ID: Int = 10
+        public val TYPE: TagType = TagType("TAG_Compound")
+        public val READER: TagReader<CompoundTag> = object : TagReader<CompoundTag> {
 
             override fun read(input: DataInput, depth: Int): CompoundTag {
                 if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
@@ -146,7 +146,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
                 return CompoundTag(tags)
             }
         }
-        val WRITER = object : TagWriter<CompoundTag> {
+        public val WRITER: TagWriter<CompoundTag> = object : TagWriter<CompoundTag> {
 
             override fun write(output: DataOutput, tag: CompoundTag) {
                 tag.tags.forEach { output.writeNamedTag(it.key, it.value) }

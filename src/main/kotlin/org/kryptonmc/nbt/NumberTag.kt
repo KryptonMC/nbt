@@ -8,17 +8,17 @@
  */
 package org.kryptonmc.nbt
 
-abstract class NumberTag protected constructor(open val value: Number) : Tag {
+public abstract class NumberTag protected constructor(public open val value: Number) : Tag {
 
-    open fun toDouble() = value.toDouble()
+    public open fun toDouble(): Double = value.toDouble()
 
-    open fun toFloat() = value.toFloat()
+    public open fun toFloat(): Float = value.toFloat()
 
-    open fun toLong() = value.toLong()
+    public open fun toLong(): Long = value.toLong()
 
-    open fun toInt() = value.toInt()
+    public open fun toInt(): Int = value.toInt()
 
-    open fun toShort() = value.toShort()
+    public open fun toShort(): Short = value.toShort()
 
-    open fun toByte() = value.toByte()
+    public open fun toByte(): Byte = value.toByte()
 }

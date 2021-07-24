@@ -1,16 +1,24 @@
+/*
+ * This file is part of Krypton NBT, licensed under the MIT license.
+ *
+ * Copyright (C) 2021 KryptonMC and contributors
+ *
+ * This project is licensed under the terms of the MIT license.
+ * For more details, please reference the LICENSE file in the top-level directory.
+ */
 package org.kryptonmc.nbt
 
 @DslMarker
 private annotation class NBTDsl
 
 @NBTDsl
-inline fun compound(builder: CompoundTag.() -> Unit): CompoundTag = CompoundTag().apply(builder)
+public inline fun compound(builder: CompoundTag.() -> Unit): CompoundTag = CompoundTag().apply(builder)
 
 @NBTDsl
-inline fun compound(existing: CompoundTag, builder: CompoundTag.() -> Unit) = existing.apply(builder)
+public inline fun compound(existing: CompoundTag, builder: CompoundTag.() -> Unit): CompoundTag = existing.apply(builder)
 
 @NBTDsl
-inline fun CompoundTag.list(name: String, builder: ListTag.() -> Unit): CompoundTag = apply { put(name, ListTag().apply(builder)) }
+public inline fun CompoundTag.list(name: String, builder: ListTag.() -> Unit): CompoundTag = apply { put(name, ListTag().apply(builder)) }
 
 @NBTDsl
-fun CompoundTag.list(name: String, vararg elements: Tag): CompoundTag = apply { put(name, ListTag().apply { addAll(elements) }) }
+public fun CompoundTag.list(name: String, vararg elements: Tag): CompoundTag = apply { put(name, ListTag().apply { addAll(elements) }) }

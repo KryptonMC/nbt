@@ -14,19 +14,19 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType: Int = 0) : CollectionTag<Tag>(elementType) {
+public class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType: Int = 0) : CollectionTag<Tag>(elementType) {
 
-    override var elementType = elementType
+    override var elementType: Int = elementType
         @JvmSynthetic internal set
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<ListTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
-    fun getByte(index: Int): Byte {
+    public fun getByte(index: Int): Byte {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == ByteTag.ID) return (tag as ByteTag).value
@@ -34,7 +34,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0
     }
 
-    fun getShort(index: Int): Short {
+    public fun getShort(index: Int): Short {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == ShortTag.ID) return (tag as ShortTag).value
@@ -42,7 +42,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0
     }
 
-    fun getInt(index: Int): Int {
+    public fun getInt(index: Int): Int {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == IntTag.ID) return (tag as IntTag).value
@@ -50,7 +50,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0
     }
 
-    fun getLong(index: Int): Long {
+    public fun getLong(index: Int): Long {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == LongTag.ID) return (tag as LongTag).value
@@ -58,7 +58,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0
     }
 
-    fun getFloat(index: Int): Float {
+    public fun getFloat(index: Int): Float {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == FloatTag.ID) return (tag as FloatTag).value
@@ -66,7 +66,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0F
     }
 
-    fun getDouble(index: Int): Double {
+    public fun getDouble(index: Int): Double {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == DoubleTag.ID) return (tag as DoubleTag).value
@@ -74,7 +74,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return 0.0
     }
 
-    fun getString(index: Int): String {
+    public fun getString(index: Int): String {
         if (index in data.indices) {
             val tag = get(index)
             return if (tag.id == StringTag.ID) tag.asString() else tag.toString()
@@ -82,7 +82,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return ""
     }
 
-    fun getByteArray(index: Int): ByteArray {
+    public fun getByteArray(index: Int): ByteArray {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == ByteArrayTag.ID) return (tag as ByteArrayTag).data
@@ -90,7 +90,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return ByteArray(0)
     }
 
-    fun getIntArray(index: Int): IntArray {
+    public fun getIntArray(index: Int): IntArray {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == IntArrayTag.ID) return (tag as IntArrayTag).data
@@ -98,7 +98,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return IntArray(0)
     }
 
-    fun getLongArray(index: Int): LongArray {
+    public fun getLongArray(index: Int): LongArray {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == LongArrayTag.ID) return (tag as LongArrayTag).data
@@ -106,7 +106,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return LongArray(0)
     }
 
-    fun getList(index: Int): ListTag {
+    public fun getList(index: Int): ListTag {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == ID) return tag as ListTag
@@ -114,7 +114,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return ListTag()
     }
 
-    fun getCompound(index: Int): CompoundTag {
+    public fun getCompound(index: Int): CompoundTag {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == CompoundTag.ID) return tag as CompoundTag
@@ -122,7 +122,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return CompoundTag()
     }
 
-    override fun get(index: Int) = data[index]
+    override fun get(index: Int): Tag = data[index]
 
     override fun set(index: Int, element: Tag): Tag {
         val oldValue = data[index]
@@ -134,12 +134,12 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         if (!addTag(index, element)) throw UnsupportedOperationException("Trying to add tag of type ${element.id} to list of type $elementType")
     }
 
-    override fun setTag(index: Int, tag: Tag) = if (updateType(tag)) {
+    override fun setTag(index: Int, tag: Tag): Boolean = if (updateType(tag)) {
         data[index] = tag
         true
     } else false
 
-    override fun addTag(index: Int, tag: Tag) = if (updateType(tag)) {
+    override fun addTag(index: Int, tag: Tag): Boolean = if (updateType(tag)) {
         data.add(index, tag)
         true
     } else false
@@ -150,7 +150,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return oldValue
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineList(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineList(this)
 
     override fun copy(): ListTag {
         val iterable = if (elementType.toTagType().isValue) data else data.map { it.copy() }
@@ -169,9 +169,9 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return data == (other as ListTag).data
     }
 
-    override fun hashCode() = data.hashCode()
+    override fun hashCode(): Int = data.hashCode()
 
-    override fun toString() = asString()
+    override fun toString(): String = asString()
 
     private fun updateType(tag: Tag): Boolean {
         if (tag.id == 0) return false
@@ -182,11 +182,11 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
         return elementType == tag.id
     }
 
-    companion object {
+    public companion object {
 
-        const val ID = 9
-        val TYPE = TagType("TAG_List")
-        val READER = object : TagReader<ListTag> {
+        public const val ID: Int = 9
+        public val TYPE: TagType = TagType("TAG_List")
+        public val READER: TagReader<ListTag> = object : TagReader<ListTag> {
 
             override fun read(input: DataInput, depth: Int): ListTag {
                 if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
@@ -199,7 +199,7 @@ class ListTag(private val data: MutableList<Tag> = mutableListOf(), elementType:
                 return ListTag(data, type)
             }
         }
-        val WRITER = object : TagWriter<ListTag> {
+        public val WRITER: TagWriter<ListTag> = object : TagWriter<ListTag> {
 
             @Suppress("UNCHECKED_CAST")
             override fun write(output: DataOutput, tag: ListTag) {

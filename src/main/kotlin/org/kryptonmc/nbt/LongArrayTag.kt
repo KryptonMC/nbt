@@ -16,21 +16,21 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
+public class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
 
-    var data = data
+    public var data: LongArray = data
         private set
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<LongArrayTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
-    constructor(data: Collection<Long>) : this(data.toLongArray())
+    public constructor(data: Collection<Long>) : this(data.toLongArray())
 
-    override fun get(index: Int) = LongTag.of(data[index])
+    override fun get(index: Int): LongTag = LongTag.of(data[index])
 
     override fun set(index: Int, element: LongTag): LongTag {
         val oldValue = data[index]
@@ -64,7 +64,7 @@ class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
         data = LongArray(0)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineLongArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineLongArray(this)
 
     override fun copy(): LongArrayTag {
         val copy = LongArray(data.size)
@@ -78,13 +78,13 @@ class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
         return data.contentEquals((other as LongArrayTag).data)
     }
 
-    override fun hashCode() = data.contentHashCode()
+    override fun hashCode(): Int = data.contentHashCode()
 
-    companion object {
+    public companion object {
 
-        const val ID = 12
-        val TYPE = TagType("TAG_Long_Array")
-        val READER = object : TagReader<LongArrayTag> {
+        public const val ID: Int = 12
+        public val TYPE: TagType = TagType("TAG_Long_Array")
+        public val READER: TagReader<LongArrayTag> = object : TagReader<LongArrayTag> {
 
             override fun read(input: DataInput, depth: Int): LongArrayTag {
                 val size = input.readInt()
@@ -93,7 +93,7 @@ class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
                 return LongArrayTag(longs)
             }
         }
-        val WRITER = object : TagWriter<LongArrayTag> {
+        public val WRITER: TagWriter<LongArrayTag> = object : TagWriter<LongArrayTag> {
 
             override fun write(output: DataOutput, tag: LongArrayTag) {
                 output.writeInt(tag.data.size)

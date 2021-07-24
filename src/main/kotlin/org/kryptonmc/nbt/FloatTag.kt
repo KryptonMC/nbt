@@ -15,16 +15,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class FloatTag private constructor(override val value: Float) : NumberTag(value) {
+public class FloatTag private constructor(override val value: Float) : NumberTag(value) {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<FloatTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineFloat(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineFloat(this)
 
-    override fun copy() = this
+    override fun copy(): FloatTag = this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -32,28 +32,29 @@ class FloatTag private constructor(override val value: Float) : NumberTag(value)
         return value == (other as FloatTag).value
     }
 
-    override fun hashCode() = value.toBits()
+    override fun hashCode(): Int = value.toBits()
 
-    override fun toInt() = value.floor()
+    override fun toInt(): Int = value.floor()
 
-    override fun toShort() = (value.floor() and '\uFFFF'.code).toShort()
+    override fun toShort(): Short = (value.floor() and 65535).toShort()
 
-    override fun toByte() = (value.floor() and 255).toByte()
+    override fun toByte(): Byte = (value.floor() and 255).toByte()
 
-    companion object {
+    public companion object {
 
-        val ZERO = FloatTag(0F)
-        const val ID = 5
-        val TYPE = TagType("TAG_Float", true)
-        val READER = object : TagReader<FloatTag> {
+        public val ZERO: FloatTag = FloatTag(0F)
+
+        public const val ID: Int = 5
+        public val TYPE: TagType = TagType("TAG_Float", true)
+        public val READER: TagReader<FloatTag> = object : TagReader<FloatTag> {
 
             override fun read(input: DataInput, depth: Int) = FloatTag(input.readFloat())
         }
-        val WRITER = object : TagWriter<FloatTag> {
+        public val WRITER: TagWriter<FloatTag> = object : TagWriter<FloatTag> {
 
             override fun write(output: DataOutput, tag: FloatTag) = output.writeFloat(tag.value)
         }
 
-        fun of(value: Float) = if (value == 0F) ZERO else FloatTag(value)
+        public fun of(value: Float): FloatTag = if (value == 0F) ZERO else FloatTag(value)
     }
 }

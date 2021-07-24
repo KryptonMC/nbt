@@ -16,21 +16,21 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
+public class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
 
-    var data = data
+    public var data: ByteArray = data
         private set
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<ByteArrayTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
-    constructor(data: Collection<Byte>) : this(data.toByteArray())
+    public constructor(data: Collection<Byte>) : this(data.toByteArray())
 
-    override fun get(index: Int) = ByteTag.of(data[index])
+    override fun get(index: Int): ByteTag = ByteTag.of(data[index])
 
     override fun set(index: Int, element: ByteTag): ByteTag {
         val oldValue = data[index]
@@ -64,7 +64,7 @@ class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
         data = ByteArray(0)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineByteArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineByteArray(this)
 
     override fun copy(): ByteArrayTag {
         val copy = ByteArray(data.size)
@@ -78,13 +78,13 @@ class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
         return data.contentEquals((other as ByteArrayTag).data)
     }
 
-    override fun hashCode() = data.contentHashCode()
+    override fun hashCode(): Int = data.contentHashCode()
 
-    companion object {
+    public companion object {
 
-        const val ID = 7
-        val TYPE = TagType("TAG_Byte_Array")
-        val READER = object : TagReader<ByteArrayTag> {
+        public const val ID: Int = 7
+        public val TYPE: TagType = TagType("TAG_Byte_Array")
+        public val READER: TagReader<ByteArrayTag> = object : TagReader<ByteArrayTag> {
 
             override fun read(input: DataInput, depth: Int): ByteArrayTag {
                 val size = input.readInt()
@@ -93,7 +93,7 @@ class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) {
                 return ByteArrayTag(bytes)
             }
         }
-        val WRITER = object : TagWriter<ByteArrayTag> {
+        public val WRITER: TagWriter<ByteArrayTag> = object : TagWriter<ByteArrayTag> {
 
             override fun write(output: DataOutput, tag: ByteArrayTag) {
                 output.writeInt(tag.data.size)

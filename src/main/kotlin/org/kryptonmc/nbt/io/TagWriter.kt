@@ -14,11 +14,11 @@ import java.io.DataOutput
 import java.io.DataOutputStream
 import java.io.OutputStream
 
-interface TagWriter<in T : Tag> {
+public interface TagWriter<in T : Tag> {
 
-    fun write(output: DataOutput, tag: T)
+    public fun write(output: DataOutput, tag: T)
 
-    fun write(output: OutputStream, tag: T) = write(DataOutputStream(output) as DataOutput, tag)
+    public fun write(output: OutputStream, tag: T): Unit = write(DataOutputStream(output) as DataOutput, tag)
 
-    fun write(tag: T): OutputStream = ByteArrayOutputStream().apply { write(this, tag) }
+    public fun write(tag: T): OutputStream = ByteArrayOutputStream().apply { write(this, tag) }
 }

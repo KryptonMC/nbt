@@ -8,7 +8,7 @@
  */
 package org.kryptonmc.nbt
 
-class StringTagExaminer : TagExaminer<String> {
+public class StringTagExaminer : TagExaminer<String> {
 
     private val builder = StringBuilder()
 

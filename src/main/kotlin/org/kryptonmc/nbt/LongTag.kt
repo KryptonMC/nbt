@@ -14,16 +14,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class LongTag private constructor(override val value: Long) : NumberTag(value) {
+public class LongTag private constructor(override val value: Long) : NumberTag(value) {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<LongTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineLong(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineLong(this)
 
-    override fun copy() = this
+    override fun copy(): LongTag = this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,23 +31,23 @@ class LongTag private constructor(override val value: Long) : NumberTag(value) {
         return value == (other as LongTag).value
     }
 
-    override fun hashCode() = (value xor (value ushr 32)).toInt()
+    override fun hashCode(): Int = (value xor (value ushr 32)).toInt()
 
-    companion object {
+    public companion object {
 
         private val CACHE = Array(1153) { LongTag((-128 + it).toLong()) }
 
-        const val ID = 4
-        val TYPE = TagType("TAG_Long", true)
-        val READER = object : TagReader<LongTag> {
+        public const val ID: Int = 4
+        public val TYPE: TagType = TagType("TAG_Long", true)
+        public val READER: TagReader<LongTag> = object : TagReader<LongTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readLong())
         }
-        val WRITER = object : TagWriter<LongTag> {
+        public val WRITER: TagWriter<LongTag> = object : TagWriter<LongTag> {
 
             override fun write(output: DataOutput, tag: LongTag) = output.writeLong(tag.value)
         }
 
-        fun of(value: Long) = if (value in -128..1024) CACHE[value.toInt()] else LongTag(value)
+        public fun of(value: Long): LongTag = if (value in -128..1024) CACHE[value.toInt()] else LongTag(value)
     }
 }

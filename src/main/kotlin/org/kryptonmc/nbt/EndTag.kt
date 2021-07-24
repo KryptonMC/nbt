@@ -16,29 +16,29 @@ import java.io.InputStream
 import java.io.OutputStream
 
 @Suppress("UNCHECKED_CAST")
-object EndTag : Tag {
+public object EndTag : Tag {
 
-    const val ID = 0
-    @JvmField val TYPE = TagType("TAG_End", true)
-    @JvmField val READER = object : TagReader<EndTag> {
+    public const val ID: Int = 0
+    @JvmField public val TYPE: TagType = TagType("TAG_End", true)
+    @JvmField public val READER: TagReader<EndTag> = object : TagReader<EndTag> {
 
         override fun read(input: DataInput, depth: Int) = EndTag
 
         override fun read(input: InputStream, depth: Int) = EndTag
     }
-    @JvmField val WRITER = object : TagWriter<EndTag> {
+    @JvmField public val WRITER: TagWriter<EndTag> = object : TagWriter<EndTag> {
 
         override fun write(output: DataOutput, tag: EndTag) = Unit
 
         override fun write(output: OutputStream, tag: EndTag) = Unit
     }
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<EndTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineEnd(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineEnd(this)
 
-    override fun copy() = this
+    override fun copy(): EndTag = this
 }

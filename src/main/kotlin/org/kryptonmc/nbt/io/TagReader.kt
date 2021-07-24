@@ -13,9 +13,9 @@ import java.io.DataInput
 import java.io.DataInputStream
 import java.io.InputStream
 
-interface TagReader<out T : Tag> {
+public interface TagReader<out T : Tag> {
 
-    fun read(input: DataInput, depth: Int): T
+    public fun read(input: DataInput, depth: Int): T
 
-    fun read(input: InputStream, depth: Int): T = read(DataInputStream(input) as DataInput, depth)
+    public fun read(input: InputStream, depth: Int): T = read(DataInputStream(input) as DataInput, depth)
 }

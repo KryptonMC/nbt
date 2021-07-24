@@ -14,16 +14,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class IntTag private constructor(override val value: Int) : NumberTag(value) {
+public class IntTag private constructor(override val value: Int) : NumberTag(value) {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<IntTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineInt(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineInt(this)
 
-    override fun copy() = this
+    override fun copy(): IntTag = this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,23 +31,23 @@ class IntTag private constructor(override val value: Int) : NumberTag(value) {
         return value == (other as IntTag).value
     }
 
-    override fun hashCode() = value
+    override fun hashCode(): Int = value
 
-    companion object {
+    public companion object {
 
         private val CACHE = Array(1153) { IntTag(-128 + it) }
 
-        const val ID = 3
-        val TYPE = TagType("TAG_Int", true)
-        val READER = object : TagReader<IntTag> {
+        public const val ID: Int = 3
+        public val TYPE: TagType = TagType("TAG_Int", true)
+        public val READER: TagReader<IntTag> = object : TagReader<IntTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readInt())
         }
-        val WRITER = object : TagWriter<IntTag> {
+        public val WRITER: TagWriter<IntTag> = object : TagWriter<IntTag> {
 
             override fun write(output: DataOutput, tag: IntTag) = output.writeInt(tag.value)
         }
 
-        fun of(value: Int) = if (value in -128..1024) CACHE[value] else IntTag(value)
+        public fun of(value: Int): IntTag = if (value in -128..1024) CACHE[value] else IntTag(value)
     }
 }

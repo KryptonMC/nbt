@@ -11,19 +11,19 @@ package org.kryptonmc.nbt
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 
-interface Tag {
+public interface Tag {
 
-    val id: Int
+    public val id: Int
 
-    val type: TagType
+    public val type: TagType
 
-    val reader: TagReader<Tag>
+    public val reader: TagReader<Tag>
 
-    val writer: TagWriter<Tag>
+    public val writer: TagWriter<Tag>
 
-    fun <T> examine(examiner: TagExaminer<T>)
+    public fun <T> examine(examiner: TagExaminer<T>)
 
-    fun asString() = StringTagExaminer().examine(this)
+    public fun asString(): String = StringTagExaminer().examine(this)
 
-    fun copy(): Tag
+    public fun copy(): Tag
 }

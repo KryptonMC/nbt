@@ -52,6 +52,6 @@ private fun invalidReader(type: Int) = object : TagReader<EndTag> {
     }
 }
 
-fun Int.toTagType(): TagType = if (this in TYPES.indices) TYPES[this] else INVALID_TYPE
+public fun Int.toTagType(): TagType = if (this in TYPES.indices) TYPES[this] else INVALID_TYPE
 
-fun Int.toTagReader(): TagReader<*> = if (this in READERS.indices) READERS[this] else invalidReader(this)
+public fun Int.toTagReader(): TagReader<*> = if (this in READERS.indices) READERS[this] else invalidReader(this)

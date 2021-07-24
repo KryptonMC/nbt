@@ -8,9 +8,9 @@
  */
 package org.kryptonmc.nbt
 
-abstract class CollectionTag<E : Tag>(open val elementType: Int) : AbstractMutableList<E>(), Tag {
+public abstract class CollectionTag<E : Tag>(public open val elementType: Int) : AbstractMutableList<E>(), Tag {
 
-    abstract fun setTag(index: Int, tag: Tag): Boolean
+    public abstract fun setTag(index: Int, tag: Tag): Boolean
 
-    abstract fun addTag(index: Int, tag: Tag): Boolean
+    public abstract fun addTag(index: Int, tag: Tag): Boolean
 }

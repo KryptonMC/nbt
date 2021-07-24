@@ -8,33 +8,33 @@
  */
 package org.kryptonmc.nbt
 
-interface TagExaminer<T> {
+public interface TagExaminer<T> {
 
-    fun examine(tag: Tag): T
+    public fun examine(tag: Tag): T
 
-    fun examineEnd(tag: EndTag)
+    public fun examineEnd(tag: EndTag)
 
-    fun examineByte(tag: ByteTag)
+    public fun examineByte(tag: ByteTag)
 
-    fun examineShort(tag: ShortTag)
+    public fun examineShort(tag: ShortTag)
 
-    fun examineInt(tag: IntTag)
+    public fun examineInt(tag: IntTag)
 
-    fun examineLong(tag: LongTag)
+    public fun examineLong(tag: LongTag)
 
-    fun examineFloat(tag: FloatTag)
+    public fun examineFloat(tag: FloatTag)
 
-    fun examineDouble(tag: DoubleTag)
+    public fun examineDouble(tag: DoubleTag)
 
-    fun examineByteArray(tag: ByteArrayTag)
+    public fun examineByteArray(tag: ByteArrayTag)
 
-    fun examineString(tag: StringTag)
+    public fun examineString(tag: StringTag)
 
-    fun examineList(tag: ListTag)
+    public fun examineList(tag: ListTag)
 
-    fun examineCompound(tag: CompoundTag)
+    public fun examineCompound(tag: CompoundTag)
 
-    fun examineIntArray(tag: IntArrayTag)
+    public fun examineIntArray(tag: IntArrayTag)
 
-    fun examineLongArray(tag: LongArrayTag)
+    public fun examineLongArray(tag: LongArrayTag)
 }

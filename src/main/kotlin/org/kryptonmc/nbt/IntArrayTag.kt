@@ -16,21 +16,21 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
+public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
 
-    var data = data
+    public var data: IntArray = data
         private set
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<IntArrayTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
-    constructor(data: Collection<Int>) : this(data.toIntArray())
+    public constructor(data: Collection<Int>) : this(data.toIntArray())
 
-    override fun get(index: Int) = IntTag.of(data[index])
+    override fun get(index: Int): IntTag = IntTag.of(data[index])
 
     override fun set(index: Int, element: IntTag): IntTag {
         val oldValue = data[index]
@@ -64,7 +64,7 @@ class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
         data = IntArray(0)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineIntArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineIntArray(this)
 
     override fun copy(): IntArrayTag {
         val copy = IntArray(data.size)
@@ -78,13 +78,13 @@ class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
         return data.contentEquals((other as IntArrayTag).data)
     }
 
-    override fun hashCode() = data.contentHashCode()
+    override fun hashCode(): Int = data.contentHashCode()
 
-    companion object {
+    public companion object {
 
-        const val ID = 11
-        val TYPE = TagType("TAG_Int_Array")
-        val READER = object : TagReader<IntArrayTag> {
+        public const val ID: Int = 11
+        public val TYPE: TagType = TagType("TAG_Int_Array")
+        public val READER: TagReader<IntArrayTag> = object : TagReader<IntArrayTag> {
 
             override fun read(input: DataInput, depth: Int): IntArrayTag {
                 val size = input.readInt()
@@ -93,7 +93,7 @@ class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
                 return IntArrayTag(ints)
             }
         }
-        val WRITER = object : TagWriter<IntArrayTag> {
+        public val WRITER: TagWriter<IntArrayTag> = object : TagWriter<IntArrayTag> {
 
             override fun write(output: DataOutput, tag: IntArrayTag) {
                 output.writeInt(tag.data.size)

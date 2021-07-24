@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.kryptonmc"
-version = "1.3.1"
+version = "1.3.2"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
 tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = "16"
-        freeCompilerArgs = listOf("-Xjvm-default=all")
+        freeCompilerArgs = listOf("-Xjvm-default=all", "-Xexplicit-api=strict")
     }
 }
 

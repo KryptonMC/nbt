@@ -14,16 +14,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 @Suppress("UNCHECKED_CAST")
-class ShortTag private constructor(override val value: Short) : NumberTag(value) {
+public class ShortTag private constructor(override val value: Short) : NumberTag(value) {
 
-    override val id = ID
-    override val type = TYPE
-    override val reader = READER
-    override val writer = WRITER as TagWriter<Tag>
+    override val id: Int = ID
+    override val type: TagType = TYPE
+    override val reader: TagReader<ShortTag> = READER
+    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
-    override fun <T> examine(examiner: TagExaminer<T>) = examiner.examineShort(this)
+    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineShort(this)
 
-    override fun copy() = this
+    override fun copy(): ShortTag = this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,23 +31,23 @@ class ShortTag private constructor(override val value: Short) : NumberTag(value)
         return value == (other as ShortTag).value
     }
 
-    override fun hashCode() = value.toInt()
+    override fun hashCode(): Int = value.toInt()
 
-    companion object {
+    public companion object {
 
         private val CACHE = Array(1153) { ShortTag((-128 + it).toShort()) }
 
-        const val ID = 2
-        val TYPE = TagType("TAG_Short", true)
-        val READER = object : TagReader<ShortTag> {
+        public const val ID: Int = 2
+        public val TYPE: TagType = TagType("TAG_Short", true)
+        public val READER: TagReader<ShortTag> = object : TagReader<ShortTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readShort())
         }
-        val WRITER = object : TagWriter<ShortTag> {
+        public val WRITER: TagWriter<ShortTag> = object : TagWriter<ShortTag> {
 
             override fun write(output: DataOutput, tag: ShortTag) = output.writeShort(tag.value.toInt())
         }
 
-        fun of(value: Short) = if (value in -128..1024) CACHE[value.toInt()] else ShortTag(value)
+        public fun of(value: Short): ShortTag = if (value in -128..1024) CACHE[value.toInt()] else ShortTag(value)
     }
 }
