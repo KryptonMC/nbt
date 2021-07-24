@@ -37,6 +37,15 @@ public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mut
 
     public fun putBoolean(key: String, value: Boolean): MutableCompoundTag = apply { put(key, ByteTag.of(value)) }
 
+    public fun update(key: String, builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = apply {
+        val tag = getCompound(key)
+        if (tag is MutableCompoundTag) put(key, tag.apply(builder)) else put(key, tag.mutable().apply(builder))
+    }
+
+    public fun updateList(key: String, type: Int, builder: ListTag.() -> Unit): MutableCompoundTag = put(key, getList(key, type).apply(builder))
+
+    public fun immutable(): CompoundTag = CompoundTag(tags)
+
     override fun put(key: String, value: Tag): MutableCompoundTag = apply { put(key, value) }
 
     override fun get(key: String): Tag? = tags[key]

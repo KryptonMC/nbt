@@ -154,6 +154,8 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
         }
     }
 
+    public fun mutable(): MutableCompoundTag = MutableCompoundTag(tags.toMutableMap())
+
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineCompound(this)
 
     override fun copy(): CompoundTag {
