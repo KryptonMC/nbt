@@ -46,6 +46,11 @@ public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mut
 
     public fun immutable(): CompoundTag = CompoundTag(tags)
 
+    override fun copy(): MutableCompoundTag {
+        val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
+        return MutableCompoundTag(copy)
+    }
+
     override fun put(key: String, value: Tag): MutableCompoundTag = apply { put(key, value) }
 
     override fun get(key: String): Tag? = tags[key]
