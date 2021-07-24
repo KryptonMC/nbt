@@ -122,6 +122,54 @@ public class ListTag(private val data: MutableList<Tag> = mutableListOf(), eleme
         return CompoundTag()
     }
 
+    public inline fun forEachByte(action: (Byte) -> Unit) {
+        for (i in indices) action(getByte(i))
+    }
+
+    public inline fun forEachShort(action: (Short) -> Unit) {
+        for (i in indices) action(getShort(i))
+    }
+
+    public inline fun forEachInt(action: (Int) -> Unit) {
+        for (i in indices) action(getInt(i))
+    }
+
+    public inline fun forEachLong(action: (Long) -> Unit) {
+        for (i in indices) action(getLong(i))
+    }
+
+    public inline fun forEach(action: (Float) -> Unit) {
+        for (i in indices) action(getFloat(i))
+    }
+
+    public inline fun forEachDouble(action: (Double) -> Unit) {
+        for (i in indices) action(getDouble(i))
+    }
+
+    public inline fun forEachString(action: (String) -> Unit) {
+        for (i in indices) action(getString(i))
+    }
+
+    public inline fun forEachByteArray(action: (ByteArray) -> Unit) {
+        for (i in indices) action(getByteArray(i))
+    }
+
+    public inline fun forEachIntArray(action: (IntArray) -> Unit) {
+        for (i in indices) action(getIntArray(i))
+    }
+
+    public inline fun forEachLongArray(action: (LongArray) -> Unit) {
+        for (i in indices) action(getLongArray(i))
+    }
+
+    public inline fun forEachList(action: (ListTag) -> Unit) {
+        for (i in indices) action(getList(i))
+    }
+
+    public inline fun forEachCompound(action: (CompoundTag) -> Unit) {
+        for (i in indices) action(getCompound(i))
+    }
+
     override fun get(index: Int): Tag = data[index]
 
     override fun set(index: Int, element: Tag): Tag {

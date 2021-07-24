@@ -9,16 +9,13 @@
 package org.kryptonmc.nbt
 
 @DslMarker
-private annotation class NBTDsl
+internal annotation class NBTDsl
 
 @NBTDsl
-public inline fun compound(builder: CompoundTag.() -> Unit): CompoundTag = CompoundTag().apply(builder)
+public inline fun compound(builder: CompoundTag.Builder.() -> Unit): CompoundTag = CompoundTag.builder().apply(builder).build()
 
 @NBTDsl
-public inline fun compound(existing: CompoundTag, builder: CompoundTag.() -> Unit): CompoundTag = existing.apply(builder)
+public inline fun mutableCompound(builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = MutableCompoundTag().apply(builder)
 
 @NBTDsl
-public inline fun CompoundTag.list(name: String, builder: ListTag.() -> Unit): CompoundTag = apply { put(name, ListTag().apply(builder)) }
-
-@NBTDsl
-public fun CompoundTag.list(name: String, vararg elements: Tag): CompoundTag = apply { put(name, ListTag().apply { addAll(elements) }) }
+public inline fun list(builder: ListTag.() -> Unit): ListTag = ListTag().apply(builder)
