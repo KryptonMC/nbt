@@ -15,6 +15,9 @@ internal annotation class NBTDsl
 public inline fun compound(builder: CompoundTag.Builder.() -> Unit): CompoundTag = CompoundTag.builder().apply(builder).build()
 
 @NBTDsl
+public inline fun buildCompound(builder: CompoundTag.Builder.() -> Unit): CompoundTag.Builder = CompoundTag.builder().apply(builder)
+
+@NBTDsl
 public inline fun mutableCompound(builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = MutableCompoundTag().apply(builder)
 
 @NBTDsl
