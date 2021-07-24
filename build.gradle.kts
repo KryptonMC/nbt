@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.kryptonmc"
-version = "1.5"
+version = "1.5.1"
 
 repositories {
     mavenCentral()

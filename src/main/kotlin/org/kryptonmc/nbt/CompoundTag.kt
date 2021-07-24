@@ -190,6 +190,10 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
         public fun byte(name: String, value: Byte): Builder = apply { put(name, ByteTag.of(value)) }
 
         @NBTDsl
+        @JvmName("putBoolean")
+        public fun boolean(name: String, value: Boolean): Builder = apply { put(name, ByteTag.of(value)) }
+
+        @NBTDsl
         @JvmName("putShort")
         public fun short(name: String, value: Short): Builder = apply { put(name, ShortTag.of(value)) }
 
