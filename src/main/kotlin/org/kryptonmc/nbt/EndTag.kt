@@ -35,8 +35,8 @@ public object EndTag : Tag {
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<EndTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
+
+    override fun write(output: DataOutput): Unit = Unit
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineEnd(this)
 

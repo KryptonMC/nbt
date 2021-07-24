@@ -23,8 +23,6 @@ public class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) 
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<ByteArrayTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
@@ -63,6 +61,8 @@ public class ByteArrayTag(data: ByteArray) : CollectionTag<ByteTag>(ByteTag.ID) 
     override fun clear() {
         data = ByteArray(0)
     }
+
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineByteArray(this)
 

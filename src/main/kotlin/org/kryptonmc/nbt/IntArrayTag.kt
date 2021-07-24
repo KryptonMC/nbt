@@ -23,8 +23,6 @@ public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<IntArrayTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
@@ -64,6 +62,8 @@ public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
         data = IntArray(0)
     }
 
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
+
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineIntArray(this)
 
     override fun copy(): IntArrayTag {
@@ -97,7 +97,7 @@ public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
 
             override fun write(output: DataOutput, tag: IntArrayTag) {
                 output.writeInt(tag.data.size)
-                tag.data.forEach { output.writeInt(it) }
+                for (i in tag.data.indices) output.writeInt(tag.data[i])
             }
         }
     }

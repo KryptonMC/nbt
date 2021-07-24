@@ -21,8 +21,6 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<CompoundTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
 
     public fun type(name: String): Int = tags[name]?.id ?: 0
 
@@ -155,6 +153,8 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
     }
 
     public fun mutable(): MutableCompoundTag = MutableCompoundTag(tags.toMutableMap())
+
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineCompound(this)
 
@@ -301,6 +301,6 @@ private fun DataOutput.writeNamedTag(name: String, tag: Tag) {
     writeByte(tag.id)
     if (tag.id != 0) {
         writeUTF(name)
-        tag.writer.write(this, tag)
+        tag.write(this)
     }
 }

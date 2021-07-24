@@ -104,7 +104,7 @@ private fun DataOutput.writeNamedTag(name: String, tag: Tag) {
     writeByte(tag.id)
     if (tag.id != EndTag.ID) {
         writeUTF(name)
-        tag.writer.write(this, tag)
+        tag.write(this)
     }
 }
 

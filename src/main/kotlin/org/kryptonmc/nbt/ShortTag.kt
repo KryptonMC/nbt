@@ -18,8 +18,8 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<ShortTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
+
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineShort(this)
 

@@ -19,8 +19,8 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<DoubleTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
+
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineDouble(this)
 

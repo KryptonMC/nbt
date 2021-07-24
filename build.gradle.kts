@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.5.20"
     id("org.cadixdev.licenser") version "0.6.1"
@@ -6,7 +8,7 @@ plugins {
 }
 
 group = "org.kryptonmc"
-version = "1.5.4"
+version = "1.5.5"
 
 repositories {
     mavenCentral()
@@ -19,11 +21,12 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "16"
+}
+
 tasks.compileKotlin {
-    kotlinOptions {
-        jvmTarget = "16"
-        freeCompilerArgs = listOf("-Xjvm-default=all", "-Xexplicit-api=strict")
-    }
+    kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=all", "-Xexplicit-api=strict")
 }
 
 tasks.test {

@@ -8,8 +8,7 @@
  */
 package org.kryptonmc.nbt
 
-import org.kryptonmc.nbt.io.TagReader
-import org.kryptonmc.nbt.io.TagWriter
+import java.io.DataOutput
 
 public interface Tag {
 
@@ -17,9 +16,7 @@ public interface Tag {
 
     public val type: TagType
 
-    public val reader: TagReader<Tag>
-
-    public val writer: TagWriter<Tag>
+    public fun write(output: DataOutput)
 
     public fun <T> examine(examiner: TagExaminer<T>)
 

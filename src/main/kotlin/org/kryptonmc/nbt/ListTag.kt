@@ -21,8 +21,6 @@ public class ListTag(private val data: MutableList<Tag> = mutableListOf(), eleme
 
     override val id: Int = ID
     override val type: TagType = TYPE
-    override val reader: TagReader<ListTag> = READER
-    override val writer: TagWriter<Tag> = WRITER as TagWriter<Tag>
     override val size: Int
         get() = data.size
 
@@ -198,6 +196,8 @@ public class ListTag(private val data: MutableList<Tag> = mutableListOf(), eleme
         return oldValue
     }
 
+    override fun write(output: DataOutput): Unit = WRITER.write(output, this)
+
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineList(this)
 
     override fun copy(): ListTag {
@@ -254,7 +254,7 @@ public class ListTag(private val data: MutableList<Tag> = mutableListOf(), eleme
                 tag.elementType = if (tag.data.isEmpty()) 0 else tag.data[0].id
                 output.writeByte(tag.elementType)
                 output.writeInt(tag.data.size)
-                tag.data.forEach { it.writer.write(output, it) }
+                for (i in tag.data.indices) tag.data[i].write(output)
             }
         }
     }
