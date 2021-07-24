@@ -7,6 +7,9 @@ private annotation class NBTDsl
 inline fun compound(builder: CompoundTag.() -> Unit): CompoundTag = CompoundTag().apply(builder)
 
 @NBTDsl
+inline fun compound(existing: CompoundTag, builder: CompoundTag.() -> Unit) = existing.apply(builder)
+
+@NBTDsl
 inline fun CompoundTag.list(name: String, builder: ListTag.() -> Unit): CompoundTag = apply { put(name, ListTag().apply(builder)) }
 
 @NBTDsl

@@ -51,11 +51,11 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
 
     fun putLong(name: String, value: Long) = apply { put(name, LongTag.of(value)) }
 
-    fun getFloat(name: String) = getNumber(name)?.toFloat() ?: 0
+    fun getFloat(name: String) = getNumber(name)?.toFloat() ?: 0F
 
     fun putFloat(name: String, value: Float) = apply { put(name, FloatTag.of(value)) }
 
-    fun getDouble(name: String) = getNumber(name)?.toDouble() ?: 0
+    fun getDouble(name: String) = getNumber(name)?.toDouble() ?: 0.0
 
     fun putDouble(name: String, value: Double) = apply { put(name, DoubleTag.of(value)) }
 
@@ -67,7 +67,7 @@ class CompoundTag(private val tags: MutableMap<String, Tag> = mutableMapOf()) : 
 
     fun putString(name: String, value: String) = apply { put(name, StringTag.of(value)) }
 
-    fun getUUID(name: String) = get(name)!!.toUUID()
+    fun getUUID(name: String) = get(name)?.toUUID()
 
     fun putUUID(name: String, value: UUID) = apply { put(name, value.toTag()) }
 
