@@ -132,7 +132,8 @@ public class BinaryNBTReader(private val source: BufferedSource) : NBTReader() {
     }
 
     override fun nextEnd() {
-        source.readByte()
+        val type = source.readByte()
+        check(type == EndTag.ID.toByte()) { "Expected END, got $type!" }
     }
 
     override fun nextType(): Byte = source.readByte()
