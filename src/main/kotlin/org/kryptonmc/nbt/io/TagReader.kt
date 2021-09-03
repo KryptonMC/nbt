@@ -17,5 +17,7 @@ public interface TagReader<out T : Tag> {
 
     public fun read(input: DataInput, depth: Int): T
 
-    public fun read(input: InputStream, depth: Int): T = read(DataInputStream(input) as DataInput, depth)
+    public fun read(input: InputStream, depth: Int): T {
+        return read((if (input is DataInputStream) input else DataInputStream(input)) as DataInput, depth)
+    }
 }

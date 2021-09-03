@@ -13,7 +13,6 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
 public class IntTag private constructor(override val value: Int) : NumberTag(value) {
 
     override val id: Int = ID
@@ -36,18 +35,24 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
     public companion object {
 
         private val CACHE = Array(1153) { IntTag(-128 + it) }
+        @JvmField
+        public val ZERO: IntTag = of(0)
 
         public const val ID: Int = 3
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Int", true)
+        @JvmField
         public val READER: TagReader<IntTag> = object : TagReader<IntTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readInt())
         }
+        @JvmField
         public val WRITER: TagWriter<IntTag> = object : TagWriter<IntTag> {
 
             override fun write(output: DataOutput, tag: IntTag) = output.writeInt(tag.value)
         }
 
+        @JvmStatic
         public fun of(value: Int): IntTag = if (value in -128..1024) CACHE[value + 128] else IntTag(value)
     }
 }

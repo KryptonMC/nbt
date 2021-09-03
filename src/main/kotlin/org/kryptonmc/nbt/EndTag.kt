@@ -15,18 +15,20 @@ import java.io.DataOutput
 import java.io.InputStream
 import java.io.OutputStream
 
-@Suppress("UNCHECKED_CAST")
 public object EndTag : Tag {
 
     public const val ID: Int = 0
-    @JvmField public val TYPE: TagType = TagType("TAG_End", true)
-    @JvmField public val READER: TagReader<EndTag> = object : TagReader<EndTag> {
+    @JvmField
+    public val TYPE: TagType = TagType("TAG_End", true)
+    @JvmField
+    public val READER: TagReader<EndTag> = object : TagReader<EndTag> {
 
         override fun read(input: DataInput, depth: Int) = EndTag
 
         override fun read(input: InputStream, depth: Int) = EndTag
     }
-    @JvmField public val WRITER: TagWriter<EndTag> = object : TagWriter<EndTag> {
+    @JvmField
+    public val WRITER: TagWriter<EndTag> = object : TagWriter<EndTag> {
 
         override fun write(output: DataOutput, tag: EndTag) = Unit
 

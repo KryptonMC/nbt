@@ -14,7 +14,6 @@ import org.kryptonmc.nbt.util.floor
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
 public class FloatTag private constructor(override val value: Float) : NumberTag(value) {
 
     override val id: Int = ID
@@ -42,19 +41,24 @@ public class FloatTag private constructor(override val value: Float) : NumberTag
 
     public companion object {
 
+        @JvmField
         public val ZERO: FloatTag = FloatTag(0F)
 
         public const val ID: Int = 5
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Float", true)
+        @JvmField
         public val READER: TagReader<FloatTag> = object : TagReader<FloatTag> {
 
             override fun read(input: DataInput, depth: Int) = FloatTag(input.readFloat())
         }
+        @JvmField
         public val WRITER: TagWriter<FloatTag> = object : TagWriter<FloatTag> {
 
             override fun write(output: DataOutput, tag: FloatTag) = output.writeFloat(tag.value)
         }
 
+        @JvmStatic
         public fun of(value: Float): FloatTag = if (value == 0F) ZERO else FloatTag(value)
     }
 }

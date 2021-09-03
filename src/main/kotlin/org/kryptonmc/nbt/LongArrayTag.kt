@@ -15,13 +15,13 @@ import org.kryptonmc.nbt.util.remove
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
-public class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) {
+public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), MutableCollectionTag<LongTag> {
 
     public var data: LongArray = data
         private set
 
     override val id: Int = ID
+    override val elementType: Int = LongTag.ID
     override val type: TagType = TYPE
     override val size: Int
         get() = data.size
@@ -83,7 +83,9 @@ public class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) 
     public companion object {
 
         public const val ID: Int = 12
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Long_Array")
+        @JvmField
         public val READER: TagReader<LongArrayTag> = object : TagReader<LongArrayTag> {
 
             override fun read(input: DataInput, depth: Int): LongArrayTag {
@@ -93,6 +95,7 @@ public class LongArrayTag(data: LongArray) : CollectionTag<LongTag>(LongTag.ID) 
                 return LongArrayTag(longs)
             }
         }
+        @JvmField
         public val WRITER: TagWriter<LongArrayTag> = object : TagWriter<LongArrayTag> {
 
             override fun write(output: DataOutput, tag: LongArrayTag) {

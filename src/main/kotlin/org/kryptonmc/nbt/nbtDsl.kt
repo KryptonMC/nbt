@@ -21,4 +21,4 @@ public inline fun buildCompound(builder: CompoundTag.Builder.() -> Unit): Compou
 public inline fun mutableCompound(builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = MutableCompoundTag().apply(builder)
 
 @NBTDsl
-public inline fun list(builder: ListTag.() -> Unit): ListTag = ListTag().apply(builder)
+public inline fun list(builder: ListTag.() -> Unit): ListTag = MutableListTag().apply(builder)

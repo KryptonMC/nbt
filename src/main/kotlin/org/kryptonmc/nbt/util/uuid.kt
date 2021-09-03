@@ -14,7 +14,9 @@ import java.util.UUID
 
 @JvmSynthetic
 internal fun Tag.toUUID(): UUID {
-    require(type === IntArrayTag.TYPE) { "Expected UUID tag to be of type ${IntArrayTag.TYPE.name}, but instead found tag of type ${type.name}" }
+    require(type === IntArrayTag.TYPE) {
+        "Expected UUID tag to be of type ${IntArrayTag.TYPE.name}, but instead found tag of type ${type.name}"
+    }
     val array = (this as IntArrayTag).data
     require(array.size == 4) { "Expected UUID array to be of length 4, but instead found array of length ${array.size}" }
     return array.toUUID()

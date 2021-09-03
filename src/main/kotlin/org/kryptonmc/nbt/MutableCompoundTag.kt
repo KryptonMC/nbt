@@ -13,38 +13,53 @@ import java.util.UUID
 
 public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mutableMapOf()) : CompoundTag(tags), MutableMap<String, Tag> by tags {
 
-    public fun putByte(key: String, value: Byte): MutableCompoundTag = apply { put(key, ByteTag.of(value)) }
+    override val size: Int
+        get() = tags.size
+    override val entries: MutableSet<MutableMap.MutableEntry<String, Tag>>
+        get() = tags.entries
+    override val keys: MutableSet<String>
+        get() = tags.keys
+    override val values: MutableCollection<Tag>
+        get() = tags.values
 
-    public fun putShort(key: String, value: Short): MutableCompoundTag = apply { put(key, ShortTag.of(value)) }
+    public fun putBoolean(key: String, value: Boolean): MutableCompoundTag = put(key, ByteTag.of(value))
 
-    public fun putInt(key: String, value: Int): MutableCompoundTag = apply { put(key, IntTag.of(value)) }
+    public fun putByte(key: String, value: Byte): MutableCompoundTag = put(key, ByteTag.of(value))
 
-    public fun putLong(key: String, value: Long): MutableCompoundTag = apply { put(key, LongTag.of(value)) }
+    public fun putShort(key: String, value: Short): MutableCompoundTag = put(key, ShortTag.of(value))
 
-    public fun putFloat(key: String, value: Float): MutableCompoundTag = apply { put(key, FloatTag.of(value)) }
+    public fun putInt(key: String, value: Int): MutableCompoundTag = put(key, IntTag.of(value))
 
-    public fun putDouble(key: String, value: Double): MutableCompoundTag = apply { put(key, DoubleTag.of(value)) }
+    public fun putLong(key: String, value: Long): MutableCompoundTag = put(key, LongTag.of(value))
 
-    public fun putString(key: String, value: String): MutableCompoundTag = apply { put(key, StringTag.of(value)) }
+    public fun putFloat(key: String, value: Float): MutableCompoundTag = put(key, FloatTag.of(value))
 
-    public fun putUUID(key: String, value: UUID): MutableCompoundTag = apply { put(key, value.toTag()) }
+    public fun putDouble(key: String, value: Double): MutableCompoundTag = put(key, DoubleTag.of(value))
 
-    public fun putByteArray(key: String, value: ByteArray): MutableCompoundTag = apply { put(key, ByteArrayTag(value)) }
+    public fun putString(key: String, value: String): MutableCompoundTag = put(key, StringTag.of(value))
 
-    public fun putIntArray(key: String, value: IntArray): MutableCompoundTag = apply { put(key, IntArrayTag(value)) }
+    public fun putUUID(key: String, value: UUID): MutableCompoundTag = put(key, value.toTag())
 
-    public fun putLongArray(key: String, value: LongArray): MutableCompoundTag = apply { put(key, LongArrayTag(value)) }
+    public fun putByteArray(key: String, value: ByteArray): MutableCompoundTag = put(key, ByteArrayTag(value))
 
-    public fun putBoolean(key: String, value: Boolean): MutableCompoundTag = apply { put(key, ByteTag.of(value)) }
+    public fun putIntArray(key: String, value: IntArray): MutableCompoundTag = put(key, IntArrayTag(value))
 
-    public fun update(key: String, builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = apply {
-        val tag = getCompound(key)
-        if (tag is MutableCompoundTag) put(key, tag.apply(builder)) else put(key, tag.mutable().apply(builder))
-    }
+    public fun putLongArray(key: String, value: LongArray): MutableCompoundTag = put(key, LongArrayTag(value))
 
-    public fun updateList(key: String, type: Int, builder: ListTag.() -> Unit): MutableCompoundTag = put(key, getList(key, type).apply(builder))
+    public fun putBytes(key: String, vararg values: Byte): MutableCompoundTag = putByteArray(key, values)
 
-    public fun immutable(): CompoundTag = CompoundTag(tags)
+    public fun putInts(key: String, vararg values: Int): MutableCompoundTag = putIntArray(key, values)
+
+    public fun putLongs(key: String, vararg values: Long): MutableCompoundTag = putLongArray(key, values)
+
+    public fun update(key: String, builder: MutableCompoundTag.() -> Unit): MutableCompoundTag =
+        put(key, (getCompound(key) as MutableCompoundTag).apply(builder))
+
+    public fun updateList(key: String, type: Int, builder: MutableListTag.() -> Unit): MutableCompoundTag =
+        put(key, (getList(key, type) as MutableListTag).apply(builder))
+
+    @Deprecated("This is no longer necessary, as all compounds are mutable.", ReplaceWith("this"))
+    public fun immutable(): CompoundTag = this
 
     override fun copy(): MutableCompoundTag {
         val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
@@ -60,13 +75,4 @@ public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mut
     override fun containsValue(value: Tag): Boolean = tags.containsValue(value)
 
     override fun isEmpty(): Boolean = tags.isEmpty()
-
-    override val size: Int
-        get() = tags.size
-    override val entries: MutableSet<MutableMap.MutableEntry<String, Tag>>
-        get() = tags.entries
-    override val keys: MutableSet<String>
-        get() = tags.keys
-    override val values: MutableCollection<Tag>
-        get() = tags.values
 }

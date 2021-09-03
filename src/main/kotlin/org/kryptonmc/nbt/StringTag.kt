@@ -13,7 +13,6 @@ import org.kryptonmc.nbt.io.TagWriter
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
 public class StringTag private constructor(public val value: String) : Tag {
 
     override val id: Int = ID
@@ -37,19 +36,24 @@ public class StringTag private constructor(public val value: String) : Tag {
 
     public companion object {
 
-        private val EMPTY = StringTag("")
+        @JvmField
+        public val EMPTY: StringTag = StringTag("")
 
         public const val ID: Int = 8
+        @JvmField
         public val TYPE: TagType = TagType("TAG_String", true)
+        @JvmField
         public val READER: TagReader<StringTag> = object : TagReader<StringTag> {
 
             override fun read(input: DataInput, depth: Int) = of(input.readUTF())
         }
+        @JvmField
         public val WRITER: TagWriter<StringTag> = object : TagWriter<StringTag> {
 
             override fun write(output: DataOutput, tag: StringTag) = output.writeUTF(tag.value)
         }
 
+        @JvmStatic
         public fun of(value: String): StringTag = if (value.isEmpty()) EMPTY else StringTag(value)
     }
 }

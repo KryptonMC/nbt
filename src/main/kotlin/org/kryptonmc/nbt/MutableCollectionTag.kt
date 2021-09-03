@@ -8,7 +8,9 @@
  */
 package org.kryptonmc.nbt
 
-public interface CollectionTag<E : Tag> : Collection<E>, Tag {
+public interface MutableCollectionTag<E : Tag> : CollectionTag<E>, MutableCollection<E>, Tag {
 
-    public val elementType: Int
+    public fun setTag(index: Int, tag: Tag): Boolean
+
+    public fun addTag(index: Int, tag: Tag): Boolean
 }

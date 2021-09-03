@@ -15,16 +15,19 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import java.util.zip.InflaterInputStream
 
-public enum class TagCompression(
+public class TagCompression(
     private val decompressor: (InputStream) -> InputStream,
     private val compressor: (OutputStream) -> OutputStream
 ) {
 
-    NONE({ it }, { it }),
-    GZIP(::GZIPInputStream, ::GZIPOutputStream),
-    ZLIB(::InflaterInputStream, ::DeflaterOutputStream);
-
     public fun decompress(input: InputStream): InputStream = decompressor(input)
 
     public fun compress(output: OutputStream): OutputStream = compressor(output)
+
+    public companion object {
+
+        public val NONE: TagCompression = TagCompression({ it }, { it })
+        public val GZIP: TagCompression = TagCompression(::GZIPInputStream, ::GZIPOutputStream)
+        public val ZLIB: TagCompression = TagCompression(::InflaterInputStream, ::DeflaterOutputStream)
+    }
 }

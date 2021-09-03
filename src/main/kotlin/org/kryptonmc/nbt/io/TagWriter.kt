@@ -18,7 +18,7 @@ public interface TagWriter<in T : Tag> {
 
     public fun write(output: DataOutput, tag: T)
 
-    public fun write(output: OutputStream, tag: T): Unit = write(DataOutputStream(output) as DataOutput, tag)
-
-    public fun write(tag: T): OutputStream = ByteArrayOutputStream().apply { write(this, tag) }
+    public fun write(output: OutputStream, tag: T) {
+        write((if (output is DataOutput) output else DataOutputStream(output)) as DataOutput, tag)
+    }
 }

@@ -16,8 +16,7 @@ import java.io.DataInput
 import java.io.DataOutput
 import java.util.UUID
 
-@Suppress("UNCHECKED_CAST")
-public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) : Tag, Map<String, Tag> by tags {
+public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) : Tag, Map<String, Tag> by tags {
 
     override val id: Int = ID
     override val type: TagType = TYPE
@@ -33,40 +32,70 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
 
     public fun hasUUID(name: String): Boolean = tags[name]?.let { it.type === IntArrayTag.TYPE && (it as IntArrayTag).data.size == 4 } ?: false
 
-    public open fun getByte(name: String): Byte = getNumber(name)?.toByte() ?: 0
+    public fun getBoolean(name: String): Boolean = getByte(name) != 0.toByte()
 
-    public open fun getShort(name: String): Short = getNumber(name)?.toShort() ?: 0
+    @JvmOverloads
+    public fun getByte(name: String, default: Byte = 0): Byte = getNumber(name)?.toByte() ?: default
 
-    public open fun getInt(name: String): Int = getNumber(name)?.toInt() ?: 0
+    @JvmOverloads
+    public fun getShort(name: String, default: Short = 0): Short = getNumber(name)?.toShort() ?: default
 
-    public open fun getLong(name: String): Long = getNumber(name)?.toLong() ?: 0
+    @JvmOverloads
+    public fun getInt(name: String, default: Int = 0): Int = getNumber(name)?.toInt() ?: default
 
-    public open fun getFloat(name: String): Float = getNumber(name)?.toFloat() ?: 0F
+    @JvmOverloads
+    public fun getLong(name: String, default: Long = 0): Long = getNumber(name)?.toLong() ?: default
 
-    public open fun getDouble(name: String): Double = getNumber(name)?.toDouble() ?: 0.0
+    @JvmOverloads
+    public fun getFloat(name: String, default: Float = 0F): Float = getNumber(name)?.toFloat() ?: default
 
-    public open fun getString(name: String): String = try {
-        if (contains(name, StringTag.ID)) tags[name]!!.asString() else ""
-    } catch (exception: ClassCastException) {
-        ""
+    @JvmOverloads
+    public fun getDouble(name: String, default: Double = 0.0): Double = getNumber(name)?.toDouble() ?: default
+
+    @JvmOverloads
+    public fun getString(name: String, default: String = ""): String {
+        return try {
+            if (contains(name, StringTag.ID)) tags[name]!!.asString() else default
+        } catch (exception: ClassCastException) {
+            default
+        }
     }
 
-    public open fun getUUID(name: String): UUID? = get(name)?.toUUID()
+    @JvmOverloads
+    public fun getUUID(name: String, default: UUID? = null): UUID? = get(name)?.toUUID() ?: default
 
-    public open fun getByteArray(name: String): ByteArray = if (contains(name, ByteArrayTag.ID)) (tags[name] as ByteArrayTag).data else ByteArray(0)
+    @JvmOverloads
+    public fun getByteArray(name: String, default: ByteArray = ByteArray(0)): ByteArray {
+        if (contains(name, ByteArrayTag.ID)) return (tags[name] as ByteArrayTag).data
+        return default
+    }
 
-    public open fun getIntArray(name: String): IntArray = if (contains(name, IntArrayTag.ID)) (tags[name] as IntArrayTag).data else IntArray(0)
+    @JvmOverloads
+    public fun getIntArray(name: String, default: IntArray = IntArray(0)): IntArray {
+        if (contains(name, IntArrayTag.ID)) return (tags[name] as IntArrayTag).data
+        return default
+    }
 
-    public open fun getLongArray(name: String): LongArray = if (contains(name, LongArrayTag.ID)) (tags[name] as LongArrayTag).data else LongArray(0)
+    @JvmOverloads
+    public fun getLongArray(name: String, default: LongArray = LongArray(0)): LongArray {
+        if (contains(name, LongArrayTag.ID)) return (tags[name] as LongArrayTag).data
+        return default
+    }
 
-    public open fun getList(name: String, elementType: Int): ListTag = if (type(name) == ListTag.ID) {
-        val tag = (tags[name] as ListTag)
-        if (!tag.isEmpty() && tag.elementType != elementType) ListTag() else tag
-    } else ListTag()
+    @JvmOverloads
+    public fun getList(name: String, elementType: Int, default: ListTag = MutableListTag()): ListTag {
+        if (type(name) == ListTag.ID) {
+            val tag = tags[name] as ListTag
+            return if (!tag.isEmpty() && tag.elementType != elementType) default else tag
+        }
+        return default
+    }
 
-    public open fun getCompound(name: String): CompoundTag = if (contains(name, ID)) tags[name] as CompoundTag else CompoundTag()
-
-    public open fun getBoolean(name: String): Boolean = getByte(name) != 0.toByte()
+    @JvmOverloads
+    public fun getCompound(name: String, default: CompoundTag = MutableCompoundTag()): CompoundTag {
+        if (contains(name, ID)) return tags[name] as CompoundTag
+        return default
+    }
 
     public inline fun forEachByte(action: (String, Byte) -> Unit) {
         for ((key, value) in this) {
@@ -152,16 +181,12 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
         }
     }
 
-    public fun mutable(): MutableCompoundTag = MutableCompoundTag(tags.toMutableMap())
+    @Deprecated("This is no longer necessary, as all compounds are mutable.", ReplaceWith("this as MutableCompoundTag"))
+    public fun mutable(): MutableCompoundTag = this as MutableCompoundTag
 
     override fun write(output: DataOutput): Unit = WRITER.write(output, this)
 
     override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineCompound(this)
-
-    override fun copy(): CompoundTag {
-        val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
-        return CompoundTag(copy)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -173,10 +198,9 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
 
     override fun toString(): String = asString()
 
-    private fun getNumber(name: String): NumberTag? = try {
-        if (contains(name, 99)) tags[name] as NumberTag else null
-    } catch (exception: ClassCastException) {
-        null
+    private fun getNumber(name: String): NumberTag? {
+        if (contains(name, 99)) return tags[name] as? NumberTag
+        return null
     }
 
     public class Builder internal constructor() {
@@ -247,29 +271,38 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
 
         @NBTDsl
         @JvmName("putList")
-        public inline fun list(name: String, builder: ListTag.() -> Unit): Builder = apply { put(name, ListTag().apply(builder)) }
+        public inline fun list(name: String, builder: ListTag.() -> Unit): Builder = apply {
+            put(name, MutableListTag().apply(builder))
+        }
 
         @NBTDsl
         @JvmName("putList")
-        public fun list(name: String, elementType: Int, vararg elements: Tag): Builder = apply { put(name, ListTag(elements.toMutableList(), elementType)) }
+        public fun list(name: String, elementType: Int, vararg elements: Tag): Builder = apply {
+            put(name, MutableListTag(elements.toMutableList(), elementType))
+        }
 
         @NBTDsl
         @JvmName("putList")
         public fun list(name: String, elementType: Int, elements: Collection<Tag>): Builder = apply {
-            if (elements is MutableList) put(name, ListTag(elements, elementType)) else put(name, ListTag(elements.toMutableList(), elementType))
+            val list = if (elements is MutableList) elements else elements.toMutableList()
+            put(name, MutableListTag(list, elementType))
         }
 
         @NBTDsl
         @JvmName("putCompound")
-        public inline fun compound(name: String, builder: Builder.() -> Unit): Builder = apply { put(name, CompoundTag.builder().apply(builder).build()) }
+        public inline fun compound(name: String, builder: Builder.() -> Unit): Builder = apply {
+            put(name, CompoundTag.builder().apply(builder).build())
+        }
 
-        public fun build(): CompoundTag = CompoundTag(tags.toMap())
+        public fun build(): CompoundTag = MutableCompoundTag(tags)
     }
 
     public companion object {
 
         public const val ID: Int = 10
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Compound")
+        @JvmField
         public val READER: TagReader<CompoundTag> = object : TagReader<CompoundTag> {
 
             override fun read(input: DataInput, depth: Int): CompoundTag {
@@ -282,9 +315,10 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
                     tags[name] = tag
                     type = input.readByte().toInt()
                 }
-                return CompoundTag(tags)
+                return MutableCompoundTag(tags)
             }
         }
+        @JvmField
         public val WRITER: TagWriter<CompoundTag> = object : TagWriter<CompoundTag> {
 
             override fun write(output: DataOutput, tag: CompoundTag) {
@@ -293,7 +327,11 @@ public open class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) 
             }
         }
 
+        @JvmStatic
         public fun builder(): Builder = Builder()
+
+        @JvmStatic
+        public fun of(data: Map<String, Tag>): CompoundTag = MutableCompoundTag(if (data is MutableMap) data else data.toMutableMap())
     }
 }
 

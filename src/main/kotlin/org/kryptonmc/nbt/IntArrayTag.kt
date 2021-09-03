@@ -15,13 +15,13 @@ import org.kryptonmc.nbt.util.remove
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
-public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
+public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), MutableCollectionTag<IntTag> {
 
     public var data: IntArray = data
         private set
 
     override val id: Int = ID
+    override val elementType: Int = IntTag.ID
     override val type: TagType = TYPE
     override val size: Int
         get() = data.size
@@ -83,7 +83,9 @@ public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
     public companion object {
 
         public const val ID: Int = 11
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Int_Array")
+        @JvmField
         public val READER: TagReader<IntArrayTag> = object : TagReader<IntArrayTag> {
 
             override fun read(input: DataInput, depth: Int): IntArrayTag {
@@ -93,6 +95,7 @@ public class IntArrayTag(data: IntArray) : CollectionTag<IntTag>(IntTag.ID) {
                 return IntArrayTag(ints)
             }
         }
+        @JvmField
         public val WRITER: TagWriter<IntArrayTag> = object : TagWriter<IntArrayTag> {
 
             override fun write(output: DataOutput, tag: IntArrayTag) {

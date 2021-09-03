@@ -3,12 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.5.20"
     id("org.cadixdev.licenser") version "0.6.1"
+    id("info.solidsoft.pitest") version "1.5.1"
     `maven-publish`
     signing
 }
 
 group = "org.kryptonmc"
-version = "1.5.5"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -22,7 +23,7 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "16"
+    kotlinOptions.jvmTarget = "11"
 }
 
 tasks.compileKotlin {
@@ -41,6 +42,18 @@ task<Jar>("sourcesJar") {
 license {
     header.set(project.resources.text.fromFile("HEADER.txt"))
     newLine.set(false)
+}
+
+pitest {
+    targetClasses.set(setOf("org.kryptonmc.nbt.*"))
+    pitestVersion.set("1.7.0")
+    outputFormats.set(setOf("HTML", "XML"))
+    junit5PluginVersion.set("0.12")
+    excludedMethods.set(setOf(
+        "equals", "hashCode", "toString", // Standard stuff that is mostly auto-generated
+        "contains", "indexOf", "lastIndexOf", "remove", // Collection stuff that we don't need to test
+    ))
+    avoidCallsTo.set(setOf("kotlin.jvm.internal"))
 }
 
 publishing {

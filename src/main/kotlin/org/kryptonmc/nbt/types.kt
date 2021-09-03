@@ -6,6 +6,7 @@
  * This project is licensed under the terms of the MIT license.
  * For more details, please reference the LICENSE file in the top-level directory.
  */
+@file:JvmName("TypeUtils")
 package org.kryptonmc.nbt
 
 import org.kryptonmc.nbt.io.TagReader
@@ -52,6 +53,8 @@ private fun invalidReader(type: Int) = object : TagReader<EndTag> {
     }
 }
 
+@JvmName("toType")
 public fun Int.toTagType(): TagType = if (this in TYPES.indices) TYPES[this] else INVALID_TYPE
 
+@JvmName("toReader")
 public fun Int.toTagReader(): TagReader<*> = if (this in READERS.indices) READERS[this] else invalidReader(this)

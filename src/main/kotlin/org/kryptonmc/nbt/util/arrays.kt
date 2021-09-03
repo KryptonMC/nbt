@@ -14,9 +14,6 @@ import java.lang.reflect.Array
 internal fun ByteArray.add(index: Int, value: Byte) = add(index, value, java.lang.Byte.TYPE) as ByteArray
 
 @JvmSynthetic
-internal fun ShortArray.add(index: Int, value: Short) = add(index, value, java.lang.Short.TYPE) as ShortArray
-
-@JvmSynthetic
 internal fun IntArray.add(index: Int, value: Int) = add(index, value, Integer.TYPE) as IntArray
 
 @JvmSynthetic
@@ -40,9 +37,6 @@ private fun Any?.add(index: Int, element: Any, type: Class<*>): Any {
 
 @JvmSynthetic
 internal fun ByteArray.remove(index: Int) = remove(index, java.lang.Byte.TYPE) as ByteArray
-
-@JvmSynthetic
-internal fun ShortArray.remove(index: Int) = remove(index, java.lang.Short.TYPE) as ShortArray
 
 @JvmSynthetic
 internal fun IntArray.remove(index: Int) = remove(index, Integer.TYPE) as IntArray

@@ -104,7 +104,7 @@ private val VALUE_REGEX = "[A-Za-z0-9._+-]+".toRegex()
 private fun String.escape() = if (VALUE_REGEX matches this) this else quoteAndEscape()
 
 private fun String.quoteAndEscape(): String {
-    val builder = StringBuilder()
+    val builder = StringBuilder(" ")
     var quote = 0.toChar()
     for (i in indices) {
         val current = this[i]

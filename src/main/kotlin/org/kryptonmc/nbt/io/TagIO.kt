@@ -27,21 +27,23 @@ import kotlin.io.path.outputStream
 public object TagIO {
 
     @JvmStatic
-    public fun read(input: DataInput): CompoundTag = input.readUnnamedTag(0) as? CompoundTag ?: throw IOException("Root tag must be a named compound!")
+    public fun read(input: DataInput): CompoundTag = input.readUnnamedTag(0) as? CompoundTag
+        ?: throw IOException("Root tag must be a named compound!")
 
     @JvmStatic
     @JvmOverloads
-    public fun read(input: InputStream, compression: TagCompression = TagCompression.NONE): CompoundTag = DataInputStream(compression.decompress(input)).use {
-        read(it as DataInput)
-    }
+    public fun read(input: InputStream, compression: TagCompression = TagCompression.NONE): CompoundTag =
+        DataInputStream(compression.decompress(input)).use { read(it as DataInput) }
 
     @JvmStatic
     @JvmOverloads
-    public fun read(path: Path, compression: TagCompression = TagCompression.NONE): CompoundTag = read(path.inputStream(), compression)
+    public fun read(path: Path, compression: TagCompression = TagCompression.NONE): CompoundTag =
+        read(path.inputStream(), compression)
 
     @JvmStatic
     @JvmOverloads
-    public fun read(file: File, compression: TagCompression = TagCompression.NONE): CompoundTag = read(file.inputStream(), compression)
+    public fun read(file: File, compression: TagCompression = TagCompression.NONE): CompoundTag =
+        read(file.inputStream(), compression)
 
     @JvmStatic
     public fun readNamed(input: DataInput): Pair<String, Tag> = input.readNamedTag(0)
@@ -53,50 +55,56 @@ public object TagIO {
 
     @JvmStatic
     @JvmOverloads
-    public fun readNamed(path: Path, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> = readNamed(path.inputStream(), compression)
+    public fun readNamed(path: Path, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> =
+        readNamed(path.inputStream(), compression)
 
     @JvmStatic
     @JvmOverloads
-    public fun readNamed(file: File, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> = readNamed(file.inputStream(), compression)
+    public fun readNamed(file: File, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> =
+        readNamed(file.inputStream(), compression)
 
     @JvmStatic
     public fun write(output: DataOutput, tag: CompoundTag): Unit = output.writeNamedTag("", tag)
 
     @JvmStatic
     @JvmOverloads
-    public fun write(output: OutputStream, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit =
+    public fun write(output: OutputStream, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
         DataOutputStream(compression.compress(output)).use { write(it as DataOutput, tag) }
-
-    @JvmStatic
-    @JvmOverloads
-    public fun write(path: Path, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit = path.outputStream().use {
-        write(it, tag, compression)
     }
 
     @JvmStatic
     @JvmOverloads
-    public fun write(file: File, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit = file.outputStream().use {
-        write(it, tag, compression)
+    public fun write(path: Path, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
+        path.outputStream().use { write(it, tag, compression) }
     }
 
     @JvmStatic
-    public fun write(output: DataOutput, name: String, tag: CompoundTag): Unit = output.writeNamedTag(name, tag)
+    @JvmOverloads
+    public fun write(file: File, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
+        file.outputStream().use { write(it, tag, compression) }
+    }
+
+    @JvmStatic
+    public fun write(output: DataOutput, name: String, tag: CompoundTag) {
+        output.writeNamedTag(name, tag)
+    }
 
     @JvmStatic
     @JvmOverloads
-    public fun write(output: OutputStream, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit =
+    public fun write(output: OutputStream, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
         DataOutputStream(compression.compress(output)).use { write(it as DataOutput, name, tag) }
-
-    @JvmStatic
-    @JvmOverloads
-    public fun write(path: Path, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit = path.outputStream().use {
-        write(it, name, tag, compression)
     }
 
     @JvmStatic
     @JvmOverloads
-    public fun write(file: File, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE): Unit = file.outputStream().use {
-        write(it, name, tag, compression)
+    public fun write(path: Path, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
+        path.outputStream().use { write(it, name, tag, compression) }
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    public fun write(file: File, name: String, tag: CompoundTag, compression: TagCompression = TagCompression.NONE) {
+        file.outputStream().use { write(it, name, tag, compression) }
     }
 }
 

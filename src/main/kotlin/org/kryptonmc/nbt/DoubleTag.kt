@@ -14,7 +14,6 @@ import org.kryptonmc.nbt.util.floor
 import java.io.DataInput
 import java.io.DataOutput
 
-@Suppress("UNCHECKED_CAST")
 public class DoubleTag private constructor(override val value: Double) : NumberTag(value) {
 
     override val id: Int = ID
@@ -47,19 +46,24 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
 
     public companion object {
 
+        @JvmField
         public val ZERO: DoubleTag = DoubleTag(0.0)
 
         public const val ID: Int = 6
+        @JvmField
         public val TYPE: TagType = TagType("TAG_Double", true)
+        @JvmField
         public val READER: TagReader<DoubleTag> = object : TagReader<DoubleTag> {
 
             override fun read(input: DataInput, depth: Int) = DoubleTag(input.readDouble())
         }
+        @JvmField
         public val WRITER: TagWriter<DoubleTag> = object : TagWriter<DoubleTag> {
 
             override fun write(output: DataOutput, tag: DoubleTag) = output.writeDouble(tag.value)
         }
 
+        @JvmStatic
         public fun of(value: Double): DoubleTag = if (value == 0.0) ZERO else DoubleTag(value)
     }
 }
