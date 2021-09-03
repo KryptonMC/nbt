@@ -5,3 +5,4 @@ pluginManagement {
 rootProject.name = "nbt"
 
 include("common")
+include("stream")

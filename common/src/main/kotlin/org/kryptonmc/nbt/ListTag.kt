@@ -260,7 +260,9 @@ public sealed class ListTag(
                 if (type == 0 && size > 0) throw RuntimeException("Missing required type byte for ListTag!")
                 val reader = type.toTagReader()
                 val data = ArrayList<Tag>(size)
-                for (i in 0 until size) data.add(reader.read(input, depth + 1))
+                for (i in 0 until size) {
+                    data.add(reader.read(input, depth + 1))
+                }
                 return MutableListTag(data, type)
             }
         }
@@ -272,7 +274,9 @@ public sealed class ListTag(
                 tag.elementType = if (tag.data.isEmpty()) 0 else tag.data[0].id
                 output.writeByte(tag.elementType)
                 output.writeInt(tag.data.size)
-                for (i in tag.data.indices) tag.data[i].write(output)
+                for (i in tag.data.indices) {
+                    tag.data[i].write(output)
+                }
             }
         }
 

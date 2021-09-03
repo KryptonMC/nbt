@@ -4,14 +4,16 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 
-fun PublishingExtension.configurePublication(project: Project, name: String) {
+fun PublishingExtension.configurePublication(project: Project, id: String) {
     publications {
-        create<MavenPublication>(name) {
+        create<MavenPublication>("mavenKotlin") {
+            artifactId = id
+
             from(project.components["kotlin"])
             artifact(project.tasks["sourcesJar"])
 
             pom {
-                this.name.set("Krypton NBT")
+                name.set("Krypton NBT")
                 description.set("An advanced NBT library, based around vanilla Minecraft, with ideas from JSON libraries incorporated.")
                 url.set("https://kryptonmc.org/projects/nbt")
                 inceptionYear.set("2021")
@@ -19,8 +21,8 @@ fun PublishingExtension.configurePublication(project: Project, name: String) {
 
                 developers {
                     developer {
-                        id.set("bombardygamer")
-                        this.name.set("Callum Seabrook")
+                        this.id.set("bombardygamer")
+                        name.set("Callum Seabrook")
                         email.set("callum.seabrook@prevarinite.com")
                         timezone.set("Europe/London")
                         roles.set(setOf("Lead Developer"))
@@ -28,7 +30,7 @@ fun PublishingExtension.configurePublication(project: Project, name: String) {
                 }
 
                 organization {
-                    this.name.set("KryptonMC")
+                    name.set("KryptonMC")
                     url.set("https://github.com/KryptonMC")
                 }
 

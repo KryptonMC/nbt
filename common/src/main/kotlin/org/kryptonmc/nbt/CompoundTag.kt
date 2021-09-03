@@ -309,7 +309,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
                 if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
                 val tags = mutableMapOf<String, Tag>()
                 var type = input.readByte().toInt()
-                while (type != 0) {
+                while (type != EndTag.ID) {
                     val name = input.readUTF()
                     val tag = type.toTagReader().read(input, depth + 1)
                     tags[name] = tag
@@ -323,7 +323,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
 
             override fun write(output: DataOutput, tag: CompoundTag) {
                 tag.tags.forEach { output.writeNamedTag(it.key, it.value) }
-                output.writeByte(0)
+                output.writeByte(EndTag.ID)
             }
         }
 
@@ -337,7 +337,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
 
 private fun DataOutput.writeNamedTag(name: String, tag: Tag) {
     writeByte(tag.id)
-    if (tag.id != 0) {
+    if (tag.id != EndTag.ID) {
         writeUTF(name)
         tag.write(this)
     }
