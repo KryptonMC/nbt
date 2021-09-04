@@ -4,5 +4,7 @@ pluginManagement {
 
 rootProject.name = "nbt"
 
-include("common")
-include("stream")
+sequenceOf("common", "stream").forEach {
+    include("nbt-$it")
+    project(":nbt-$it").projectDir = file(it)
+}

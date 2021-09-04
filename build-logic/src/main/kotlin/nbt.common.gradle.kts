@@ -1,9 +1,9 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     id("org.cadixdev.licenser")
-    id("info.solidsoft.pitest")
     `maven-publish`
     signing
 }
@@ -12,30 +12,30 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    api(kotlin("stdlib-jdk8"))
-    testImplementation(kotlin("test-junit5"))
-}
-
 kotlin {
     explicitApi()
+    jvm {
+        withJava()
+    }
+//    js {
+//        browser()
+//        nodejs()
+//    }
+}
+
+dependencies {
+    "commonMainApi"(kotlin("stdlib-common"))
+    "jvmMainApi"(kotlin("stdlib"))
+//    "jsMainApi"(kotlin("stdlib-js"))
+    "commonTestImplementation"(kotlin("test-common"))
+    "commonTestImplementation"(kotlin("test-annotations-common"))
+    "jvmTestImplementation"(kotlin("test-junit5"))
+//    "jsTestImplementation"(kotlin("test-js"))
 }
 
 license {
     header.set(project.rootProject.resources.text.fromFile("HEADER.txt"))
     newLine.set(false)
-}
-
-pitest {
-    targetClasses.set(setOf("org.kryptonmc.nbt.*"))
-    pitestVersion.set("1.7.0")
-    outputFormats.set(setOf("HTML", "XML"))
-    junit5PluginVersion.set("0.12")
-    excludedMethods.set(setOf(
-        "equals", "hashCode", "toString", // Standard stuff that is mostly auto-generated
-        "contains", "indexOf", "lastIndexOf", "remove", // Collection stuff that we don't need to test
-    ))
-    avoidCallsTo.set(setOf("kotlin.jvm.internal"))
 }
 
 publishing {
@@ -53,19 +53,11 @@ publishing {
     }
 }
 
-task<Jar>("sourcesJar") {
-    from(sourceSets.main.get().allSource)
-    archiveClassifier.set("sources")
-}
-
 tasks {
-    compileKotlin {
+    withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "11"
     }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-    test {
+    withType<Test> {
         useJUnitPlatform()
     }
 }
