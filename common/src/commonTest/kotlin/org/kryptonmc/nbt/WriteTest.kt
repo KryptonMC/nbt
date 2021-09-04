@@ -13,6 +13,7 @@ import okio.BufferedSource
 import okio.utf8Size
 import org.kryptonmc.nbt.io.TagCompression
 import org.kryptonmc.nbt.io.TagIO
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -40,22 +41,28 @@ class WriteTest {
     }
 
     @Test
-    fun `test uncompressed unnamed write`() = checkWrite(TagCompression.NONE, "")
+    @JsName("uncompressedUnnamed")
+    fun `uncompressed unnamed`() = checkWrite(TagCompression.NONE, "")
 
     @Test
-    fun `test uncompressed named write`() = checkWrite(TagCompression.NONE, "Test")
+    @JsName("uncompressedNamed")
+    fun `uncompressed named`() = checkWrite(TagCompression.NONE, "Test")
 
     @Test
-    fun `test gzip unnamed write`() = checkWrite(TagCompression.GZIP, "")
+    @JsName("gzipUnnamed")
+    fun `gzip unnamed`() = checkWrite(TagCompression.GZIP, "")
 
     @Test
-    fun `test gzip named write`() = checkWrite(TagCompression.GZIP, "Test")
+    @JsName("gzipNamed")
+    fun `gzip named`() = checkWrite(TagCompression.GZIP, "Test")
 
     @Test
-    fun `test zlib unnamed write`() = checkWrite(TagCompression.ZLIB, "")
+    @JsName("zlibUnnamed")
+    fun `zlib unnamed`() = checkWrite(TagCompression.ZLIB, "")
 
     @Test
-    fun `test zlib named write`() = checkWrite(TagCompression.ZLIB, "Test")
+    @JsName("zlibNamed")
+    fun `zlib named`() = checkWrite(TagCompression.ZLIB, "Test")
 
     private fun checkWrite(compression: TagCompression, name: String) {
         val buffer = Buffer()
@@ -73,8 +80,11 @@ private fun BufferedSource.checkContents() {
     assertType(ShortTag.ID, "short test") { assertEquals(25, readShort()) }
     assertType(IntTag.ID, "int test") { assertEquals(58329, readInt()) }
     assertType(LongTag.ID, "long test") { assertEquals(19848395L, readLong()) }
-    assertType(FloatTag.ID, "float test") { assertEquals(0.4231535F, Float.fromBits(readInt())) }
-    assertType(DoubleTag.ID, "double test") { assertEquals(1.2136563264461, Double.fromBits(readLong())) }
+
+    // We check the bits here due to inconsistencies with floating point on different platforms
+    assertType(FloatTag.ID, "float test") { assertEquals(0.4231535F.toBits(), readInt()) }
+    assertType(DoubleTag.ID, "double test") { assertEquals(1.2136563264461.toBits(), readLong()) }
+
     assertType(StringTag.ID, "string test") { assertEquals("cauidsgahsgdg", readUtf8(readShort().toLong())) }
     assertType(ByteArrayTag.ID, "byte array test") {
         assertEquals(3, readInt())

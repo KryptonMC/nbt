@@ -9,12 +9,14 @@
 package org.kryptonmc.nbt
 
 import org.kryptonmc.nbt.util.floor
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NumberTagTests {
 
     @Test
+    @JsName("checkNumberConversions")
     fun `check number conversions`() {
         val double = DoubleTag.of(57.5)
         assertEquals(double.toDouble(), double.value)
@@ -30,7 +32,8 @@ class NumberTagTests {
     }
 
     @Test
-    fun `check initialisations`() {
+    @JsName("checkInitializations")
+    fun `check initializations`() {
         assertEquals(1, ByteTag.of(true).value)
         assertEquals(0, ByteTag.of(false).value)
         assertEquals(57, IntTag.of(57).value)

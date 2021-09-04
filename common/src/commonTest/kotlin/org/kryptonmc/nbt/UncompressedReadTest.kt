@@ -9,6 +9,7 @@
 package org.kryptonmc.nbt
 
 import org.kryptonmc.nbt.io.TagIO
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -17,6 +18,7 @@ import kotlin.test.assertTrue
 class UncompressedReadTest {
 
     @Test
+    @JsName("helloWorld")
     fun `hello world`() {
         val nbt = TagIO.readNamed(getResource("hello_world.nbt"))
         assertEquals("hello world", nbt.first)
@@ -29,6 +31,7 @@ class UncompressedReadTest {
     }
 
     @Test
+    @JsName("bigTest")
     fun `big test`() {
         val nbt = TagIO.readNamed(getResource("bigtest.nbt"))
         assertEquals("Level", nbt.first)

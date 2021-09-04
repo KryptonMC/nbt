@@ -8,6 +8,7 @@
  */
 package org.kryptonmc.nbt
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -16,6 +17,7 @@ import kotlin.test.assertTrue
 class ArrayTagTests {
 
     @Test
+    @JsName("testSetTag")
     fun `test set tag`() {
         val byteArray = ByteArrayTag(ByteArray(2))
         assertFalse(byteArray.setTag(0, StringTag.EMPTY))
@@ -29,6 +31,7 @@ class ArrayTagTests {
     }
 
     @Test
+    @JsName("testAddTag")
     fun `test add tag`() {
         val byteArray = ByteArrayTag(ByteArray(2))
         assertFalse(byteArray.addTag(0, StringTag.EMPTY))
@@ -42,6 +45,7 @@ class ArrayTagTests {
     }
 
     @Test
+    @JsName("testEquality")
     fun `test equality`() {
         val byteArrayOne = ByteArrayTag(byteArrayOf(1, 2))
         val byteArrayTwo = ByteArrayTag(byteArrayOf(1, 2))
@@ -64,6 +68,7 @@ class ArrayTagTests {
     }
 
     @Test
+    @JsName("checkElementTypes")
     fun `check element types`() {
         assertEquals(ByteTag.ID, ByteArrayTag(ByteArray(0)).elementType)
         assertEquals(IntTag.ID, IntArrayTag(IntArray(0)).elementType)

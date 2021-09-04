@@ -8,12 +8,14 @@
  */
 package org.kryptonmc.nbt
 
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ExaminationTests {
 
     @Test
+    @JsName("examineNumbers")
     fun `examine numbers`() {
         assertEquals("END", StringTagExaminer().examine(EndTag))
         assertEquals("30b", StringTagExaminer().examine(ByteTag.of(30)))
@@ -25,6 +27,7 @@ class ExaminationTests {
     }
 
     @Test
+    @JsName("examineArrays")
     fun `examine arrays`() {
         assertEquals("[B;1B,8B,3B,25B]", StringTagExaminer().examine(ByteArrayTag(byteArrayOf(1, 8, 3, 25))))
         assertEquals("[I;5,93,28,47]", StringTagExaminer().examine(IntArrayTag(intArrayOf(5, 93, 28, 47))))
@@ -32,6 +35,7 @@ class ExaminationTests {
     }
 
     @Test
+    @JsName("examineStrings")
     fun `examine strings`() {
         assertEquals("\"hello world\"", StringTagExaminer().examine(StringTag.of("hello world")))
         assertEquals("\"hello_world\"", StringTagExaminer().examine(StringTag.of("hello_world")))
@@ -39,6 +43,7 @@ class ExaminationTests {
     }
 
     @Test
+    @JsName("examineList")
     fun `examine list`() {
         assertEquals("[\"hello_world\",\"goodbye_world\"]", StringTagExaminer().examine(ListTag.of(
             listOf(StringTag.of("hello_world"), StringTag.of("goodbye_world")),
@@ -47,6 +52,7 @@ class ExaminationTests {
     }
 
     @Test
+    @JsName("examineCompound")
     fun `examine compound`() {
         assertEquals("{goodbye_world:8L,hello_world:1b}", StringTagExaminer().examine(CompoundTag.of(
             mapOf("hello_world" to ByteTag.of(1), "goodbye_world" to LongTag.of(8))

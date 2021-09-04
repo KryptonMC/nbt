@@ -17,20 +17,26 @@ kotlin {
     jvm {
         withJava()
     }
-//    js {
-//        browser()
-//        nodejs()
-//    }
+    js {
+        nodejs()
+    }
+    sourceSets.all {
+        languageSettings.optIn("okio.ExperimentalFileSystem")
+    }
 }
 
 dependencies {
     "commonMainApi"(kotlin("stdlib-common"))
+    "commonMainApi"("com.squareup.okio", "okio-multiplatform", "3.0.0-alpha.9")
     "jvmMainApi"(kotlin("stdlib"))
-//    "jsMainApi"(kotlin("stdlib-js"))
+    "jvmMainApi"("com.squareup.okio", "okio", "3.0.0-alpha.9")
+    "jsMainApi"(kotlin("stdlib-js"))
+    "jsMainApi"("com.squareup.okio", "okio-nodefilesystem-js", "3.0.0-alpha.9")
+    "jsMainApi"(npm("pako", "2.0.3"))
     "commonTestImplementation"(kotlin("test-common"))
     "commonTestImplementation"(kotlin("test-annotations-common"))
     "jvmTestImplementation"(kotlin("test-junit5"))
-//    "jsTestImplementation"(kotlin("test-js"))
+    "jsTestImplementation"(kotlin("test-js"))
 }
 
 license {

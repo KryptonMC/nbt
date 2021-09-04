@@ -11,6 +11,7 @@ package org.kryptonmc.nbt.stream
 import okio.Buffer
 import org.kryptonmc.nbt.CompoundTag
 import org.kryptonmc.nbt.LongTag
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -37,6 +38,7 @@ class ReadTests {
     }
 
     @Test
+    @JsName("bigTest")
     fun `big test`() {
         // Write the data
         val buffer = Buffer()

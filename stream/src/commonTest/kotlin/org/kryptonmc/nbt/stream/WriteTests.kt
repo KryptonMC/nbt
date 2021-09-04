@@ -22,6 +22,7 @@ import org.kryptonmc.nbt.ListTag
 import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -53,6 +54,7 @@ class WriteTests {
     }
 
     @Test
+    @JsName("bigTest")
     fun `big test`() {
         val buffer = Buffer()
         BinaryNBTWriter(buffer).use { writer ->

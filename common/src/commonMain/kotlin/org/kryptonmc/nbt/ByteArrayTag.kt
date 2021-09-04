@@ -13,7 +13,6 @@ import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
-import org.kryptonmc.nbt.util.arraycopy
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
 
@@ -72,7 +71,7 @@ public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), Mut
 
     override fun copy(): ByteArrayTag {
         val copy = ByteArray(data.size)
-        arraycopy(data, 0, copy, 0, data.size)
+        data.copyInto(copy, 0, 0, data.size)
         return ByteArrayTag(copy)
     }
 
