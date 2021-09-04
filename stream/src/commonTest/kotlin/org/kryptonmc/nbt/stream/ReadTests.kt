@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt.stream
 
 import okio.Buffer
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.kryptonmc.nbt.CompoundTag
 import org.kryptonmc.nbt.LongTag
 import kotlin.test.Test

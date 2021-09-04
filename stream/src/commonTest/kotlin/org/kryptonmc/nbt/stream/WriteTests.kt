@@ -9,6 +9,7 @@
 package org.kryptonmc.nbt.stream
 
 import okio.Buffer
+import okio.use
 import okio.utf8Size
 import org.kryptonmc.nbt.ByteArrayTag
 import org.kryptonmc.nbt.ByteTag

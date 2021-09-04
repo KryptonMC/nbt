@@ -23,7 +23,7 @@ import org.kryptonmc.nbt.LongArrayTag
 import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
-import java.util.UUID
+import org.kryptonmc.nbt.util.UUID
 
 public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter() {
 

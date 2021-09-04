@@ -8,6 +8,7 @@
  */
 package org.kryptonmc.nbt.stream
 
+import okio.Closeable
 import org.kryptonmc.nbt.ByteArrayTag
 import org.kryptonmc.nbt.ByteTag
 import org.kryptonmc.nbt.CompoundTag
@@ -21,8 +22,7 @@ import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
 import org.kryptonmc.nbt.Tag
-import java.io.Closeable
-import java.util.UUID
+import org.kryptonmc.nbt.util.UUID
 
 public abstract class NBTWriter : Closeable {
 
