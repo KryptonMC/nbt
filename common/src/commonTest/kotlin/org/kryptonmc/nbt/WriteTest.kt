@@ -60,10 +60,11 @@ class WriteTest {
     private fun checkWrite(compression: TagCompression, name: String) {
         val buffer = Buffer()
         TagIO.writeNamed(buffer, name, tag, compression)
-        assertEquals(CompoundTag.ID.toByte(), buffer.readByte())
-        assertEquals(name.utf8Size().toShort(), buffer.readShort())
-        assertEquals(name, buffer.readUtf8(name.utf8Size()))
-        buffer.checkContents()
+        val input = compression.decompress(buffer)
+        assertEquals(CompoundTag.ID.toByte(), input.readByte())
+        assertEquals(name.utf8Size().toShort(), input.readShort())
+        assertEquals(name, input.readUtf8(name.utf8Size()))
+        input.checkContents()
     }
 }
 
