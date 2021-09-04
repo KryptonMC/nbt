@@ -14,7 +14,7 @@ public actual object TagIO {
 
     public actual fun read(input: BufferedSource, compression: TagCompression): CompoundTag = read(compression.decompress(input))
 
-    public actual fun readNamed(input: BufferedSource): Pair<String, Tag> = input.readNamedTag(0)
+    public actual fun readNamed(input: BufferedSource): Pair<String, Tag> = input.use { it.readNamedTag(0) }
 
     public actual fun readNamed(input: BufferedSource, compression: TagCompression): Pair<String, Tag> =
         readNamed(compression.decompress(input))
