@@ -180,12 +180,12 @@ class WriteTests {
         assertEquals(FloatTag.ID.toByte(), buffer.readByte())
         assertEquals("floatTest".length.toShort(), buffer.readShort())
         assertEquals("floatTest", buffer.readUtf8("floatTest".length.toLong()))
-        assertEquals(0.49823147F, Float.fromBits(buffer.readInt()))
+        assertEquals(0.49823147F.toBits(), buffer.readInt())
 
         assertEquals(DoubleTag.ID.toByte(), buffer.readByte())
         assertEquals("doubleTest".length.toShort(), buffer.readShort())
         assertEquals("doubleTest", buffer.readUtf8("doubleTest".length.toLong()))
-        assertEquals(0.4931287132182315, Double.fromBits(buffer.readLong()))
+        assertEquals(0.4931287132182315.toBits(), buffer.readLong())
 
         assertEquals(IntTag.ID.toByte(), buffer.readByte())
         assertEquals("intTest".length.toShort(), buffer.readShort())

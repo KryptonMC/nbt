@@ -276,8 +276,8 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
 
         @NBTDsl
         @JvmName("putList")
-        public inline fun list(name: String, builder: ListTag.() -> Unit): Builder = apply {
-            put(name, MutableListTag().apply(builder))
+        public inline fun list(name: String, builder: ListTag.Builder.() -> Unit): Builder = apply {
+            put(name, ListTag.builder().apply(builder).build())
         }
 
         @NBTDsl
