@@ -51,8 +51,8 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
         @JvmField
         public val WRITER: TagWriter<LongTag> = object : TagWriter<LongTag> {
 
-            override fun write(output: BufferedSink, tag: LongTag) {
-                output.writeLong(tag.value)
+            override fun write(output: BufferedSink, value: LongTag) {
+                output.writeLong(value.value)
             }
         }
 

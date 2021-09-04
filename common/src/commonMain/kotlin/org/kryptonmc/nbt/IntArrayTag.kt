@@ -104,9 +104,9 @@ public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), Mutabl
         @JvmField
         public val WRITER: TagWriter<IntArrayTag> = object : TagWriter<IntArrayTag> {
 
-            override fun write(output: BufferedSink, tag: IntArrayTag) {
-                output.writeInt(tag.data.size)
-                for (i in tag.data.indices) output.writeInt(tag.data[i])
+            override fun write(output: BufferedSink, value: IntArrayTag) {
+                output.writeInt(value.data.size)
+                for (i in value.data.indices) output.writeInt(value.data[i])
             }
         }
     }

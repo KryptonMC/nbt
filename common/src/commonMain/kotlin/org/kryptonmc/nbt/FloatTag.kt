@@ -61,8 +61,8 @@ public class FloatTag private constructor(override val value: Float) : NumberTag
         @JvmField
         public val WRITER: TagWriter<FloatTag> = object : TagWriter<FloatTag> {
 
-            override fun write(output: BufferedSink, tag: FloatTag) {
-                output.writeInt(tag.value.toBits())
+            override fun write(output: BufferedSink, value: FloatTag) {
+                output.writeInt(value.value.toBits())
             }
         }
 
