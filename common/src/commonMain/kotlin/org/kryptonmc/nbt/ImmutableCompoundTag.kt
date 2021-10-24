@@ -17,6 +17,10 @@ public class ImmutableCompoundTag(
 
     override fun put(key: String, value: Tag): ImmutableCompoundTag = ImmutableCompoundTag(tags + (key to value))
 
+    override fun remove(key: String): ImmutableCompoundTag = ImmutableCompoundTag(
+        if (tags is MutableMap) tags.apply { remove(key) } else tags.toMutableMap().apply { remove(key) }
+    )
+
     override fun putBoolean(key: String, value: Boolean): ImmutableCompoundTag = put(key, ByteTag.of(value))
 
     override fun putByte(key: String, value: Byte): ImmutableCompoundTag = put(key, ByteTag.of(value))

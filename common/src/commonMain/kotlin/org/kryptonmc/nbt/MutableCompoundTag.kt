@@ -39,6 +39,8 @@ public class MutableCompoundTag(
 
     override fun put(key: String, value: Tag): MutableCompoundTag = apply { tags[key] = value }
 
+    override fun remove(key: String): MutableCompoundTag = apply { tags.remove(key) }
+
     override fun putBoolean(key: String, value: Boolean): MutableCompoundTag = put(key, ByteTag.of(value))
 
     override fun putByte(key: String, value: Byte): MutableCompoundTag = put(key, ByteTag.of(value))

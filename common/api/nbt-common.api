@@ -199,8 +199,9 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
 	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
+	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public abstract fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
 	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
 	public fun replace (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
@@ -360,6 +361,10 @@ public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/Co
 	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 }
 
 public final class org/kryptonmc/nbt/ImmutableListTag : org/kryptonmc/nbt/ListTag {
@@ -683,8 +688,9 @@ public final class org/kryptonmc/nbt/MutableCompoundTag : org/kryptonmc/nbt/Comp
 	public synthetic fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
-	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
-	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
+	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public final fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public final fun updateList (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 }

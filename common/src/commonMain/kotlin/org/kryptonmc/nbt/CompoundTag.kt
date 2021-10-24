@@ -108,6 +108,8 @@ public sealed class CompoundTag(
 
     public abstract fun put(key: String, value: Tag): CompoundTag
 
+    public abstract fun remove(key: String): CompoundTag
+
     public open fun putBoolean(key: String, value: Boolean): CompoundTag = put(key, ByteTag.of(value))
 
     public open fun putByte(key: String, value: Byte): CompoundTag = put(key, ByteTag.of(value))
