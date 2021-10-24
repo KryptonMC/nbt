@@ -22,7 +22,9 @@ import kotlin.jvm.JvmName
 import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 
-public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()) : Tag, Map<String, Tag> by tags {
+public sealed class CompoundTag(
+    public open val tags: Map<String, Tag> = mapOf()
+) : Tag, Map<String, Tag> by tags {
 
     override val id: Int = ID
     override val type: TagType = TYPE
@@ -33,10 +35,14 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
         val type = type(name)
         if (type == typeId) return true
         if (typeId != 99) return false
-        return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID || type == FloatTag.ID || type == DoubleTag.ID
+        return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID ||
+            type == FloatTag.ID || type == DoubleTag.ID
     }
 
-    public fun hasUUID(name: String): Boolean = tags[name]?.let { it.type === IntArrayTag.TYPE && (it as IntArrayTag).data.size == 4 } ?: false
+    public fun hasUUID(name: String): Boolean {
+        val value = tags[name] ?: return false
+        return value.type === IntArrayTag.TYPE && (value as IntArrayTag).data.size == 4
+    }
 
     public fun getBoolean(name: String): Boolean = getByte(name) != 0.toByte()
 
@@ -99,6 +105,38 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
         if (contains(name, ID)) return tags[name] as CompoundTag
         return default
     }
+
+    public abstract fun put(key: String, value: Tag): CompoundTag
+
+    public open fun putBoolean(key: String, value: Boolean): CompoundTag = put(key, ByteTag.of(value))
+
+    public open fun putByte(key: String, value: Byte): CompoundTag = put(key, ByteTag.of(value))
+
+    public open fun putShort(key: String, value: Short): CompoundTag = put(key, ShortTag.of(value))
+
+    public open fun putInt(key: String, value: Int): CompoundTag = put(key, IntTag.of(value))
+
+    public open fun putLong(key: String, value: Long): CompoundTag = put(key, LongTag.of(value))
+
+    public open fun putFloat(key: String, value: Float): CompoundTag = put(key, FloatTag.of(value))
+
+    public open fun putDouble(key: String, value: Double): CompoundTag = put(key, DoubleTag.of(value))
+
+    public open fun putString(key: String, value: String): CompoundTag = put(key, StringTag.of(value))
+
+    public open fun putUUID(key: String, value: UUID): CompoundTag = put(key, value.toTag())
+
+    public open fun putByteArray(key: String, value: ByteArray): CompoundTag = put(key, ByteArrayTag(value))
+
+    public open fun putIntArray(key: String, value: IntArray): CompoundTag = put(key, IntArrayTag(value))
+
+    public open fun putLongArray(key: String, value: LongArray): CompoundTag = put(key, LongArrayTag(value))
+
+    public open fun putBytes(key: String, vararg values: Byte): CompoundTag = putByteArray(key, values)
+
+    public open fun putInts(key: String, vararg values: Int): CompoundTag = putIntArray(key, values)
+
+    public open fun putLongs(key: String, vararg values: Long): CompoundTag = putLongArray(key, values)
 
     public inline fun forEachByte(action: (String, Byte) -> Unit) {
         for ((key, value) in this) {
@@ -184,8 +222,15 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
         }
     }
 
-    @Deprecated("This is no longer necessary, as all compounds are mutable.", ReplaceWith("this as MutableCompoundTag"))
-    public fun mutable(): MutableCompoundTag = this as MutableCompoundTag
+    public fun mutable(): MutableCompoundTag {
+        if (this is MutableCompoundTag) return this
+        return MutableCompoundTag(if (tags is MutableMap) tags as MutableMap<String, Tag> else tags.toMutableMap())
+    }
+
+    public fun immutable(): ImmutableCompoundTag {
+        if (this is ImmutableCompoundTag) return this
+        return ImmutableCompoundTag(tags)
+    }
 
     override fun write(output: BufferedSink) {
         WRITER.write(output, this)

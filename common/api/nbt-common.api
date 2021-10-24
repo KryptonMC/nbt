@@ -170,6 +170,7 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public fun getValues ()Ljava/util/Collection;
 	public final fun hasUUID (Ljava/lang/String;)Z
 	public fun hashCode ()I
+	public final fun immutable ()Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public static final fun immutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun isEmpty ()Z
 	public final fun keySet ()Ljava/util/Set;
@@ -178,11 +179,25 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public final fun mutable ()Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public static final fun mutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public static final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
-	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public abstract fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun putAll (Ljava/util/Map;)V
+	public fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/CompoundTag;
 	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun putIfAbsent (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
 	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
 	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
@@ -312,6 +327,39 @@ public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/Co
 	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
+	public synthetic fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 }
 
 public final class org/kryptonmc/nbt/ImmutableListTag : org/kryptonmc/nbt/ListTag {
@@ -599,26 +647,41 @@ public final class org/kryptonmc/nbt/MutableCompoundTag : org/kryptonmc/nbt/Comp
 	public fun getSize ()I
 	public fun getTags ()Ljava/util/Map;
 	public fun getValues ()Ljava/util/Collection;
-	public final fun immutable ()Lorg/kryptonmc/nbt/CompoundTag;
 	public fun isEmpty ()Z
 	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public fun putAll (Ljava/util/Map;)V
-	public final fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
 	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
 	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
