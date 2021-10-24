@@ -54,7 +54,7 @@ class ExaminationTests {
     @Test
     @JsName("examineCompound")
     fun `examine compound`() {
-        assertEquals("{goodbye_world:8L,hello_world:1b}", StringTagExaminer().examine(CompoundTag.of(
+        assertEquals("{goodbye_world:8L,hello_world:1b}", StringTagExaminer().examine(CompoundTag.immutable(
             mapOf("hello_world" to ByteTag.of(1), "goodbye_world" to LongTag.of(8))
         )))
     }

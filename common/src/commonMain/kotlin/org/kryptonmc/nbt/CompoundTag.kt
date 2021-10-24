@@ -208,7 +208,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
         return null
     }
 
-    public class Builder internal constructor() {
+    public class Builder internal constructor(private val mutable: Boolean) {
 
         private val tags = mutableMapOf<String, Tag>()
 
@@ -299,7 +299,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
             put(name, Companion.builder().apply(builder).build())
         }
 
-        public fun build(): CompoundTag = MutableCompoundTag(tags)
+        public fun build(): CompoundTag = if (mutable) mutable(tags) else immutable(tags)
     }
 
     public companion object {
@@ -333,12 +333,20 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = mapOf()
             }
         }
 
+        @JvmStatic
+        @JvmOverloads
+        public fun builder(mutable: Boolean = true): Builder = Builder(mutable)
 
         @JvmStatic
-        public fun builder(): Builder = Builder()
+        @Deprecated("Not all compound tags are mutable any more.", ReplaceWith("CompoundTag.mutable"))
+        public fun of(data: Map<String, Tag>): CompoundTag = mutable(data)
 
         @JvmStatic
-        public fun of(data: Map<String, Tag>): CompoundTag = MutableCompoundTag(if (data is MutableMap) data else data.toMutableMap())
+        public fun mutable(data: Map<String, Tag>): CompoundTag =
+            MutableCompoundTag(if (data is MutableMap) data else data.toMutableMap())
+
+        @JvmStatic
+        public fun immutable(data: Map<String, Tag>): CompoundTag = ImmutableCompoundTag(data)
     }
 }
 

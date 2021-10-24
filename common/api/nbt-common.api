@@ -90,6 +90,7 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun asString ()Ljava/lang/String;
 	public static final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public static final fun builder (Z)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public fun clear ()V
 	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
 	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Lorg/kryptonmc/nbt/Tag;
@@ -169,11 +170,13 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public fun getValues ()Ljava/util/Collection;
 	public final fun hasUUID (Ljava/lang/String;)Z
 	public fun hashCode ()I
+	public static final fun immutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun isEmpty ()Z
 	public final fun keySet ()Ljava/util/Set;
 	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
 	public fun merge (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;Ljava/util/function/BiFunction;)Lorg/kryptonmc/nbt/Tag;
 	public final fun mutable ()Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public static final fun mutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public static final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
@@ -221,6 +224,10 @@ public final class org/kryptonmc/nbt/CompoundTag$Builder {
 
 public final class org/kryptonmc/nbt/CompoundTag$Companion {
 	public final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun builder (Z)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public static synthetic fun builder$default (Lorg/kryptonmc/nbt/CompoundTag$Companion;ZILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun immutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun mutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 }
 
@@ -297,6 +304,25 @@ public final class org/kryptonmc/nbt/FloatTag : org/kryptonmc/nbt/NumberTag {
 
 public final class org/kryptonmc/nbt/FloatTag$Companion {
 	public final fun of (F)Lorg/kryptonmc/nbt/FloatTag;
+}
+
+public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/CompoundTag {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class org/kryptonmc/nbt/ImmutableListTag : org/kryptonmc/nbt/ListTag {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;I)V
+	public synthetic fun <init> (Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/ListTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lorg/kryptonmc/nbt/Tag;
+	public fun getSize ()I
 }
 
 public final class org/kryptonmc/nbt/IntArrayTag : kotlin/collections/AbstractMutableList, org/kryptonmc/nbt/MutableCollectionTag {
