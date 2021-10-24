@@ -1,0 +1,861 @@
+public final class org/kryptonmc/nbt/ByteArrayTag : kotlin/collections/AbstractMutableList, org/kryptonmc/nbt/MutableCollectionTag {
+	public static final field Companion Lorg/kryptonmc/nbt/ByteArrayTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public fun <init> (Ljava/util/Collection;)V
+	public fun <init> ([B)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (ILorg/kryptonmc/nbt/ByteTag;)V
+	public fun addTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun asString ()Ljava/lang/String;
+	public fun clear ()V
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Lorg/kryptonmc/nbt/ByteTag;)Z
+	public fun copy ()Lorg/kryptonmc/nbt/ByteArrayTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lorg/kryptonmc/nbt/ByteTag;
+	public final fun getData ()[B
+	public fun getElementType ()I
+	public fun getId ()I
+	public fun getSize ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun hashCode ()I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun indexOf (Lorg/kryptonmc/nbt/ByteTag;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lorg/kryptonmc/nbt/ByteTag;)I
+	public final fun remove (I)Lorg/kryptonmc/nbt/ByteTag;
+	public final fun remove (Ljava/lang/Object;)Z
+	public fun remove (Lorg/kryptonmc/nbt/ByteTag;)Z
+	public synthetic fun removeAt (I)Ljava/lang/Object;
+	public fun removeAt (I)Lorg/kryptonmc/nbt/ByteTag;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public fun set (ILorg/kryptonmc/nbt/ByteTag;)Lorg/kryptonmc/nbt/ByteTag;
+	public fun setTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/ByteArrayTag$Companion {
+}
+
+public final class org/kryptonmc/nbt/ByteTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/ByteTag$Companion;
+	public static final field ID I
+	public static final field ONE Lorg/kryptonmc/nbt/ByteTag;
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/ByteTag;
+	public fun copy ()Lorg/kryptonmc/nbt/ByteTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun getValue ()Ljava/lang/Byte;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public static final fun of (B)Lorg/kryptonmc/nbt/ByteTag;
+	public static final fun of (Z)Lorg/kryptonmc/nbt/ByteTag;
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/ByteTag$Companion {
+	public final fun of (B)Lorg/kryptonmc/nbt/ByteTag;
+	public final fun of (Z)Lorg/kryptonmc/nbt/ByteTag;
+}
+
+public abstract interface class org/kryptonmc/nbt/CollectionTag : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker, org/kryptonmc/nbt/Tag {
+	public abstract fun getElementType ()I
+}
+
+public final class org/kryptonmc/nbt/CollectionTag$DefaultImpls {
+	public static fun asString (Lorg/kryptonmc/nbt/CollectionTag;)Ljava/lang/String;
+}
+
+public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker, org/kryptonmc/nbt/Tag {
+	public static final field Companion Lorg/kryptonmc/nbt/CompoundTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun asString ()Ljava/lang/String;
+	public static final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public fun clear ()V
+	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
+	public fun computeIfAbsent (Ljava/lang/String;Ljava/util/function/Function;)Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun computeIfPresent (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun computeIfPresent (Ljava/lang/String;Ljava/util/function/BiFunction;)Lorg/kryptonmc/nbt/Tag;
+	public final fun contains (Ljava/lang/String;I)Z
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsKey (Ljava/lang/String;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public fun containsValue (Lorg/kryptonmc/nbt/Tag;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public final fun forEachByte (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachByteArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachCompound (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachDouble (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachFloat (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachInt (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachIntArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachList (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachLong (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachLongArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachShort (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachString (Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun get (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
+	public fun get (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
+	public final fun getBoolean (Ljava/lang/String;)Z
+	public final fun getByte (Ljava/lang/String;)B
+	public final fun getByte (Ljava/lang/String;B)B
+	public static synthetic fun getByte$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;BILjava/lang/Object;)B
+	public final fun getByteArray (Ljava/lang/String;)[B
+	public final fun getByteArray (Ljava/lang/String;[B)[B
+	public static synthetic fun getByteArray$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;[BILjava/lang/Object;)[B
+	public final fun getCompound (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun getCompound (Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun getCompound$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun getDouble (Ljava/lang/String;)D
+	public final fun getDouble (Ljava/lang/String;D)D
+	public static synthetic fun getDouble$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;DILjava/lang/Object;)D
+	public fun getEntries ()Ljava/util/Set;
+	public final fun getFloat (Ljava/lang/String;)F
+	public final fun getFloat (Ljava/lang/String;F)F
+	public static synthetic fun getFloat$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;FILjava/lang/Object;)F
+	public fun getId ()I
+	public final fun getInt (Ljava/lang/String;)I
+	public final fun getInt (Ljava/lang/String;I)I
+	public static synthetic fun getInt$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;IILjava/lang/Object;)I
+	public final fun getIntArray (Ljava/lang/String;)[I
+	public final fun getIntArray (Ljava/lang/String;[I)[I
+	public static synthetic fun getIntArray$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;[IILjava/lang/Object;)[I
+	public fun getKeys ()Ljava/util/Set;
+	public final fun getList (Ljava/lang/String;I)Lorg/kryptonmc/nbt/ListTag;
+	public final fun getList (Ljava/lang/String;ILorg/kryptonmc/nbt/ListTag;)Lorg/kryptonmc/nbt/ListTag;
+	public static synthetic fun getList$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;ILorg/kryptonmc/nbt/ListTag;ILjava/lang/Object;)Lorg/kryptonmc/nbt/ListTag;
+	public final fun getLong (Ljava/lang/String;)J
+	public final fun getLong (Ljava/lang/String;J)J
+	public static synthetic fun getLong$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;JILjava/lang/Object;)J
+	public final fun getLongArray (Ljava/lang/String;)[J
+	public final fun getLongArray (Ljava/lang/String;[J)[J
+	public static synthetic fun getLongArray$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;[JILjava/lang/Object;)[J
+	public final fun getShort (Ljava/lang/String;)S
+	public final fun getShort (Ljava/lang/String;S)S
+	public static synthetic fun getShort$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;SILjava/lang/Object;)S
+	public fun getSize ()I
+	public final fun getString (Ljava/lang/String;)Ljava/lang/String;
+	public final fun getString (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+	public static synthetic fun getString$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public fun getTags ()Ljava/util/Map;
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public final fun getUUID (Ljava/lang/String;)Ljava/util/UUID;
+	public final fun getUUID (Ljava/lang/String;Ljava/util/UUID;)Ljava/util/UUID;
+	public static synthetic fun getUUID$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Ljava/util/UUID;ILjava/lang/Object;)Ljava/util/UUID;
+	public fun getValues ()Ljava/util/Collection;
+	public final fun hasUUID (Ljava/lang/String;)Z
+	public fun hashCode ()I
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun merge (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;Ljava/util/function/BiFunction;)Lorg/kryptonmc/nbt/Tag;
+	public final fun mutable ()Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public static final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public fun putAll (Ljava/util/Map;)V
+	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun putIfAbsent (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
+	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
+	public fun replace (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public fun replace (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;Lorg/kryptonmc/nbt/Tag;)Z
+	public fun replaceAll (Ljava/util/function/BiFunction;)V
+	public final fun size ()I
+	public fun toString ()Ljava/lang/String;
+	public final fun type (Ljava/lang/String;)I
+	public final fun values ()Ljava/util/Collection;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/CompoundTag$Builder {
+	public final fun build ()Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putCompound (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putList (Ljava/lang/String;ILjava/util/Collection;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putList (Ljava/lang/String;I[Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putList (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+}
+
+public final class org/kryptonmc/nbt/CompoundTag$Companion {
+	public final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
+}
+
+public final class org/kryptonmc/nbt/DoubleTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/DoubleTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/DoubleTag;
+	public synthetic fun <init> (DLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/DoubleTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun getValue ()Ljava/lang/Double;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public static final fun of (D)Lorg/kryptonmc/nbt/DoubleTag;
+	public fun toByte ()B
+	public fun toInt ()I
+	public fun toLong ()J
+	public fun toShort ()S
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/DoubleTag$Companion {
+	public final fun of (D)Lorg/kryptonmc/nbt/DoubleTag;
+}
+
+public final class org/kryptonmc/nbt/EndTag : org/kryptonmc/nbt/Tag {
+	public static final field ID I
+	public static final field INSTANCE Lorg/kryptonmc/nbt/EndTag;
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public fun asString ()Ljava/lang/String;
+	public fun copy ()Lorg/kryptonmc/nbt/EndTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/FloatTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/FloatTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/FloatTag;
+	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/FloatTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun getValue ()Ljava/lang/Float;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public static final fun of (F)Lorg/kryptonmc/nbt/FloatTag;
+	public fun toByte ()B
+	public fun toInt ()I
+	public fun toShort ()S
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/FloatTag$Companion {
+	public final fun of (F)Lorg/kryptonmc/nbt/FloatTag;
+}
+
+public final class org/kryptonmc/nbt/IntArrayTag : kotlin/collections/AbstractMutableList, org/kryptonmc/nbt/MutableCollectionTag {
+	public static final field Companion Lorg/kryptonmc/nbt/IntArrayTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public fun <init> (Ljava/util/Collection;)V
+	public fun <init> ([I)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (ILorg/kryptonmc/nbt/IntTag;)V
+	public fun addTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun asString ()Ljava/lang/String;
+	public fun clear ()V
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Lorg/kryptonmc/nbt/IntTag;)Z
+	public fun copy ()Lorg/kryptonmc/nbt/IntArrayTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lorg/kryptonmc/nbt/IntTag;
+	public final fun getData ()[I
+	public fun getElementType ()I
+	public fun getId ()I
+	public fun getSize ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun hashCode ()I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun indexOf (Lorg/kryptonmc/nbt/IntTag;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lorg/kryptonmc/nbt/IntTag;)I
+	public final fun remove (I)Lorg/kryptonmc/nbt/IntTag;
+	public final fun remove (Ljava/lang/Object;)Z
+	public fun remove (Lorg/kryptonmc/nbt/IntTag;)Z
+	public synthetic fun removeAt (I)Ljava/lang/Object;
+	public fun removeAt (I)Lorg/kryptonmc/nbt/IntTag;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public fun set (ILorg/kryptonmc/nbt/IntTag;)Lorg/kryptonmc/nbt/IntTag;
+	public fun setTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/IntArrayTag$Companion {
+}
+
+public final class org/kryptonmc/nbt/IntTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/IntTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/IntTag;
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public fun copy ()Lorg/kryptonmc/nbt/IntTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public final fun copy (I)Lorg/kryptonmc/nbt/IntTag;
+	public static synthetic fun copy$default (Lorg/kryptonmc/nbt/IntTag;IILjava/lang/Object;)Lorg/kryptonmc/nbt/IntTag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun getValue ()Ljava/lang/Integer;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public static final fun of (I)Lorg/kryptonmc/nbt/IntTag;
+	public fun toString ()Ljava/lang/String;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/IntTag$Companion {
+	public final fun of (I)Lorg/kryptonmc/nbt/IntTag;
+}
+
+public abstract class org/kryptonmc/nbt/ListTag : kotlin/collections/AbstractList, org/kryptonmc/nbt/CollectionTag {
+	public static final field Companion Lorg/kryptonmc/nbt/ListTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public synthetic fun <init> (Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun asString ()Ljava/lang/String;
+	public static final fun builder ()Lorg/kryptonmc/nbt/ListTag$Builder;
+	public static final fun builder (I)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Lorg/kryptonmc/nbt/Tag;)Z
+	public abstract fun copy ()Lorg/kryptonmc/nbt/ListTag;
+	public final fun equals (Ljava/lang/Object;)Z
+	public final fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public final fun forEachByte (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachByteArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachCompound (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachDouble (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachFloat (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachInt (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachIntArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachList (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachLong (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachLongArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachShort (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachString (Lkotlin/jvm/functions/Function1;)V
+	public final fun getByte (I)B
+	public final fun getByte (IB)B
+	public static synthetic fun getByte$default (Lorg/kryptonmc/nbt/ListTag;IBILjava/lang/Object;)B
+	public final fun getByteArray (I)[B
+	public final fun getByteArray (I[B)[B
+	public static synthetic fun getByteArray$default (Lorg/kryptonmc/nbt/ListTag;I[BILjava/lang/Object;)[B
+	public final fun getCompound (I)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun getCompound (ILorg/kryptonmc/nbt/CompoundTag;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun getCompound$default (Lorg/kryptonmc/nbt/ListTag;ILorg/kryptonmc/nbt/CompoundTag;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun getData ()Ljava/util/List;
+	public final fun getDouble (I)D
+	public final fun getDouble (ID)D
+	public static synthetic fun getDouble$default (Lorg/kryptonmc/nbt/ListTag;IDILjava/lang/Object;)D
+	public final fun getElementType ()I
+	public final fun getFloat (I)F
+	public final fun getFloat (IF)F
+	public static synthetic fun getFloat$default (Lorg/kryptonmc/nbt/ListTag;IFILjava/lang/Object;)F
+	public final fun getId ()I
+	public final fun getInt (I)I
+	public final fun getInt (II)I
+	public static synthetic fun getInt$default (Lorg/kryptonmc/nbt/ListTag;IIILjava/lang/Object;)I
+	public final fun getIntArray (I)[I
+	public final fun getIntArray (I[I)[I
+	public static synthetic fun getIntArray$default (Lorg/kryptonmc/nbt/ListTag;I[IILjava/lang/Object;)[I
+	public final fun getList (I)Lorg/kryptonmc/nbt/ListTag;
+	public final fun getList (ILorg/kryptonmc/nbt/ListTag;)Lorg/kryptonmc/nbt/ListTag;
+	public static synthetic fun getList$default (Lorg/kryptonmc/nbt/ListTag;ILorg/kryptonmc/nbt/ListTag;ILjava/lang/Object;)Lorg/kryptonmc/nbt/ListTag;
+	public final fun getLong (I)J
+	public final fun getLong (IJ)J
+	public static synthetic fun getLong$default (Lorg/kryptonmc/nbt/ListTag;IJILjava/lang/Object;)J
+	public final fun getLongArray (I)[J
+	public final fun getLongArray (I[J)[J
+	public static synthetic fun getLongArray$default (Lorg/kryptonmc/nbt/ListTag;I[JILjava/lang/Object;)[J
+	public final fun getShort (I)S
+	public final fun getShort (IS)S
+	public static synthetic fun getShort$default (Lorg/kryptonmc/nbt/ListTag;ISILjava/lang/Object;)S
+	public final fun getString (I)Ljava/lang/String;
+	public final fun getString (ILjava/lang/String;)Ljava/lang/String;
+	public static synthetic fun getString$default (Lorg/kryptonmc/nbt/ListTag;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public final fun hashCode ()I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun indexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public static final fun of (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
+	public final fun toString ()Ljava/lang/String;
+	public final fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/ListTag$Builder {
+	public final fun add (Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addByte (B)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addByteArray ([B)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addBytes ([B)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addDouble (D)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addFloat (F)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addInt (I)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addIntArray ([I)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addInts ([I)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addLong (J)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addLongArray ([J)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addLongs ([J)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addShort (S)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addString (Ljava/lang/String;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun addUUID (Ljava/util/UUID;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun build ()Lorg/kryptonmc/nbt/ListTag;
+}
+
+public final class org/kryptonmc/nbt/ListTag$Companion {
+	public final fun builder ()Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun builder (I)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public static synthetic fun builder$default (Lorg/kryptonmc/nbt/ListTag$Companion;IILjava/lang/Object;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun of (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
+}
+
+public final class org/kryptonmc/nbt/LongArrayTag : kotlin/collections/AbstractMutableList, org/kryptonmc/nbt/MutableCollectionTag {
+	public static final field Companion Lorg/kryptonmc/nbt/LongArrayTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public fun <init> (Ljava/util/Collection;)V
+	public fun <init> ([J)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (ILorg/kryptonmc/nbt/LongTag;)V
+	public fun addTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun asString ()Ljava/lang/String;
+	public fun clear ()V
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Lorg/kryptonmc/nbt/LongTag;)Z
+	public fun copy ()Lorg/kryptonmc/nbt/LongArrayTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lorg/kryptonmc/nbt/LongTag;
+	public final fun getData ()[J
+	public fun getElementType ()I
+	public fun getId ()I
+	public fun getSize ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun hashCode ()I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun indexOf (Lorg/kryptonmc/nbt/LongTag;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lorg/kryptonmc/nbt/LongTag;)I
+	public final fun remove (I)Lorg/kryptonmc/nbt/LongTag;
+	public final fun remove (Ljava/lang/Object;)Z
+	public fun remove (Lorg/kryptonmc/nbt/LongTag;)Z
+	public synthetic fun removeAt (I)Ljava/lang/Object;
+	public fun removeAt (I)Lorg/kryptonmc/nbt/LongTag;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public fun set (ILorg/kryptonmc/nbt/LongTag;)Lorg/kryptonmc/nbt/LongTag;
+	public fun setTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/LongArrayTag$Companion {
+}
+
+public final class org/kryptonmc/nbt/LongTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/LongTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/LongTag;
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/LongTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public fun getValue ()Ljava/lang/Long;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun hashCode ()I
+	public static final fun of (J)Lorg/kryptonmc/nbt/LongTag;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/LongTag$Companion {
+	public final fun of (J)Lorg/kryptonmc/nbt/LongTag;
+}
+
+public abstract interface class org/kryptonmc/nbt/MutableCollectionTag : java/util/Collection, kotlin/jvm/internal/markers/KMutableCollection, org/kryptonmc/nbt/CollectionTag, org/kryptonmc/nbt/Tag {
+	public abstract fun addTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public abstract fun setTag (ILorg/kryptonmc/nbt/Tag;)Z
+}
+
+public final class org/kryptonmc/nbt/MutableCollectionTag$DefaultImpls {
+	public static fun asString (Lorg/kryptonmc/nbt/MutableCollectionTag;)Ljava/lang/String;
+}
+
+public final class org/kryptonmc/nbt/MutableCompoundTag : org/kryptonmc/nbt/CompoundTag, java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear ()V
+	public fun containsKey (Ljava/lang/String;)Z
+	public fun containsValue (Lorg/kryptonmc/nbt/Tag;)Z
+	public fun copy ()Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun get (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getTags ()Ljava/util/Map;
+	public fun getValues ()Ljava/util/Collection;
+	public final fun immutable ()Lorg/kryptonmc/nbt/CompoundTag;
+	public fun isEmpty ()Z
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public fun putAll (Ljava/util/Map;)V
+	public final fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putIntArray (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putShort (Ljava/lang/String;S)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/Tag;
+	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
+	public final fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public final fun updateList (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+}
+
+public final class org/kryptonmc/nbt/MutableListTag : org/kryptonmc/nbt/ListTag, java/util/List, kotlin/jvm/internal/markers/KMutableList, org/kryptonmc/nbt/MutableCollectionTag {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;I)V
+	public synthetic fun <init> (Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (ILorg/kryptonmc/nbt/Tag;)V
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun add (Lorg/kryptonmc/nbt/Tag;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun addTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun clear ()V
+	public fun contains (Lorg/kryptonmc/nbt/Tag;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/ListTag;
+	public fun copy ()Lorg/kryptonmc/nbt/MutableListTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lorg/kryptonmc/nbt/Tag;
+	public fun getData ()Ljava/util/List;
+	public fun getSize ()I
+	public fun indexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public final fun remove (I)Lorg/kryptonmc/nbt/Tag;
+	public final fun remove (Ljava/lang/Object;)Z
+	public fun remove (Lorg/kryptonmc/nbt/Tag;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun removeAt (I)Lorg/kryptonmc/nbt/Tag;
+	public fun retainAll (Ljava/util/Collection;)Z
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public fun set (ILorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/Tag;
+	public final fun setByte (IB)V
+	public final fun setByteArray (I[B)V
+	public final fun setDouble (ID)V
+	public final fun setFloat (IF)V
+	public final fun setInt (II)V
+	public final fun setIntArray (I[I)V
+	public final fun setLong (IJ)V
+	public final fun setLongArray (I[J)V
+	public final fun setShort (IS)V
+	public final fun setString (ILjava/lang/String;)V
+	public fun setTag (ILorg/kryptonmc/nbt/Tag;)Z
+	public fun subList (II)Ljava/util/List;
+}
+
+public final class org/kryptonmc/nbt/NbtDslKt {
+	public static final fun buildCompound (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public static final fun buildList (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public static final fun compound (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun list (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/ListTag;
+	public static final fun mutableCompound (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
+	public static final fun mutableList (Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableListTag;
+}
+
+public abstract class org/kryptonmc/nbt/NumberTag : org/kryptonmc/nbt/Tag {
+	protected fun <init> (Ljava/lang/Number;)V
+	public fun asString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/Number;
+	public fun toByte ()B
+	public fun toDouble ()D
+	public fun toFloat ()F
+	public fun toInt ()I
+	public fun toLong ()J
+	public fun toShort ()S
+}
+
+public final class org/kryptonmc/nbt/ShortTag : org/kryptonmc/nbt/NumberTag {
+	public static final field Companion Lorg/kryptonmc/nbt/ShortTag$Companion;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public static final field ZERO Lorg/kryptonmc/nbt/ShortTag;
+	public synthetic fun <init> (SLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copy ()Lorg/kryptonmc/nbt/ShortTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public synthetic fun getValue ()Ljava/lang/Number;
+	public fun getValue ()Ljava/lang/Short;
+	public fun hashCode ()I
+	public static final fun of (S)Lorg/kryptonmc/nbt/ShortTag;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/ShortTag$Companion {
+	public final fun of (S)Lorg/kryptonmc/nbt/ShortTag;
+}
+
+public final class org/kryptonmc/nbt/StringTag : org/kryptonmc/nbt/Tag {
+	public static final field Companion Lorg/kryptonmc/nbt/StringTag$Companion;
+	public static final field EMPTY Lorg/kryptonmc/nbt/StringTag;
+	public static final field ID I
+	public static final field READER Lorg/kryptonmc/nbt/io/TagReader;
+	public static final field TYPE Lorg/kryptonmc/nbt/TagType;
+	public static final field WRITER Lorg/kryptonmc/nbt/io/TagWriter;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun asString ()Ljava/lang/String;
+	public fun copy ()Lorg/kryptonmc/nbt/StringTag;
+	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public fun getId ()I
+	public fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static final fun of (Ljava/lang/String;)Lorg/kryptonmc/nbt/StringTag;
+	public fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/StringTag$Companion {
+	public final fun of (Ljava/lang/String;)Lorg/kryptonmc/nbt/StringTag;
+}
+
+public final class org/kryptonmc/nbt/StringTagExaminer : org/kryptonmc/nbt/TagExaminer {
+	public fun <init> ()V
+	public synthetic fun examine (Lorg/kryptonmc/nbt/Tag;)Ljava/lang/Object;
+	public fun examine (Lorg/kryptonmc/nbt/Tag;)Ljava/lang/String;
+	public fun examineByte (Lorg/kryptonmc/nbt/ByteTag;)V
+	public fun examineByteArray (Lorg/kryptonmc/nbt/ByteArrayTag;)V
+	public fun examineCompound (Lorg/kryptonmc/nbt/CompoundTag;)V
+	public fun examineDouble (Lorg/kryptonmc/nbt/DoubleTag;)V
+	public fun examineEnd (Lorg/kryptonmc/nbt/EndTag;)V
+	public fun examineFloat (Lorg/kryptonmc/nbt/FloatTag;)V
+	public fun examineInt (Lorg/kryptonmc/nbt/IntTag;)V
+	public fun examineIntArray (Lorg/kryptonmc/nbt/IntArrayTag;)V
+	public fun examineList (Lorg/kryptonmc/nbt/ListTag;)V
+	public fun examineLong (Lorg/kryptonmc/nbt/LongTag;)V
+	public fun examineLongArray (Lorg/kryptonmc/nbt/LongArrayTag;)V
+	public fun examineShort (Lorg/kryptonmc/nbt/ShortTag;)V
+	public fun examineString (Lorg/kryptonmc/nbt/StringTag;)V
+}
+
+public abstract interface class org/kryptonmc/nbt/Tag {
+	public abstract fun asString ()Ljava/lang/String;
+	public abstract fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public abstract fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
+	public abstract fun getId ()I
+	public abstract fun getType ()Lorg/kryptonmc/nbt/TagType;
+	public abstract fun write (Lokio/BufferedSink;)V
+}
+
+public final class org/kryptonmc/nbt/Tag$DefaultImpls {
+	public static fun asString (Lorg/kryptonmc/nbt/Tag;)Ljava/lang/String;
+}
+
+public abstract interface class org/kryptonmc/nbt/TagExaminer {
+	public abstract fun examine (Lorg/kryptonmc/nbt/Tag;)Ljava/lang/Object;
+	public abstract fun examineByte (Lorg/kryptonmc/nbt/ByteTag;)V
+	public abstract fun examineByteArray (Lorg/kryptonmc/nbt/ByteArrayTag;)V
+	public abstract fun examineCompound (Lorg/kryptonmc/nbt/CompoundTag;)V
+	public abstract fun examineDouble (Lorg/kryptonmc/nbt/DoubleTag;)V
+	public abstract fun examineEnd (Lorg/kryptonmc/nbt/EndTag;)V
+	public abstract fun examineFloat (Lorg/kryptonmc/nbt/FloatTag;)V
+	public abstract fun examineInt (Lorg/kryptonmc/nbt/IntTag;)V
+	public abstract fun examineIntArray (Lorg/kryptonmc/nbt/IntArrayTag;)V
+	public abstract fun examineList (Lorg/kryptonmc/nbt/ListTag;)V
+	public abstract fun examineLong (Lorg/kryptonmc/nbt/LongTag;)V
+	public abstract fun examineLongArray (Lorg/kryptonmc/nbt/LongArrayTag;)V
+	public abstract fun examineShort (Lorg/kryptonmc/nbt/ShortTag;)V
+	public abstract fun examineString (Lorg/kryptonmc/nbt/StringTag;)V
+}
+
+public final class org/kryptonmc/nbt/TagType {
+	public fun <init> (Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun copy (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/TagType;
+	public static synthetic fun copy$default (Lorg/kryptonmc/nbt/TagType;Ljava/lang/String;ZILjava/lang/Object;)Lorg/kryptonmc/nbt/TagType;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isValue ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/kryptonmc/nbt/io/TagCompression {
+	public static final field Companion Lorg/kryptonmc/nbt/io/TagCompression$Companion;
+	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public final fun compress (Lokio/BufferedSink;)Lokio/BufferedSink;
+	public final fun decompress (Lokio/BufferedSource;)Lokio/BufferedSource;
+}
+
+public final class org/kryptonmc/nbt/io/TagCompression$Companion {
+	public final fun getGZIP ()Lorg/kryptonmc/nbt/io/TagCompression;
+	public final fun getNONE ()Lorg/kryptonmc/nbt/io/TagCompression;
+	public final fun getZLIB ()Lorg/kryptonmc/nbt/io/TagCompression;
+}
+
+public final class org/kryptonmc/nbt/io/TagIO {
+	public static final field INSTANCE Lorg/kryptonmc/nbt/io/TagIO;
+	public static final fun read (Ljava/io/File;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun read (Ljava/io/File;Lorg/kryptonmc/nbt/io/TagCompression;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun read (Ljava/io/InputStream;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun read (Ljava/io/InputStream;Lorg/kryptonmc/nbt/io/TagCompression;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun read (Ljava/nio/file/Path;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun read (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/io/TagCompression;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun read (Lokio/BufferedSource;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun read (Lokio/BufferedSource;Lorg/kryptonmc/nbt/io/TagCompression;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun read$default (Ljava/io/File;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun read$default (Ljava/io/InputStream;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun read$default (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun readNamed (Ljava/io/File;)Lkotlin/Pair;
+	public static final fun readNamed (Ljava/io/File;Lorg/kryptonmc/nbt/io/TagCompression;)Lkotlin/Pair;
+	public static final fun readNamed (Ljava/io/InputStream;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun readNamed (Ljava/io/InputStream;Lorg/kryptonmc/nbt/io/TagCompression;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static final fun readNamed (Ljava/nio/file/Path;)Lkotlin/Pair;
+	public static final fun readNamed (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/io/TagCompression;)Lkotlin/Pair;
+	public final fun readNamed (Lokio/BufferedSource;)Lkotlin/Pair;
+	public final fun readNamed (Lokio/BufferedSource;Lorg/kryptonmc/nbt/io/TagCompression;)Lkotlin/Pair;
+	public static synthetic fun readNamed$default (Ljava/io/File;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lkotlin/Pair;
+	public static synthetic fun readNamed$default (Ljava/io/InputStream;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public static synthetic fun readNamed$default (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)Lkotlin/Pair;
+	public static final fun write (Ljava/io/File;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun write (Ljava/io/File;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static final fun write (Ljava/io/OutputStream;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun write (Ljava/io/OutputStream;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static final fun write (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun write (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public final fun write (Lokio/BufferedSink;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public final fun write (Lokio/BufferedSink;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static synthetic fun write$default (Ljava/io/File;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+	public static synthetic fun write$default (Ljava/io/OutputStream;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+	public static synthetic fun write$default (Ljava/nio/file/Path;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+	public static final fun writeNamed (Ljava/io/File;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun writeNamed (Ljava/io/File;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static final fun writeNamed (Ljava/io/OutputStream;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun writeNamed (Ljava/io/OutputStream;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static final fun writeNamed (Ljava/nio/file/Path;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public static final fun writeNamed (Ljava/nio/file/Path;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public final fun writeNamed (Lokio/BufferedSink;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)V
+	public final fun writeNamed (Lokio/BufferedSink;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;)V
+	public static synthetic fun writeNamed$default (Ljava/io/File;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+	public static synthetic fun writeNamed$default (Ljava/io/OutputStream;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+	public static synthetic fun writeNamed$default (Ljava/nio/file/Path;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;Lorg/kryptonmc/nbt/io/TagCompression;ILjava/lang/Object;)V
+}
+
+public abstract interface class org/kryptonmc/nbt/io/TagReader {
+	public abstract fun read (Lokio/BufferedSource;I)Lorg/kryptonmc/nbt/Tag;
+}
+
+public abstract interface class org/kryptonmc/nbt/io/TagWriter {
+	public abstract fun write (Lokio/BufferedSink;Lorg/kryptonmc/nbt/Tag;)V
+}
+
+public final class org/kryptonmc/nbt/io/Types {
+	public static final field INSTANCE Lorg/kryptonmc/nbt/io/Types;
+	public static final fun of (I)Lorg/kryptonmc/nbt/TagType;
+	public static final fun reader (I)Lorg/kryptonmc/nbt/io/TagReader;
+}
+

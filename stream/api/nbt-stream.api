@@ -1,0 +1,106 @@
+public final class org/kryptonmc/nbt/stream/BinaryNBTReader : org/kryptonmc/nbt/stream/NBTReader {
+	public fun <init> (Lokio/BufferedSource;)V
+	public fun beginByteArray ()I
+	public fun beginCompound ()V
+	public fun beginIntArray ()I
+	public fun beginList (I)I
+	public fun beginLongArray ()I
+	public fun close ()V
+	public fun endByteArray ()V
+	public fun endCompound ()V
+	public fun endIntArray ()V
+	public fun endList ()V
+	public fun endLongArray ()V
+	public fun hasNext ()Z
+	public fun nextByte ()B
+	public fun nextDouble ()D
+	public fun nextEnd ()V
+	public fun nextFloat ()F
+	public fun nextInt ()I
+	public fun nextLong ()J
+	public fun nextName ()Ljava/lang/String;
+	public fun nextShort ()S
+	public fun nextString ()Ljava/lang/String;
+	public fun nextType ()B
+	public fun peekType ()B
+}
+
+public final class org/kryptonmc/nbt/stream/BinaryNBTWriter : org/kryptonmc/nbt/stream/NBTWriter {
+	public fun <init> (Lokio/BufferedSink;)V
+	public fun beginByteArray (I)V
+	public fun beginCompound ()V
+	public fun beginIntArray (I)V
+	public fun beginList (II)V
+	public fun beginLongArray (I)V
+	public fun close ()V
+	public fun end ()V
+	public fun endByteArray ()V
+	public fun endCompound ()V
+	public fun endIntArray ()V
+	public fun endList ()V
+	public fun endLongArray ()V
+	public fun name (Ljava/lang/String;)V
+	public fun value (B)V
+	public fun value (D)V
+	public fun value (F)V
+	public fun value (I)V
+	public fun value (J)V
+	public fun value (Ljava/lang/String;)V
+	public fun value (Ljava/util/UUID;)V
+	public fun value (S)V
+	public fun value (Z)V
+}
+
+public abstract class org/kryptonmc/nbt/stream/NBTReader : java/io/Closeable {
+	public fun <init> ()V
+	public abstract fun beginByteArray ()I
+	public abstract fun beginCompound ()V
+	public abstract fun beginIntArray ()I
+	public abstract fun beginList (I)I
+	public abstract fun beginLongArray ()I
+	public abstract fun endByteArray ()V
+	public abstract fun endCompound ()V
+	public abstract fun endIntArray ()V
+	public abstract fun endList ()V
+	public abstract fun endLongArray ()V
+	public abstract fun hasNext ()Z
+	public abstract fun nextByte ()B
+	public abstract fun nextDouble ()D
+	public abstract fun nextEnd ()V
+	public abstract fun nextFloat ()F
+	public abstract fun nextInt ()I
+	public abstract fun nextLong ()J
+	public abstract fun nextName ()Ljava/lang/String;
+	public abstract fun nextShort ()S
+	public abstract fun nextString ()Ljava/lang/String;
+	public abstract fun nextType ()B
+	public abstract fun peekType ()B
+	public final fun read ()Lorg/kryptonmc/nbt/Tag;
+}
+
+public abstract class org/kryptonmc/nbt/stream/NBTWriter : java/io/Closeable {
+	public fun <init> ()V
+	public abstract fun beginByteArray (I)V
+	public abstract fun beginCompound ()V
+	public abstract fun beginIntArray (I)V
+	public abstract fun beginList (II)V
+	public abstract fun beginLongArray (I)V
+	public abstract fun end ()V
+	public abstract fun endByteArray ()V
+	public abstract fun endCompound ()V
+	public abstract fun endIntArray ()V
+	public abstract fun endList ()V
+	public abstract fun endLongArray ()V
+	public abstract fun name (Ljava/lang/String;)V
+	public abstract fun value (B)V
+	public abstract fun value (D)V
+	public abstract fun value (F)V
+	public abstract fun value (I)V
+	public abstract fun value (J)V
+	public abstract fun value (Ljava/lang/String;)V
+	public abstract fun value (Ljava/util/UUID;)V
+	public abstract fun value (S)V
+	public abstract fun value (Z)V
+	public final fun write (Lorg/kryptonmc/nbt/Tag;)V
+}
+

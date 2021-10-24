@@ -4,6 +4,7 @@ import java.net.URI
 plugins {
     kotlin("multiplatform")
     id("org.cadixdev.licenser")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
     signing
 }
