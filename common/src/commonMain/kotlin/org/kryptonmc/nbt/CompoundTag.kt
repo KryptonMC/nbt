@@ -22,9 +22,7 @@ import kotlin.jvm.JvmName
 import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 
-public sealed class CompoundTag(
-    public open val tags: Map<String, Tag> = mapOf()
-) : Tag, Map<String, Tag> by tags {
+public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMap()) : Tag, Map<String, Tag> by tags {
 
     override val id: Int = ID
     override val type: TagType = TYPE
@@ -379,6 +377,7 @@ public sealed class CompoundTag(
                 output.writeByte(EndTag.ID)
             }
         }
+        private val EMPTY = ImmutableCompoundTag()
 
         @JvmStatic
         @JvmOverloads
@@ -394,6 +393,9 @@ public sealed class CompoundTag(
 
         @JvmStatic
         public fun immutable(data: Map<String, Tag>): CompoundTag = ImmutableCompoundTag(data)
+
+        @JvmStatic
+        public fun empty(): CompoundTag = EMPTY
     }
 }
 

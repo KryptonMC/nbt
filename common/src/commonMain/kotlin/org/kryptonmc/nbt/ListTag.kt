@@ -21,7 +21,7 @@ import kotlin.jvm.JvmStatic
 import kotlin.jvm.JvmSynthetic
 
 public sealed class ListTag(
-    public open val data: List<Tag> = mutableListOf(),
+    public open val data: List<Tag> = emptyList(),
     elementType: Int = 0
 ) : AbstractList<Tag>(), CollectionTag<Tag> {
 
@@ -296,13 +296,24 @@ public sealed class ListTag(
                 }
             }
         }
+        private val EMPTY = ImmutableListTag()
 
         @JvmStatic
         @JvmOverloads
         public fun builder(elementType: Int = EndTag.ID): Builder = Builder(elementType)
 
         @JvmStatic
-        public fun of(data: List<Tag>, elementType: Int): ListTag =
+        @Deprecated("Not all list tags are mutable any more.", ReplaceWith("ListTag.mutable"))
+        public fun of(data: List<Tag>, elementType: Int): ListTag = mutable(data, elementType)
+
+        @JvmStatic
+        public fun mutable(data: List<Tag>, elementType: Int): ListTag =
             MutableListTag(if (data is MutableList) data else data.toMutableList(), elementType)
+
+        @JvmStatic
+        public fun immutable(data: List<Tag>, elementType: Int): ListTag = ImmutableListTag(data, elementType)
+
+        @JvmStatic
+        public fun empty(): ListTag = EMPTY
     }
 }
