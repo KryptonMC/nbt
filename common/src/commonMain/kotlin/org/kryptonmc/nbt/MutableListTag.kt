@@ -65,7 +65,25 @@ public class MutableListTag(
     }
 
     override fun add(index: Int, element: Tag) {
-        if (!addTag(index, element)) throw UnsupportedOperationException("Cannot add tag of type ${element.id} to list of type $elementType!")
+        if (updateType(element)) {
+            data.add(index, element)
+            return
+        }
+        throw UnsupportedOperationException("Cannot add tag of type ${element.id} to list of type $elementType!")
+    }
+
+    override fun add(element: Tag): Boolean {
+        if (updateType(element)) {
+            data.add(element)
+            return true
+        }
+        return false
+    }
+
+    override fun remove(element: Tag): Boolean {
+        val result = data.remove(element)
+        if (data.isEmpty()) elementType = EndTag.ID
+        return result
     }
 
     override fun removeAt(index: Int): Tag {
@@ -104,21 +122,19 @@ public class MutableListTag(
     }
 
     override fun setTag(index: Int, tag: Tag): Boolean {
-        return if (updateType(tag)) {
+        if (updateType(tag)) {
             data[index] = tag
-            true
-        } else {
-            false
+            return true
         }
+        return false
     }
 
     override fun addTag(index: Int, tag: Tag): Boolean {
-        return if (updateType(tag)) {
+        if (updateType(tag)) {
             data.add(index, tag)
-            true
-        } else {
-            false
+            return true
         }
+        return false
     }
 
     private fun updateType(tag: Tag): Boolean {
