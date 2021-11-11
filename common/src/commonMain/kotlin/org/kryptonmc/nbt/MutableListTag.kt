@@ -74,6 +74,16 @@ public class MutableListTag(
         return oldValue
     }
 
+    override fun contains(element: Tag): Boolean = data.contains(element)
+
+    override fun containsAll(elements: Collection<Tag>): Boolean = data.containsAll(elements)
+
+    override fun indexOf(element: Tag): Int = data.indexOf(element)
+
+    override fun isEmpty(): Boolean = data.isEmpty()
+
+    override fun lastIndexOf(element: Tag): Int = data.lastIndexOf(element)
+
     override fun iterator(): MutableIterator<Tag> = data.iterator()
 
     override fun listIterator(): MutableListIterator<Tag> = data.listIterator()

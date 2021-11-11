@@ -103,6 +103,7 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public fun containsKey (Ljava/lang/String;)Z
 	public final fun containsValue (Ljava/lang/Object;)Z
 	public fun containsValue (Lorg/kryptonmc/nbt/Tag;)Z
+	public static final fun empty ()Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun entrySet ()Ljava/util/Set;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
@@ -242,6 +243,7 @@ public final class org/kryptonmc/nbt/CompoundTag$Companion {
 	public final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun builder (Z)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public static synthetic fun builder$default (Lorg/kryptonmc/nbt/CompoundTag$Companion;ZILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun empty ()Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun immutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun mutable (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun of (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag;
@@ -328,7 +330,6 @@ public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/Co
 	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
-	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public synthetic fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun putBoolean (Ljava/lang/String;Z)Lorg/kryptonmc/nbt/CompoundTag;
@@ -361,8 +362,6 @@ public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/Co
 	public fun putString (Ljava/lang/String;Ljava/lang/String;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun putUUID (Ljava/lang/String;Ljava/util/UUID;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
-	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
-	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 }
@@ -467,6 +466,7 @@ public abstract class org/kryptonmc/nbt/ListTag : kotlin/collections/AbstractLis
 	public final fun contains (Ljava/lang/Object;)Z
 	public fun contains (Lorg/kryptonmc/nbt/Tag;)Z
 	public abstract fun copy ()Lorg/kryptonmc/nbt/ListTag;
+	public static final fun empty ()Lorg/kryptonmc/nbt/ListTag;
 	public final fun equals (Ljava/lang/Object;)Z
 	public final fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
 	public final fun forEachByte (Lkotlin/jvm/functions/Function1;)V
@@ -522,10 +522,12 @@ public abstract class org/kryptonmc/nbt/ListTag : kotlin/collections/AbstractLis
 	public static synthetic fun getString$default (Lorg/kryptonmc/nbt/ListTag;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
 	public final fun getType ()Lorg/kryptonmc/nbt/TagType;
 	public final fun hashCode ()I
+	public static final fun immutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public final fun indexOf (Ljava/lang/Object;)I
 	public fun indexOf (Lorg/kryptonmc/nbt/Tag;)I
 	public final fun lastIndexOf (Ljava/lang/Object;)I
 	public fun lastIndexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public static final fun mutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public static final fun of (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public final fun toString ()Ljava/lang/String;
 	public final fun write (Lokio/BufferedSink;)V
@@ -554,6 +556,9 @@ public final class org/kryptonmc/nbt/ListTag$Companion {
 	public final fun builder ()Lorg/kryptonmc/nbt/ListTag$Builder;
 	public final fun builder (I)Lorg/kryptonmc/nbt/ListTag$Builder;
 	public static synthetic fun builder$default (Lorg/kryptonmc/nbt/ListTag$Companion;IILjava/lang/Object;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun empty ()Lorg/kryptonmc/nbt/ListTag;
+	public final fun immutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
+	public final fun mutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public final fun of (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 }
 

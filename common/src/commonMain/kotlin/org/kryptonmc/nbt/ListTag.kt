@@ -259,7 +259,7 @@ public sealed class ListTag(
         @NBTDsl
         public fun addLongs(vararg values: Long): Builder = addLongArray(values)
 
-        public fun build(): ListTag = MutableListTag(data)
+        public fun build(): ListTag = MutableListTag(data, elementType)
     }
 
     public companion object {
