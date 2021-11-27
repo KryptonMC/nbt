@@ -15,6 +15,13 @@ import org.kryptonmc.nbt.io.TagWriter
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
+/**
+ * A tag that holds a long value.
+ *
+ * The reason this is not directly constructable is that it is pooled and
+ * cached. The cache contains the most common long values used in NBT, those
+ * being the values from -128 to 1024.
+ */
 public class LongTag private constructor(override val value: Long) : NumberTag(value) {
 
     override val id: Int = ID
@@ -37,6 +44,10 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
     public companion object {
 
         private val CACHE = Array(1153) { LongTag((-128 + it).toLong()) }
+
+        /**
+         * The long tag representing the constant zero.
+         */
         @JvmField
         public val ZERO: LongTag = of(0)
 
@@ -56,6 +67,14 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
             }
         }
 
+        /**
+         * Gets the long tag representing the given [value], if it is in the
+         * range -128 to 1024, else creates a new long tag representing the
+         * given [value].
+         *
+         * @param value the backing value
+         * @return a long tag representing the value
+         */
         @JvmStatic
         public fun of(value: Long): LongTag = if (value in -128..1024) CACHE[value.toInt() + 128] else LongTag(value)
     }

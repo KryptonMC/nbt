@@ -23,17 +23,17 @@ import org.kryptonmc.nbt.LongArrayTag
 import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
+import org.kryptonmc.nbt.Tag
 import org.kryptonmc.nbt.util.UUID
 
-public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter() {
+public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter {
 
     private var stackSize = 1
-    private var scopes = IntArray(32) { -1 }.apply {
-        this[0] = NBTScope.COMPOUND
-    }
+    private var scopes = IntArray(32) { -1 }.apply { this[0] = NBTScope.COMPOUND }
     private var deferredName: String? = null
 
     override fun beginByteArray(size: Int) {
+        require(size >= 0) { "Cannot write a byte array with a size less than 0!" }
         writeNameAndType(ByteArrayTag.ID)
         open(NBTScope.BYTE_ARRAY)
         sink.writeInt(size)
@@ -44,6 +44,7 @@ public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter() {
     }
 
     override fun beginIntArray(size: Int) {
+        require(size >= 0) { "Cannot write an integer array with a size less than 0!" }
         writeNameAndType(IntArrayTag.ID)
         open(NBTScope.INT_ARRAY)
         sink.writeInt(size)
@@ -54,6 +55,7 @@ public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter() {
     }
 
     override fun beginLongArray(size: Int) {
+        require(size >= 0) { "Cannot write a long array with a size less than 0!" }
         writeNameAndType(LongArrayTag.ID)
         open(NBTScope.LONG_ARRAY)
         sink.writeInt(size)
@@ -64,6 +66,7 @@ public class BinaryNBTWriter(private val sink: BufferedSink) : NBTWriter() {
     }
 
     override fun beginList(elementType: Int, size: Int) {
+        require(size >= 0) { "Cannot write a list with a size less than 0!" }
         check(elementType != 0 || size != 0) { "Invalid list! Element type must not be 0 for non-empty lists!" }
         writeNameAndType(ListTag.ID)
         open(NBTScope.LIST)

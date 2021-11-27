@@ -11,15 +11,20 @@ package org.kryptonmc.nbt
 import org.kryptonmc.nbt.util.UUID
 import org.kryptonmc.nbt.util.toTag
 
-public class ImmutableCompoundTag(
-    tags: Map<String, Tag> = emptyMap()
-) : CompoundTag(tags) {
+/**
+ * A variant of [CompoundTag] that is immutable.
+ *
+ * All attempts to write to an immutable tag will result in a new immutable tag
+ * being created with the requested changes.
+ */
+public class ImmutableCompoundTag(tags: Map<String, Tag> = emptyMap()) : CompoundTag(tags) {
 
-    override fun put(key: String, value: Tag): ImmutableCompoundTag = ImmutableCompoundTag(tags + (key to value))
+    override fun put(key: String, value: Tag): ImmutableCompoundTag = ImmutableCompoundTag(tags.plus(key to value))
 
-    override fun remove(key: String): ImmutableCompoundTag = ImmutableCompoundTag(
-        if (tags is MutableMap) tags.apply { remove(key) } else tags.toMutableMap().apply { remove(key) }
-    )
+    override fun remove(key: String): ImmutableCompoundTag {
+        val result = if (tags is MutableMap) tags.apply { remove(key) } else tags.toMutableMap().apply { remove(key) }
+        return ImmutableCompoundTag(result)
+    }
 
     override fun putBoolean(key: String, value: Boolean): ImmutableCompoundTag = put(key, ByteTag.of(value))
 
@@ -51,5 +56,5 @@ public class ImmutableCompoundTag(
 
     override fun putLongs(key: String, vararg values: Long): ImmutableCompoundTag = putLongArray(key, values)
 
-    override fun copy(): Tag = this // Immutable, no need to copy
+    override fun copy(): ImmutableCompoundTag = this // Immutable, no need to copy
 }

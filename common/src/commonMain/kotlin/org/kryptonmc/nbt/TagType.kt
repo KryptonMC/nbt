@@ -8,6 +8,12 @@
  */
 package org.kryptonmc.nbt
 
+/**
+ * A type of tag.
+ *
+ * @param name the name of the tag type
+ * @param isValue if the tag is a value tag
+ */
 public data class TagType(
     val name: String,
     val isValue: Boolean = false

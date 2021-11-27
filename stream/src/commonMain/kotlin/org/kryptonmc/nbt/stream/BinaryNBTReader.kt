@@ -23,12 +23,10 @@ import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
 
-public class BinaryNBTReader(private val source: BufferedSource) : NBTReader() {
+public class BinaryNBTReader(private val source: BufferedSource) : NBTReader {
 
     private var stackSize = 1
-    private var scopes = IntArray(32) { -1 }.apply {
-        this[0] = NBTScope.COMPOUND
-    }
+    private var scopes = IntArray(32) { -1 }.apply { this[0] = NBTScope.COMPOUND }
     private var deferredName: String? = null
 
     override fun beginByteArray(): Int {

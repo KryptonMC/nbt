@@ -16,8 +16,14 @@ import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
 
+/**
+ * A tag that holds a byte array.
+ */
 public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), MutableCollectionTag<ByteTag> {
 
+    /**
+     * The backing data for this tag.
+     */
     public var data: ByteArray = data
         private set
 
@@ -27,6 +33,11 @@ public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), Mut
     override val size: Int
         get() = data.size
 
+    /**
+     * Creates a new byte array tag from the given [data].
+     *
+     * @param data the backing data for the tag
+     */
     public constructor(data: Collection<Byte>) : this(data.toByteArray())
 
     override fun get(index: Int): ByteTag = ByteTag.of(data[index])

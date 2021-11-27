@@ -59,6 +59,7 @@ private external object Pako {
     }
 
     class Deflate(options: Any = definedExternally) {
+
         val err: Int
         val msg: String
         val result: Uint8Array
@@ -70,6 +71,7 @@ private external object Pako {
     }
 
     class Inflate(options: Any = definedExternally) {
+
         val err: Int
         val msg: String
         val result: Uint8Array
@@ -82,6 +84,7 @@ private external object Pako {
 }
 
 internal enum class ZFlushMode(val flushMode: Int) {
+
     NO_FLUSH(0),
     PARTIAL_FLUSH(1),
     SYNC_FLUSH(2),
@@ -92,6 +95,7 @@ internal enum class ZFlushMode(val flushMode: Int) {
 }
 
 internal enum class ZStatus(val status: Int) {
+
     VERSION_ERROR(-6),
     BUF_ERROR(-5),
     MEM_ERROR(-4),
@@ -100,13 +104,13 @@ internal enum class ZStatus(val status: Int) {
     ERRNO(-1),
     OK(0),
     STREAM_END(1),
-    NEED_DICT(2),
-    ;
+    NEED_DICT(2);
 
     val isError: Boolean
         get() = status < 0
 
     companion object {
+
         fun fromCode(status: Int): ZStatus {
             require(status in -6..2) { "Invalid Status code: $status" }
             return enumValues<ZStatus>()[status - 6]
@@ -114,15 +118,17 @@ internal enum class ZStatus(val status: Int) {
     }
 }
 
-internal value class ZLevel(
-    /** Between 0 (No compression) and 9 (Best compression), or -1 (Default compression) */
-    val level: Int,
-) {
+/**
+ * The level is between 0 (No compression) and 9 (Best compression), or -1 (Default compression)
+ */
+internal value class ZLevel(val level: Int) {
+
     init {
         require(level in -1..9) { "Compression level must be in -1..9" }
     }
 
     companion object {
+
         val NO_COMPRESSION = ZLevel(Pako.Constants.Z_NO_COMPRESSION)
         val BEST_SPEED = ZLevel(Pako.Constants.Z_BEST_SPEED)
         val BEST_COMPRESSION = ZLevel(Pako.Constants.Z_BEST_COMPRESSION)
@@ -131,6 +137,7 @@ internal value class ZLevel(
 }
 
 internal enum class ZStrategy(val constant: Int) {
+
     FILTERED(Pako.Constants.Z_FILTERED),
     HUFFMAN_ONLY(Pako.Constants.Z_HUFFMAN_ONLY),
     RLE(Pako.Constants.Z_RLE),
@@ -139,6 +146,7 @@ internal enum class ZStrategy(val constant: Int) {
 }
 
 internal enum class ZDataType(val dataType: Int) {
+
     BINARY(Pako.Constants.Z_BINARY),
     TEXT(Pako.Constants.Z_TEXT),
     UNKNOWN(Pako.Constants.Z_UNKNOWN),
@@ -150,6 +158,7 @@ internal class Deflate(
     memLevel: Int? = null,
     strategy: ZStrategy? = null,
 ) {
+
     private val deflate = Pako.Deflate(
         json().apply {
             if (level != null) set("level", level.level)
@@ -175,8 +184,7 @@ internal class Deflate(
             deflate.onEnd = { status -> value(ZStatus.fromCode(status)) }
         }
 
-    fun push(data: Uint8Array, flushMode: ZFlushMode = ZFlushMode.NO_FLUSH): Boolean =
-        deflate.push(data, flushMode.flushMode)
+    fun push(data: Uint8Array, flushMode: ZFlushMode = ZFlushMode.NO_FLUSH): Boolean = deflate.push(data, flushMode.flushMode)
 
     class Options(
         var level: ZLevel? = null,
@@ -186,14 +194,9 @@ internal class Deflate(
     )
 }
 
-internal class Inflate(
-    windowBits: Int? = null,
-) {
-    private val inflate = Pako.Inflate(
-        json().apply {
-            if (windowBits != null) set("windowBits", windowBits)
-        }
-    )
+internal class Inflate(windowBits: Int? = null) {
+
+    private val inflate = Pako.Inflate(json().apply { if (windowBits != null) set("windowBits", windowBits) })
 
     val err: ZStatus
         get() = ZStatus.fromCode(inflate.err)
@@ -211,6 +214,5 @@ internal class Inflate(
             inflate.onEnd = value
         }
 
-    fun push(data: Uint8Array, flushMode: ZFlushMode = ZFlushMode.NO_FLUSH): Boolean =
-        inflate.push(data, flushMode.flushMode)
+    fun push(data: Uint8Array, flushMode: ZFlushMode = ZFlushMode.NO_FLUSH): Boolean = inflate.push(data, flushMode.flushMode)
 }

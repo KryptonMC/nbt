@@ -8,6 +8,12 @@
  */
 package org.kryptonmc.nbt
 
+/**
+ * A variant of [ListTag] that is immutable.
+ *
+ * All attempts to write to an immutable tag will result in a new immutable tag
+ * being created with the requested changes.
+ */
 public class ImmutableListTag(data: List<Tag> = emptyList(), elementType: Int = 0) : ListTag(data, elementType) {
 
     override val size: Int

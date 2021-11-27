@@ -41,6 +41,9 @@ public class StringTag private constructor(public val value: String) : Tag {
 
     public companion object {
 
+        /**
+         * The string tag representing the empty string.
+         */
         @JvmField
         public val EMPTY: StringTag = StringTag("")
 
@@ -64,6 +67,12 @@ public class StringTag private constructor(public val value: String) : Tag {
             }
         }
 
+        /**
+         * Creates a new string tag holding the given [value].
+         *
+         * @param value the value
+         * @return a new string tag
+         */
         @JvmStatic
         public fun of(value: String): StringTag = if (value.isEmpty()) EMPTY else StringTag(value)
     }

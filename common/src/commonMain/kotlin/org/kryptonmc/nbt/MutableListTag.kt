@@ -18,42 +18,102 @@ public class MutableListTag(
     override val size: Int
         get() = data.size
 
+    /**
+     * Sets the value at the given [index] to the given byte [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setByte(index: Int, value: Byte) {
         set(index, ByteTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given short [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setShort(index: Int, value: Short) {
         set(index, ShortTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given integer [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setInt(index: Int, value: Int) {
         set(index, IntTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given long [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setLong(index: Int, value: Long) {
         set(index, LongTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given float [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setFloat(index: Int, value: Float) {
         set(index, FloatTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given double [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setDouble(index: Int, value: Double) {
         set(index, DoubleTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given string [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setString(index: Int, value: String) {
         set(index, StringTag.of(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given byte array [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setByteArray(index: Int, value: ByteArray) {
         set(index, ByteArrayTag(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given integer array [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setIntArray(index: Int, value: IntArray) {
         set(index, IntArrayTag(value))
     }
 
+    /**
+     * Sets the value at the given [index] to the given long array [value].
+     *
+     * @param index the index
+     * @param value the value
+     */
     public fun setLongArray(index: Int, value: LongArray) {
         set(index, LongArrayTag(value))
     }

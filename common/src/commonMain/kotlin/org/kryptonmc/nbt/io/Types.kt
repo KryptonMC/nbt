@@ -16,6 +16,9 @@ import org.kryptonmc.nbt.StringTag
 import org.kryptonmc.nbt.TagType
 import kotlin.jvm.JvmStatic
 
+/**
+ * A utility used to retrieve tag types for all the tags from their IDs.
+ */
 public object Types {
 
     private val TYPES = arrayOf(
@@ -49,9 +52,21 @@ public object Types {
         LongArrayTag.READER
     )
 
+    /**
+     * Gets the tag type for the given tag of the given [type].
+     *
+     * @param type the integer type ID
+     * @return the tag type for the type
+     */
     @JvmStatic
     public fun of(type: Int): TagType = TYPES[type]
 
+    /**
+     * Gets the tag reader for the given tag of the given [type].
+     *
+     * @param type the integer type ID
+     * @return the tag reader for the type
+     */
     @JvmStatic
     public fun reader(type: Int): TagReader<*> = READERS[type]
 }

@@ -11,9 +11,7 @@ package org.kryptonmc.nbt
 import org.kryptonmc.nbt.util.UUID
 import org.kryptonmc.nbt.util.toTag
 
-public class MutableCompoundTag(
-    override val tags: MutableMap<String, Tag> = mutableMapOf()
-) : CompoundTag(tags), MutableMap<String, Tag> by tags {
+public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mutableMapOf()) : CompoundTag(tags), MutableMap<String, Tag> by tags {
 
     override val size: Int
         get() = tags.size

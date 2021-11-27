@@ -16,6 +16,12 @@ import org.kryptonmc.nbt.util.floor
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
+/**
+ * A tag that holds a double.
+ *
+ * This is not directly constructable, as the [ZERO] constant is cached, and we
+ * want to return that if the value is zero.
+ */
 public class DoubleTag private constructor(override val value: Double) : NumberTag(value) {
 
     override val id: Int = ID
@@ -52,6 +58,9 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
 
     public companion object {
 
+        /**
+         * The double tag representing the constant zero.
+         */
         @JvmField
         public val ZERO: DoubleTag = DoubleTag(0.0)
 
@@ -71,6 +80,12 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
             }
         }
 
+        /**
+         * Creates a new double tag holding the given [value].
+         *
+         * @param value the value
+         * @return a new double tag
+         */
         @JvmStatic
         public fun of(value: Double): DoubleTag = if (value == 0.0) ZERO else DoubleTag(value)
     }

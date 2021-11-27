@@ -8,7 +8,9 @@
  */
 package org.kryptonmc.nbt.stream
 
+import okio.BufferedSource
 import okio.Closeable
+import okio.IOException
 import org.kryptonmc.nbt.ByteArrayTag
 import org.kryptonmc.nbt.ByteTag
 import org.kryptonmc.nbt.CompoundTag
@@ -22,53 +24,222 @@ import org.kryptonmc.nbt.LongTag
 import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
 import org.kryptonmc.nbt.Tag
+import kotlin.jvm.JvmStatic
 
-public abstract class NBTReader : Closeable {
+/**
+ * A reader for decoding NBT using the streaming API.
+ */
+public interface NBTReader : Closeable {
 
-    public abstract fun peekType(): Byte
+    /**
+     * Gets the type of the next tag available to this reader.
+     *
+     * @return the type of the next tag
+     * @throws IOException if an I/O error occurred
+     */
+    public fun peekType(): Byte
 
-    public abstract fun beginByteArray(): Int
+    /**
+     * Opens a new byte array scope for this reader.
+     *
+     * @return the size of the byte array
+     * @throws IllegalStateException if the read type is not a byte array,
+     * or the nesting is too deep
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginByteArray(): Int
 
-    public abstract fun endByteArray()
+    /**
+     * Closes the current byte array scope.
+     *
+     * @throws IllegalStateException if the current scope is not a byte array,
+     * or the last thing that was written was a name
+     */
+    public fun endByteArray()
 
-    public abstract fun beginIntArray(): Int
+    /**
+     * Opens a new integer array scope for this reader.
+     *
+     * @return the size of the integer array
+     * @throws IllegalStateException if the read type is not an integer array,
+     * or the nesting is too deep
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginIntArray(): Int
 
-    public abstract fun endIntArray()
+    /**
+     * Closes the current integer array scope.
+     *
+     * @throws IllegalStateException if the current scope is not an integer
+     * array, or the last thing that was written was a name
+     */
+    public fun endIntArray()
 
-    public abstract fun beginLongArray(): Int
+    /**
+     * Opens a new long array scope for this reader.
+     *
+     * @return the size of the long array
+     * @throws IllegalStateException if the read type is not a long array,
+     * or the nesting is too deep
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginLongArray(): Int
 
-    public abstract fun endLongArray()
+    /**
+     * Closes the current long array scope.
+     *
+     * @throws IllegalStateException if the current scope is not a long array,
+     * or the last thing that was written was a name
+     */
+    public fun endLongArray()
 
-    public abstract fun beginList(elementType: Int): Int
+    /**
+     * Opens a new list scope for this reader, expecting the list to hold
+     * elements of the given [elementType].
+     *
+     * @return the size of the byte array
+     * @throws IllegalStateException if the read type is not an integer array,
+     * the nesting is too deep, or the element type is not of the expected
+     * type
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginList(elementType: Int): Int
 
-    public abstract fun endList()
+    /**
+     * Closes the current list scope.
+     *
+     * @throws IllegalStateException if the current scope is not a list,
+     * or the last thing that was written was a name
+     */
+    public fun endList()
 
-    public abstract fun beginCompound()
+    /**
+     * Opens a new compound scope for this reader.
+     *
+     * @throws IllegalStateException if the read type is not a compound,
+     * or the nesting is too deep
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginCompound()
 
-    public abstract fun endCompound()
+    /**
+     * Closes the current compound scope.
+     *
+     * @throws IllegalStateException if the current scope is not a compound,
+     * the last thing that was written was a name, or the next tag is not an
+     * end tag
+     */
+    public fun endCompound()
 
-    public abstract fun hasNext(): Boolean
+    /**
+     * Checks if this reader has a next value that can be read.
+     *
+     * @return true if there is more data to be read, false otherwise
+     */
+    public fun hasNext(): Boolean
 
-    public abstract fun nextType(): Byte
+    /**
+     * Reads the type of the next available tag.
+     *
+     * @return the type of the next tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextType(): Byte
 
-    public abstract fun nextName(): String
+    /**
+     * Reads the name of the next available compound tag.
+     *
+     * @return the name of the next compound tag
+     * @throws IllegalStateException if the current scope is not a compound,
+     * or the writer is closed
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextName(): String
 
-    public abstract fun nextByte(): Byte
+    /**
+     * Reads the next available byte tag value.
+     *
+     * @return the next byte
+     * @throws IllegalStateException if the type of the next tag is not a
+     * byte tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextByte(): Byte
 
-    public abstract fun nextShort(): Short
+    /**
+     * Reads the next available short tag value.
+     *
+     * @return the next short
+     * @throws IllegalStateException if the type of the next tag is not a
+     * short tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextShort(): Short
 
-    public abstract fun nextInt(): Int
+    /**
+     * Reads the next available integer tag value.
+     *
+     * @return the next integer
+     * @throws IllegalStateException if the type of the next tag is not an
+     * integer tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextInt(): Int
 
-    public abstract fun nextLong(): Long
+    /**
+     * Reads the next available float tag value.
+     *
+     * @return the next float
+     * @throws IllegalStateException if the type of the next tag is not a
+     * long tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextLong(): Long
 
-    public abstract fun nextFloat(): Float
+    /**
+     * Reads the next available float tag value.
+     *
+     * @return the next float
+     * @throws IllegalStateException if the type of the next tag is not a
+     * float tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextFloat(): Float
 
-    public abstract fun nextDouble(): Double
+    /**
+     * Reads the next available double tag value.
+     *
+     * @return the next double
+     * @throws IllegalStateException if the type of the next tag is not a
+     * double tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextDouble(): Double
 
-    public abstract fun nextString(): String
+    /**
+     * Reads the next available string tag value.
+     *
+     * @return the next string
+     * @throws IllegalStateException if the type of the next tag is not a
+     * string tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextString(): String
 
-    public abstract fun nextEnd()
+    /**
+     * Reads and consumes the next end tag.
+     *
+     * @throws IllegalStateException if the type of the next tag is not
+     * the end tag
+     * @throws IOException if an I/O error occurs
+     */
+    public fun nextEnd()
 
+    /**
+     * Reads the next generic tag.
+     *
+     * @return the next generic tag
+     */
     public fun read(): Tag = when (peekType().toInt()) {
         ByteArrayTag.ID -> {
             val size = beginByteArray()
@@ -135,5 +306,17 @@ public abstract class NBTReader : Closeable {
         DoubleTag.ID -> DoubleTag.of(nextDouble())
         StringTag.ID -> StringTag.of(nextString())
         else -> error("Expected a value, but was ${peekType()}!")
+    }
+
+    public companion object {
+
+        /**
+         * Creates a new NBT reader for reading binary NBT data.
+         *
+         * @param source the binary source
+         * @return a new binary NBT reader
+         */
+        @JvmStatic
+        public fun binary(source: BufferedSource): NBTReader = BinaryNBTReader(source)
     }
 }

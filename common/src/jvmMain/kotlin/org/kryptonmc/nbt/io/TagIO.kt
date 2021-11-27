@@ -23,43 +23,45 @@ public actual object TagIO {
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun read(input: InputStream, compression: TagCompression = TagCompression.NONE): CompoundTag =
-        read(input.source().buffer(), compression)
+    public fun read(input: InputStream, compression: TagCompression = TagCompression.NONE): CompoundTag = read(input.source().buffer(), compression)
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun read(path: Path, compression: TagCompression = TagCompression.NONE): CompoundTag =
-        read(path.source().buffer(), compression)
+    public fun read(path: Path, compression: TagCompression = TagCompression.NONE): CompoundTag = read(path.source().buffer(), compression)
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun read(file: File, compression: TagCompression = TagCompression.NONE): CompoundTag =
-        read(file.source().buffer(), compression)
+    public fun read(file: File, compression: TagCompression = TagCompression.NONE): CompoundTag = read(file.source().buffer(), compression)
 
     public actual fun readNamed(input: BufferedSource): Pair<String, Tag> = input.use { it.readNamedTag(0) }
 
-    public actual fun readNamed(input: BufferedSource, compression: TagCompression): Pair<String, Tag> =
-        readNamed(compression.decompress(input))
+    public actual fun readNamed(input: BufferedSource, compression: TagCompression): Pair<String, Tag> = readNamed(compression.decompress(input))
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun readNamed(input: InputStream, compression: TagCompression = TagCompression.NONE): CompoundTag =
-        read(input.source().buffer(), compression)
+    public fun readNamed(
+        input: InputStream,
+        compression: TagCompression = TagCompression.NONE
+    ): CompoundTag = read(input.source().buffer(), compression)
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun readNamed(path: Path, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> =
-        readNamed(path.source().buffer(), compression)
+    public fun readNamed(
+        path: Path,
+        compression: TagCompression = TagCompression.NONE
+    ): Pair<String, Tag> = readNamed(path.source().buffer(), compression)
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    public fun readNamed(file: File, compression: TagCompression = TagCompression.NONE): Pair<String, Tag> =
-        readNamed(file.source().buffer(), compression)
+    public fun readNamed(
+        file: File,
+        compression: TagCompression = TagCompression.NONE
+    ): Pair<String, Tag> = readNamed(file.source().buffer(), compression)
 
     public actual fun write(output: BufferedSink, value: CompoundTag) {
         output.use { it.writeNamedTag("", value) }

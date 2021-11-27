@@ -16,8 +16,14 @@ import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
 
+/**
+ * A tag that holds a long array.
+ */
 public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), MutableCollectionTag<LongTag> {
 
+    /**
+     * The backing data for this tag.
+     */
     public var data: LongArray = data
         private set
 
@@ -27,6 +33,11 @@ public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), Mut
     override val size: Int
         get() = data.size
 
+    /**
+     * Creates a new long array tag from the given [data].
+     *
+     * @param data the backing data for the tag
+     */
     public constructor(data: Collection<Long>) : this(data.toLongArray())
 
     override fun get(index: Int): LongTag = LongTag.of(data[index])

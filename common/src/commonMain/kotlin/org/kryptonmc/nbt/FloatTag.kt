@@ -10,12 +10,19 @@ package org.kryptonmc.nbt
 
 import okio.BufferedSink
 import okio.BufferedSource
+import org.kryptonmc.nbt.DoubleTag.Companion.ZERO
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.floor
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
+/**
+ * A tag that holds a float.
+ *
+ * This is not directly constructable, as the [ZERO] constant is cached, and we
+ * want to return that if the value is zero.
+ */
 public class FloatTag private constructor(override val value: Float) : NumberTag(value) {
 
     override val id: Int = ID
@@ -47,6 +54,9 @@ public class FloatTag private constructor(override val value: Float) : NumberTag
 
     public companion object {
 
+        /**
+         * The float tag representing the constant zero.
+         */
         @JvmField
         public val ZERO: FloatTag = FloatTag(0F)
 
@@ -66,6 +76,12 @@ public class FloatTag private constructor(override val value: Float) : NumberTag
             }
         }
 
+        /**
+         * Creates a new float tag holding the given [value].
+         *
+         * @param value the value
+         * @return a new double tag
+         */
         @JvmStatic
         public fun of(value: Float): FloatTag = if (value == 0F) ZERO else FloatTag(value)
     }

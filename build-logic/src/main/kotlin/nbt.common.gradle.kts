@@ -51,11 +51,7 @@ publishing {
             val releases = URI("https://repo.kryptonmc.org/releases")
             val snapshots = URI("https://repo.kryptonmc.org/snapshots")
             url = if (project.version.toString().endsWith("SNAPSHOT")) snapshots else releases
-
-            credentials {
-                username = if (project.hasProperty("maven.username")) project.property("maven.username").toString() else System.getenv("MAVEN_USERNAME")
-                password = if (project.hasProperty("maven.password")) project.property("maven.password").toString() else System.getenv("MAVEN_PASSWORD")
-            }
+            credentials(PasswordCredentials::class)
         }
     }
 }

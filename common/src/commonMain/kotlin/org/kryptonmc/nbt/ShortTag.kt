@@ -15,6 +15,13 @@ import org.kryptonmc.nbt.io.TagWriter
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
+/**
+ * A tag that holds a short value.
+ *
+ * The reason this is not directly constructable is that it is pooled and
+ * cached. The cache contains the most common short values used in NBT, those
+ * being the values from -128 to 1024.
+ */
 public class ShortTag private constructor(override val value: Short) : NumberTag(value) {
 
     override val id: Int = ID
@@ -39,6 +46,10 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
     public companion object {
 
         private val CACHE = Array(1153) { ShortTag((-128 + it).toShort()) }
+
+        /**
+         * The short tag representing the constant zero.
+         */
         @JvmField
         public val ZERO: ShortTag = of(0)
 
@@ -58,6 +69,14 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
             }
         }
 
+        /**
+         * Gets the short tag representing the given [value], if it is in the
+         * range -128 to 1024, else creates a new short tag representing the
+         * given [value].
+         *
+         * @param value the backing value
+         * @return a short tag representing the value
+         */
         @JvmStatic
         public fun of(value: Short): ShortTag = if (value in -128..1024) CACHE[value.toInt() + 128] else ShortTag(value)
     }

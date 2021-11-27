@@ -8,6 +8,9 @@
  */
 package org.kryptonmc.nbt
 
+/**
+ * An examiner that appends the results of the examination to a string.
+ */
 public class StringTagExaminer : TagExaminer<String> {
 
     private val builder = StringBuilder()

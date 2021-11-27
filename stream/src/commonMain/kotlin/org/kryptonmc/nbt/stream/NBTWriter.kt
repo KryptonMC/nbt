@@ -8,7 +8,9 @@
  */
 package org.kryptonmc.nbt.stream
 
+import okio.BufferedSink
 import okio.Closeable
+import okio.IOException
 import org.kryptonmc.nbt.ByteArrayTag
 import org.kryptonmc.nbt.ByteTag
 import org.kryptonmc.nbt.CompoundTag
@@ -23,51 +25,204 @@ import org.kryptonmc.nbt.ShortTag
 import org.kryptonmc.nbt.StringTag
 import org.kryptonmc.nbt.Tag
 import org.kryptonmc.nbt.util.UUID
+import kotlin.jvm.JvmStatic
 
-public abstract class NBTWriter : Closeable {
+public interface NBTWriter : Closeable {
 
-    public abstract fun beginByteArray(size: Int)
+    /**
+     * Opens a new byte array scope for this writer.
+     *
+     * @param size the expected size of the array
+     * @throws IllegalArgumentException if the size is < 0, or no name has been
+     * set with [name]
+     * @throws IllegalStateException if the nesting is too high
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginByteArray(size: Int)
 
-    public abstract fun endByteArray()
+    /**
+     * Closes the current byte array scope.
+     *
+     * @throws IllegalStateException if the current scope is not a byte array,
+     * or the last thing that was written was a name
+     */
+    public fun endByteArray()
 
-    public abstract fun beginIntArray(size: Int)
+    /**
+     * Opens a new integer array scope for this writer.
+     *
+     * @param size the expected size of the array
+     * @throws IllegalArgumentException if the size is < 0, or no name has been
+     * set with [name]
+     * @throws IllegalStateException if the nesting is too high
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginIntArray(size: Int)
 
-    public abstract fun endIntArray()
+    /**
+     * Closes the current integer array scope.
+     *
+     * @throws IllegalStateException if the current scope is not an integer
+     * array, or the last thing that was written was a name
+     */
+    public fun endIntArray()
 
-    public abstract fun beginLongArray(size: Int)
+    /**
+     * Opens a new long array scope for this writer.
+     *
+     * @param size the expected size of the array
+     * @throws IllegalArgumentException if the size is < 0, or no name has been
+     * set with [name]
+     * @throws IllegalStateException if the nesting is too high
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginLongArray(size: Int)
 
-    public abstract fun endLongArray()
+    /**
+     * Closes the current long array scope.
+     *
+     * @throws IllegalStateException if the current scope is not a long array,
+     * or the last thing that was written was a name
+     */
+    public fun endLongArray()
 
-    public abstract fun beginList(elementType: Int, size: Int)
+    /**
+     * Opens a new list scope for this writer.
+     *
+     * @param elementType the expected type of all the tags
+     * @param size the expected size of the list
+     * @throws IllegalArgumentException if the size is < 0, or no name has been
+     * set with [name]
+     * @throws IllegalStateException if the element type is non-zero and the
+     * size is zero, or the nesting is too high
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginList(elementType: Int, size: Int)
 
-    public abstract fun endList()
+    /**
+     * Closes the current list scope.
+     *
+     * @throws IllegalStateException if the current scope is not a list,
+     * or the last thing that was written was a name
+     */
+    public fun endList()
 
-    public abstract fun beginCompound()
+    /**
+     * Opens a new compound scope for this writer.
+     *
+     * @throws IllegalArgumentException if no name has been set with [name]
+     * @throws IOException if an I/O error occurred
+     */
+    public fun beginCompound()
 
-    public abstract fun endCompound()
+    /**
+     * Closes the current compound scope.
+     *
+     * @throws IllegalStateException if the current scope is not a compound,
+     * or the last thing that was written was a name
+     */
+    public fun endCompound()
 
-    public abstract fun name(name: String)
+    /**
+     * Writes the given [name] to this writer.
+     *
+     * @throws IllegalStateException if the current scope is not a compound
+     */
+    public fun name(name: String)
 
-    public abstract fun value(value: Boolean)
+    /**
+     * Writes the given boolean [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Boolean)
 
-    public abstract fun value(value: Byte)
+    /**
+     * Writes the given byte [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Byte)
 
-    public abstract fun value(value: Short)
+    /**
+     * Writes the given short [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Short)
 
-    public abstract fun value(value: Int)
+    /**
+     * Writes the given integer [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Int)
 
-    public abstract fun value(value: Long)
+    /**
+     * Writes the given long [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Long)
 
-    public abstract fun value(value: Float)
+    /**
+     * Writes the given float [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Float)
 
-    public abstract fun value(value: Double)
+    /**
+     * Writes the given double [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: Double)
 
-    public abstract fun value(value: String)
+    /**
+     * Writes the given string [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: String)
 
-    public abstract fun value(value: UUID)
+    /**
+     * Writes the given UUID [value] to this writer.
+     *
+     * @param value the value
+     * @throws IllegalArgumentException if no name has been set using [name]
+     * @throws IOException if an I/O error occurs
+     */
+    public fun value(value: UUID)
 
-    public abstract fun end()
+    /**
+     * Writes an end tag to this writer.
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public fun end()
 
+    /**
+     * Writes the given generic [tag] to this writer.
+     *
+     * @param tag the tag to write
+     */
     public fun write(tag: Tag): Unit = when (tag) {
         is ByteTag -> value(tag.value)
         is ShortTag -> value(tag.value)
@@ -105,5 +260,17 @@ public abstract class NBTWriter : Closeable {
             endLongArray()
         }
         else -> error("Don't know how to write $tag!")
+    }
+
+    public companion object {
+
+        /**
+         * Creates a new NBT writer for writing binary NBT data.
+         *
+         * @param sink the binary sink
+         * @return a new binary NBT writer
+         */
+        @JvmStatic
+        public fun binary(sink: BufferedSink): NBTWriter = BinaryNBTWriter(sink)
     }
 }

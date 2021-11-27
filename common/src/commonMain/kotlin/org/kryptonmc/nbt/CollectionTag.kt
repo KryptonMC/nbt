@@ -8,7 +8,15 @@
  */
 package org.kryptonmc.nbt
 
+/**
+ * A tag that holds a collection of values of the given type [E].
+ *
+ * @param E the held tag type
+ */
 public interface CollectionTag<E : Tag> : Collection<E>, Tag {
 
+    /**
+     * The ID of the tags that can be held by this collection tag.
+     */
     public val elementType: Int
 }

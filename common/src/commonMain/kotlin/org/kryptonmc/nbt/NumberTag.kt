@@ -8,6 +8,9 @@
  */
 package org.kryptonmc.nbt
 
+/**
+ * A tag holding a number value.
+ */
 public abstract class NumberTag protected constructor(public open val value: Number) : Tag {
 
     public open fun toDouble(): Double = value.toDouble()

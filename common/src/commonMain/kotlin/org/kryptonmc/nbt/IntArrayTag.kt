@@ -16,8 +16,14 @@ import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
 
+/**
+ * A tag that holds an integer array.
+ */
 public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), MutableCollectionTag<IntTag> {
 
+    /**
+     * The backing data for this tag.
+     */
     public var data: IntArray = data
         private set
 
@@ -27,6 +33,11 @@ public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), Mutabl
     override val size: Int
         get() = data.size
 
+    /**
+     * Creates a new integer array tag from the given [data].
+     *
+     * @param data the backing data for the tag
+     */
     public constructor(data: Collection<Int>) : this(data.toIntArray())
 
     override fun get(index: Int): IntTag = IntTag.of(data[index])

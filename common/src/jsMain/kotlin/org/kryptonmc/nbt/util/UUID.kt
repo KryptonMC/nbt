@@ -46,7 +46,6 @@ public actual class UUID actual constructor(
         // Took the fromString parsing from FastUUID:
         // https://github.com/jchambers/fast-uuid/blob/9a60f414719792fe52d6273aa0f9d114f6f6469a/src/main/java/com/eatthepath/uuid/FastUUID.java
         private const val UUID_STRING_LENGTH = 36
-        private val HEX_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
         private val HEX_VALUES = LongArray(128) { -1 }.apply {
             this['0'.code] = 0x0
             this['1'.code] = 0x1

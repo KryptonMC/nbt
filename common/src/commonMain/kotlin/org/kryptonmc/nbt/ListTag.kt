@@ -20,6 +20,11 @@ import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 import kotlin.jvm.JvmSynthetic
 
+/**
+ * A tag holding a list of values of the given tag type [elementType].
+ *
+ * @param data the backing data
+ */
 public sealed class ListTag(
     public open val data: List<Tag> = emptyList(),
     elementType: Int = 0
@@ -30,6 +35,13 @@ public sealed class ListTag(
     final override var elementType: Int = elementType
         @JvmSynthetic internal set
 
+    /**
+     * Gets the byte value at the given [index], or returns the given
+     * [default] value if there is no byte value at the given [index].
+     *
+     * @param index the index
+     * @return the byte value, or the default if not present
+     */
     @JvmOverloads
     public fun getByte(index: Int, default: Byte = 0): Byte {
         if (index in data.indices) {
@@ -39,6 +51,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the short value at the given [index], or returns the given
+     * [default] value if there is no short value at the given [index].
+     *
+     * @param index the index
+     * @return the short value, or the default if not present
+     */
     @JvmOverloads
     public fun getShort(index: Int, default: Short = 0): Short {
         if (index in data.indices) {
@@ -48,6 +67,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the integer value at the given [index], or returns the given
+     * [default] value if there is no integer value at the given [index].
+     *
+     * @param index the index
+     * @return the integer value, or the default if not present
+     */
     @JvmOverloads
     public fun getInt(index: Int, default: Int = 0): Int {
         if (index in data.indices) {
@@ -57,6 +83,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the long value at the given [index], or returns the given
+     * [default] value if there is no long value at the given [index].
+     *
+     * @param index the index
+     * @return the long value, or the default if not present
+     */
     @JvmOverloads
     public fun getLong(index: Int, default: Long = 0L): Long {
         if (index in data.indices) {
@@ -66,6 +99,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the float value at the given [index], or returns the given
+     * [default] value if there is no float value at the given [index].
+     *
+     * @param index the index
+     * @return the float value, or the default if not present
+     */
     @JvmOverloads
     public fun getFloat(index: Int, default: Float = 0F): Float {
         if (index in data.indices) {
@@ -75,6 +115,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the double value at the given [index], or returns the given
+     * [default] value if there is no double value at the given [index].
+     *
+     * @param index the index
+     * @return the double value, or the default if not present
+     */
     @JvmOverloads
     public fun getDouble(index: Int, default: Double = 0.0): Double {
         if (index in data.indices) {
@@ -84,6 +131,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the string value at the given [index], or returns the given
+     * [default] value if there is no string value at the given [index].
+     *
+     * @param index the index
+     * @return the string value, or the default if not present
+     */
     @JvmOverloads
     public fun getString(index: Int, default: String = ""): String {
         if (index in data.indices) {
@@ -93,6 +147,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the byte array at the given [index], or returns the given
+     * [default] if there is no byte array at the given [index].
+     *
+     * @param index the index
+     * @return the byte array, or the default if not present
+     */
     @JvmOverloads
     public fun getByteArray(index: Int, default: ByteArray = ByteArray(0)): ByteArray {
         if (index in data.indices) {
@@ -102,6 +163,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the integer array at the given [index], or returns the given
+     * [default] if there is no integer array at the given [index].
+     *
+     * @param index the index
+     * @return the integer array, or the default if not present
+     */
     @JvmOverloads
     public fun getIntArray(index: Int, default: IntArray = IntArray(0)): IntArray {
         if (index in data.indices) {
@@ -111,6 +179,13 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the long array at the given [index], or returns the given
+     * [default] if there is no long array at the given [index].
+     *
+     * @param index the index
+     * @return the long array, or the default if not present
+     */
     @JvmOverloads
     public fun getLongArray(index: Int, default: LongArray = LongArray(0)): LongArray {
         if (index in data.indices) {
@@ -120,8 +195,15 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the list at the given [index], or returns the given [default] if
+     * there is no list at the given [index].
+     *
+     * @param index the index
+     * @return the list, or the default if not present
+     */
     @JvmOverloads
-    public fun getList(index: Int, default: ListTag = MutableListTag()): ListTag {
+    public fun getList(index: Int, default: ListTag = empty()): ListTag {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == ID) return tag as ListTag
@@ -129,8 +211,15 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Gets the compound at the given [index], or returns the given [default]
+     * if there is no compound at the given [index].
+     *
+     * @param index the index
+     * @return the compound, or the default if not present
+     */
     @JvmOverloads
-    public fun getCompound(index: Int, default: CompoundTag = MutableCompoundTag()): CompoundTag {
+    public fun getCompound(index: Int, default: CompoundTag = CompoundTag.empty()): CompoundTag {
         if (index in data.indices) {
             val tag = get(index)
             if (tag.id == CompoundTag.ID) return tag as CompoundTag
@@ -138,50 +227,122 @@ public sealed class ListTag(
         return default
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [ByteTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every byte value
+     */
     public inline fun forEachByte(action: (Byte) -> Unit) {
         for (i in indices) action(getByte(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [ShortTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every short value
+     */
     public inline fun forEachShort(action: (Short) -> Unit) {
         for (i in indices) action(getShort(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is an
+     * [IntTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every integer value
+     */
     public inline fun forEachInt(action: (Int) -> Unit) {
         for (i in indices) action(getInt(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [LongTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every long value
+     */
     public inline fun forEachLong(action: (Long) -> Unit) {
         for (i in indices) action(getLong(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [FloatTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every float value
+     */
     public inline fun forEachFloat(action: (Float) -> Unit) {
         for (i in indices) action(getFloat(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [DoubleTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every double value
+     */
     public inline fun forEachDouble(action: (Double) -> Unit) {
         for (i in indices) action(getDouble(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [StringTag], applies the given [action] to the value.
+     *
+     * @param action the action to apply to every string value
+     */
     public inline fun forEachString(action: (String) -> Unit) {
         for (i in indices) action(getString(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [ByteArrayTag], applies the given [action] to the array.
+     *
+     * @param action the action to apply to every byte array
+     */
     public inline fun forEachByteArray(action: (ByteArray) -> Unit) {
         for (i in indices) action(getByteArray(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is an
+     * [IntArrayTag], applies the given [action] to the array.
+     *
+     * @param action the action to apply to every integer array
+     */
     public inline fun forEachIntArray(action: (IntArray) -> Unit) {
         for (i in indices) action(getIntArray(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [LongArrayTag], applies the given [action] to the array.
+     *
+     * @param action the action to apply to every long array
+     */
     public inline fun forEachLongArray(action: (LongArray) -> Unit) {
         for (i in indices) action(getLongArray(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [ListTag], applies the given [action] to the list.
+     *
+     * @param action the action to apply to every list
+     */
     public inline fun forEachList(action: (ListTag) -> Unit) {
         for (i in indices) action(getList(i))
     }
 
+    /**
+     * Iterates over every tag in this list, and for every tag that is a
+     * [CompoundTag], applies the given [action] to the compound.
+     *
+     * @param action the action to apply to every compound
+     */
     public inline fun forEachCompound(action: (CompoundTag) -> Unit) {
         for (i in indices) action(getCompound(i))
     }
@@ -204,10 +365,19 @@ public sealed class ListTag(
 
     final override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineList(this)
 
-    public class Builder internal constructor(private var elementType: Int) {
+    /**
+     * A builder for building list tags.
+     */
+    public class Builder internal constructor(private val mutable: Boolean, private var elementType: Int) {
 
         private val data = mutableListOf<Tag>()
 
+        /**
+         * Adds the given [tag] to this list tag.
+         *
+         * @param tag the tag
+         * @return this builder
+         */
         @NBTDsl
         public fun add(tag: Tag): Builder = apply {
             require(data.isEmpty() || elementType == tag.id) {
@@ -217,49 +387,151 @@ public sealed class ListTag(
             elementType = tag.id
         }
 
+        /**
+         * Adds the given byte [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addByte(value: Byte): Builder = add(ByteTag.of(value))
 
+        /**
+         * Adds the given boolean [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
+        @NBTDsl
+        public fun addBoolean(value: Boolean): Builder = add(ByteTag.of(value))
+
+        /**
+         * Adds the given short [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addShort(value: Short): Builder = add(ShortTag.of(value))
 
+        /**
+         * Adds the given integer [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addInt(value: Int): Builder = add(IntTag.of(value))
 
+        /**
+         * Adds the given long [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addLong(value: Long): Builder = add(LongTag.of(value))
 
+        /**
+         * Adds the given float [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addFloat(value: Float): Builder = add(FloatTag.of(value))
 
+        /**
+         * Adds the given double [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addDouble(value: Double): Builder = add(DoubleTag.of(value))
 
+        /**
+         * Adds the given byte array [value] to this list tag.
+         *
+         * @param value the array
+         * @return this builder
+         */
         @NBTDsl
         public fun addByteArray(value: ByteArray): Builder = add(ByteArrayTag(value))
 
+        /**
+         * Adds the given integer array [value] to this list tag.
+         *
+         * @param value the array
+         * @return this builder
+         */
         @NBTDsl
         public fun addIntArray(value: IntArray): Builder = add(IntArrayTag(value))
 
+        /**
+         * Adds the given long array [value] to this list tag.
+         *
+         * @param value the array
+         * @return this builder
+         */
         @NBTDsl
         public fun addLongArray(value: LongArray): Builder = add(LongArrayTag(value))
 
+        /**
+         * Adds the given string [value] to this list tag.
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addString(value: String): Builder = add(StringTag.of(value))
 
+        /**
+         * Adds the given UUID [value] to this list tag.
+         *
+         * How UUIDs are stored is explained by [CompoundTag.hasUUID].
+         *
+         * @param value the value
+         * @return this builder
+         */
         @NBTDsl
         public fun addUUID(value: UUID): Builder = add(value.toTag())
 
+        /**
+         * Adds the given byte [values] to this list tag.
+         *
+         * @param values the values
+         * @return this builder
+         */
         @NBTDsl
         public fun addBytes(vararg values: Byte): Builder = addByteArray(values)
 
+        /**
+         * Adds the given integer [values] to this list tag.
+         *
+         * @param values the values
+         * @return this builder
+         */
         @NBTDsl
         public fun addInts(vararg values: Int): Builder = addIntArray(values)
 
+        /**
+         * Adds the given long [values] to this list tag.
+         *
+         * @param values the values
+         * @return this builder
+         */
         @NBTDsl
         public fun addLongs(vararg values: Long): Builder = addLongArray(values)
 
-        public fun build(): ListTag = MutableListTag(data, elementType)
+        /**
+         * Creates a new list tag containing the values set in this builder.
+         * Whether the resulting tag is mutable or immutable depends on what
+         * was supplied to the builder when the builder functions were called.
+         *
+         * @return a new list tag
+         */
+        public fun build(): ListTag = if (mutable) mutable(data, elementType) else immutable(data, elementType)
     }
 
     public companion object {
@@ -298,21 +570,50 @@ public sealed class ListTag(
         }
         private val EMPTY = ImmutableListTag()
 
+        /**
+         * Creates a new builder for building a list tag.
+         *
+         * @param elementType the type of tags that will be stored
+         * @param mutable if the resulting built tag will be mutable
+         */
         @JvmStatic
         @JvmOverloads
-        public fun builder(elementType: Int = EndTag.ID): Builder = Builder(elementType)
+        public fun builder(elementType: Int = EndTag.ID, mutable: Boolean = true): Builder = Builder(mutable, elementType)
 
         @JvmStatic
         @Deprecated("Not all list tags are mutable any more.", ReplaceWith("ListTag.mutable"))
         public fun of(data: List<Tag>, elementType: Int): ListTag = mutable(data, elementType)
 
+        /**
+         * Creates a new mutable list tag with the given [data] and
+         * [elementType].
+         * If the [data] is not a [MutableList], it will be converted to one
+         * using [List.toMutableList].
+         *
+         * @param data the data
+         * @return a new mutable list tag
+         */
         @JvmStatic
-        public fun mutable(data: List<Tag>, elementType: Int): ListTag =
-            MutableListTag(if (data is MutableList) data else data.toMutableList(), elementType)
+        public fun mutable(data: List<Tag>, elementType: Int): ListTag {
+            val result = if (data is MutableList) data else data.toMutableList()
+            return MutableListTag(result, elementType)
+        }
 
+        /**
+         * Creates a new immutable list tag with the given [data].
+         *
+         * @param data the data
+         * @return a new immutable list tag
+         */
         @JvmStatic
         public fun immutable(data: List<Tag>, elementType: Int): ListTag = ImmutableListTag(data, elementType)
 
+        /**
+         * Gets the empty list tag.
+         *
+         * This is an immutable list tag with an empty list backing it,
+         * meaning no data can be modified.
+         */
         @JvmStatic
         public fun empty(): ListTag = EMPTY
     }

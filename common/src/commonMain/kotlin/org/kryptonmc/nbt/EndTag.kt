@@ -14,6 +14,9 @@ import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import kotlin.jvm.JvmField
 
+/**
+ * The tag representing the end of a compound tag.
+ */
 public object EndTag : Tag {
 
     public const val ID: Int = 0
