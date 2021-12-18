@@ -214,6 +214,8 @@ public abstract class org/kryptonmc/nbt/CompoundTag : java/util/Map, kotlin/jvm/
 	public final fun size ()I
 	public final fun toString ()Ljava/lang/String;
 	public final fun type (Ljava/lang/String;)I
+	public fun update (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
+	public fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun values ()Ljava/util/Collection;
 	public final fun write (Lokio/BufferedSink;)V
 }
@@ -528,11 +530,13 @@ public abstract class org/kryptonmc/nbt/ListTag : kotlin/collections/AbstractLis
 	public static synthetic fun getString$default (Lorg/kryptonmc/nbt/ListTag;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
 	public final fun getType ()Lorg/kryptonmc/nbt/TagType;
 	public final fun hashCode ()I
+	public final fun immutable ()Lorg/kryptonmc/nbt/ImmutableListTag;
 	public static final fun immutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public final fun indexOf (Ljava/lang/Object;)I
 	public fun indexOf (Lorg/kryptonmc/nbt/Tag;)I
 	public final fun lastIndexOf (Ljava/lang/Object;)I
 	public fun lastIndexOf (Lorg/kryptonmc/nbt/Tag;)I
+	public final fun mutable ()Lorg/kryptonmc/nbt/MutableListTag;
 	public static final fun mutable (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public static final fun of (Ljava/util/List;I)Lorg/kryptonmc/nbt/ListTag;
 	public final fun toString ()Ljava/lang/String;
@@ -705,8 +709,6 @@ public final class org/kryptonmc/nbt/MutableCompoundTag : org/kryptonmc/nbt/Comp
 	public final fun remove (Ljava/lang/Object;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public synthetic fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
-	public final fun updateList (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/MutableCompoundTag;
 }
 
 public final class org/kryptonmc/nbt/MutableListTag : org/kryptonmc/nbt/ListTag, java/util/List, kotlin/jvm/internal/markers/KMutableList, org/kryptonmc/nbt/MutableCollectionTag {

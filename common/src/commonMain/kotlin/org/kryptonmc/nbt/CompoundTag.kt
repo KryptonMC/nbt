@@ -434,6 +434,10 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      */
     public open fun putLongs(key: String, vararg values: Long): CompoundTag = putLongArray(key, values)
 
+    public open fun update(key: String, builder: CompoundTag.() -> Unit): CompoundTag = put(key, getCompound(key).apply(builder))
+
+    public open fun update(key: String, type: Int, builder: ListTag.() -> Unit): CompoundTag = put(key, getList(key, type).apply(builder))
+
     /**
      * Iterates over every tag in this compound, and for every tag that is a
      * [ByteTag], applies the given [action] to the key and the value.
@@ -597,7 +601,8 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      */
     public fun mutable(): MutableCompoundTag {
         if (this is MutableCompoundTag) return this
-        return MutableCompoundTag(if (tags is MutableMap) tags as MutableMap<String, Tag> else tags.toMutableMap())
+        val newTags = if (tags is MutableMap) tags as MutableMap else tags.toMutableMap()
+        return MutableCompoundTag(newTags)
     }
 
     /**

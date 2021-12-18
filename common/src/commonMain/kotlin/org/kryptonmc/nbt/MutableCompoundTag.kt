@@ -22,12 +22,6 @@ public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mut
     override val values: MutableCollection<Tag>
         get() = tags.values
 
-    public fun update(key: String, builder: MutableCompoundTag.() -> Unit): MutableCompoundTag =
-        put(key, (getCompound(key) as MutableCompoundTag).apply(builder))
-
-    public fun updateList(key: String, type: Int, builder: MutableListTag.() -> Unit): MutableCompoundTag =
-        put(key, (getList(key, type) as MutableListTag).apply(builder))
-
     override fun copy(): MutableCompoundTag {
         val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
         return MutableCompoundTag(copy)

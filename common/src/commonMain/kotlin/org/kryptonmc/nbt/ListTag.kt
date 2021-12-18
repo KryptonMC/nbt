@@ -347,6 +347,27 @@ public sealed class ListTag(
         for (i in indices) action(getCompound(i))
     }
 
+    /**
+     * Converts this tag to its mutable list equivalent.
+     *
+     * If this tag is already a mutable tag, this will simply return itself.
+     */
+    public fun mutable(): MutableListTag {
+        if (this is MutableListTag) return this
+        val newData = if (data is MutableList) data as MutableList else data.toMutableList()
+        return MutableListTag(newData, elementType)
+    }
+
+    /**
+     * Converts this tag to its immutable list equivalent.
+     *
+     * If this tag is already an immutable tag, this will simply return itself.
+     */
+    public fun immutable(): ImmutableListTag {
+        if (this is ImmutableListTag) return this
+        return ImmutableListTag(data, elementType)
+    }
+
     public abstract override fun copy(): ListTag
 
     final override fun equals(other: Any?): Boolean {
