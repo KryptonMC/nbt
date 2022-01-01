@@ -15,23 +15,23 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
+import kotlin.jvm.JvmSynthetic
 
 /**
  * A tag that holds a byte array.
  */
-public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), MutableCollectionTag<ByteTag> {
+public class ByteArrayTag(data: ByteArray) : Tag {
 
     /**
      * The backing data for this tag.
      */
     public var data: ByteArray = data
         private set
+    public val size: Int
+        get() = data.size
 
     override val id: Int = ID
-    override val elementType: Int = ByteTag.ID
     override val type: TagType = TYPE
-    override val size: Int
-        get() = data.size
 
     /**
      * Creates a new byte array tag from the given [data].
@@ -40,45 +40,40 @@ public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), Mut
      */
     public constructor(data: Collection<Byte>) : this(data.toByteArray())
 
-    override fun get(index: Int): ByteTag = ByteTag.of(data[index])
+    public fun get(index: Int): Byte = data[index]
 
-    override fun set(index: Int, element: ByteTag): ByteTag {
-        val oldValue = data[index]
-        data[index] = element.value
-        return ByteTag.of(oldValue)
+    public fun set(index: Int, value: Byte) {
+        data[index] = value
     }
 
-    override fun add(index: Int, element: ByteTag) {
-        data = data.add(index, element.value)
+    public fun add(value: Byte) {
+        data = data.copyOf(data.size + 1)
+        data[data.size - 1] = value
     }
 
-    override fun setTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data[index] = tag.toByte()
-        return true
+    public fun add(index: Int, value: Byte) {
+        data = data.add(index, value)
     }
 
-    override fun addTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data = data.add(index, tag.toByte())
-        return true
-    }
-
-    override fun removeAt(index: Int): ByteTag {
-        val oldValue = data[index]
+    public fun remove(index: Int) {
         data = data.remove(index)
-        return ByteTag.of(oldValue)
     }
 
-    override fun clear() {
-        data = ByteArray(0)
+    public fun forEach(action: (Byte) -> Unit) {
+        data.forEach(action)
+    }
+
+    public fun clear() {
+        data = EMPTY_DATA
     }
 
     override fun write(output: BufferedSink) {
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineByteArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineByteArray(this)
+    }
 
     override fun copy(): ByteArrayTag {
         val copy = ByteArray(data.size)
@@ -119,5 +114,7 @@ public class ByteArrayTag(data: ByteArray) : AbstractMutableList<ByteTag>(), Mut
                 output.write(value.data)
             }
         }
+        @JvmSynthetic
+        internal val EMPTY_DATA: ByteArray = ByteArray(0)
     }
 }

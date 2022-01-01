@@ -45,7 +45,7 @@ class ExaminationTests {
     @Test
     @JsName("examineList")
     fun `examine list`() {
-        assertEquals("[\"hello_world\",\"goodbye_world\"]", StringTagExaminer().examine(ListTag.of(
+        assertEquals("[\"hello_world\",\"goodbye_world\"]", StringTagExaminer().examine(ListTag.immutable(
             listOf(StringTag.of("hello_world"), StringTag.of("goodbye_world")),
             StringTag.ID
         )))

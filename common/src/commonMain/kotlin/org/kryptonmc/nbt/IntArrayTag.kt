@@ -15,23 +15,23 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
+import kotlin.jvm.JvmSynthetic
 
 /**
  * A tag that holds an integer array.
  */
-public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), MutableCollectionTag<IntTag> {
+public class IntArrayTag(data: IntArray) : Tag {
 
     /**
      * The backing data for this tag.
      */
     public var data: IntArray = data
         private set
+    public val size: Int
+        get() = data.size
 
     override val id: Int = ID
-    override val elementType: Int = IntTag.ID
     override val type: TagType = TYPE
-    override val size: Int
-        get() = data.size
 
     /**
      * Creates a new integer array tag from the given [data].
@@ -40,38 +40,31 @@ public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), Mutabl
      */
     public constructor(data: Collection<Int>) : this(data.toIntArray())
 
-    override fun get(index: Int): IntTag = IntTag.of(data[index])
+    public fun get(index: Int): Int = data[index]
 
-    override fun set(index: Int, element: IntTag): IntTag {
-        val oldValue = data[index]
-        data[index] = element.value
-        return IntTag.of(oldValue)
+    public fun set(index: Int, value: Int) {
+        data[index] = value
     }
 
-    override fun add(index: Int, element: IntTag) {
-        data = data.add(index, element.value)
+    public fun add(value: Int) {
+        data = data.copyOf(data.size + 1)
+        data[data.size - 1] = value
     }
 
-    override fun setTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data[index] = tag.toInt()
-        return true
+    public fun add(index: Int, value: Int) {
+        data = data.add(index, value)
     }
 
-    override fun addTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data = data.add(index, tag.toInt())
-        return true
-    }
-
-    override fun removeAt(index: Int): IntTag {
-        val oldValue = data[index]
+    public fun remove(index: Int) {
         data = data.remove(index)
-        return IntTag.of(oldValue)
     }
 
-    override fun clear() {
-        data = IntArray(0)
+    public fun forEach(action: (Int) -> Unit) {
+        data.forEach(action)
+    }
+
+    public fun clear() {
+        data = EMPTY_DATA
     }
 
     override fun write(output: BufferedSink) {
@@ -119,5 +112,7 @@ public class IntArrayTag(data: IntArray) : AbstractMutableList<IntTag>(), Mutabl
                 for (i in value.data.indices) output.writeInt(value.data[i])
             }
         }
+        @JvmSynthetic
+        internal val EMPTY_DATA: IntArray = IntArray(0)
     }
 }

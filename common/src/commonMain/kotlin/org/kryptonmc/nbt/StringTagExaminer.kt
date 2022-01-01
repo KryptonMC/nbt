@@ -8,12 +8,12 @@
  */
 package org.kryptonmc.nbt
 
+import kotlin.jvm.JvmStatic
+
 /**
  * An examiner that appends the results of the examination to a string.
  */
-public class StringTagExaminer : TagExaminer<String> {
-
-    private val builder = StringBuilder()
+public data class StringTagExaminer(private val builder: StringBuilder = StringBuilder()) : TagExaminer<String> {
 
     override fun examine(tag: Tag): String {
         tag.examine(this)
@@ -59,7 +59,7 @@ public class StringTagExaminer : TagExaminer<String> {
     }
 
     override fun examineString(tag: StringTag) {
-        builder.append(tag.value.quoteAndEscape())
+        builder.append(quoteAndEscape(tag.value))
     }
 
     override fun examineList(tag: ListTag) {
@@ -76,7 +76,7 @@ public class StringTagExaminer : TagExaminer<String> {
         val keys = tag.keys.toMutableList().apply { sort() }
         keys.forEach {
             if (builder.length != 1) builder.append(',')
-            builder.append(it.escape()).append(':').append(StringTagExaminer().examine(tag[it]!!))
+            builder.append(escape(it)).append(':').append(StringTagExaminer().examine(tag[it]!!))
         }
         builder.append('}')
     }
@@ -100,27 +100,35 @@ public class StringTagExaminer : TagExaminer<String> {
         }
         builder.append(']')
     }
-}
 
-private val VALUE_REGEX = "[A-Za-z0-9._+-]+".toRegex()
+    private companion object {
 
-private fun String.escape() = if (VALUE_REGEX matches this) this else quoteAndEscape()
+        private val VALUE_REGEX = "[A-Za-z0-9._+-]+".toRegex()
 
-private fun String.quoteAndEscape(): String {
-    val builder = StringBuilder(" ")
-    var quote = 0.toChar()
-    for (i in indices) {
-        val current = this[i]
-        if (current == '\\') {
-            builder.append('\\')
-        } else if (current == '"' || current == '\'') {
-            if (quote == 0.toChar()) quote = if (current == '"') '\'' else '"'
-            if (quote == current) builder.append('\\')
+        @JvmStatic
+        private fun escape(text: String): String {
+            if (VALUE_REGEX.matches(text)) return text
+            return quoteAndEscape(text)
         }
-        builder.append(current)
+
+        @JvmStatic
+        private fun quoteAndEscape(text: String): String {
+            val builder = StringBuilder(" ")
+            var quote = 0.toChar()
+            for (i in text.indices) {
+                val current = text[i]
+                if (current == '\\') {
+                    builder.append('\\')
+                } else if (current == '"' || current == '\'') {
+                    if (quote == 0.toChar()) quote = if (current == '"') '\'' else '"'
+                    if (quote == current) builder.append('\\')
+                }
+                builder.append(current)
+            }
+            if (quote == 0.toChar()) quote = '"'
+            builder[0] = quote
+            builder.append(quote)
+            return builder.toString()
+        }
     }
-    if (quote == 0.toChar()) quote = '"'
-    builder[0] = quote
-    builder.append(quote)
-    return builder.toString()
 }

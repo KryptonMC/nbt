@@ -41,7 +41,7 @@ private class ZLIBSource(private val source: BufferedSource) : BufferedSource by
         private var position = 0
         private var exhausted = true
 
-        fun exhausted() = exhausted
+        fun exhausted(): Boolean = exhausted
 
         fun read(sink: Buffer, byteCount: Long): Long {
             if (exhausted) return -1
@@ -64,7 +64,7 @@ private class ZLIBSource(private val source: BufferedSource) : BufferedSource by
 private class ZLIBSink(private val sink: BufferedSink, gzip: Boolean, level: Int) : BufferedSink by sink {
 
     private val inBuffer = Uint8Array(1)
-    private val deflate = Deflate(ZLevel(level), 15 + (if (gzip) 16 else 0)).apply {
+    private val deflate = Deflate(ZLevel(level), calculateWindowBits(gzip)).apply {
         onData = {
             for (i in 0 until it.byteLength) {
                 sink.writeByte(it[i].toInt())
@@ -82,5 +82,14 @@ private class ZLIBSink(private val sink: BufferedSink, gzip: Boolean, level: Int
     override fun close() {
         deflate.push(Uint8Array(0), ZFlushMode.FINISH)
         sink.close()
+    }
+
+    companion object {
+
+        private fun calculateWindowBits(gzip: Boolean): Int {
+            var base = 15
+            if (gzip) base += 16
+            return base
+        }
     }
 }

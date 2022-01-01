@@ -17,34 +17,6 @@ import kotlin.test.assertTrue
 class ArrayTagTests {
 
     @Test
-    @JsName("testSetTag")
-    fun `test set tag`() {
-        val byteArray = ByteArrayTag(ByteArray(2))
-        assertFalse(byteArray.setTag(0, StringTag.EMPTY))
-        assertTrue(byteArray.setTag(0, ByteTag.ZERO))
-        val intArray = IntArrayTag(IntArray(2))
-        assertFalse(intArray.setTag(0, StringTag.EMPTY))
-        assertTrue(intArray.setTag(0, IntTag.ZERO))
-        val longArray = LongArrayTag(LongArray(2))
-        assertFalse(longArray.setTag(0, StringTag.EMPTY))
-        assertTrue(longArray.setTag(0, LongTag.ZERO))
-    }
-
-    @Test
-    @JsName("testAddTag")
-    fun `test add tag`() {
-        val byteArray = ByteArrayTag(ByteArray(2))
-        assertFalse(byteArray.addTag(0, StringTag.EMPTY))
-        assertTrue(byteArray.addTag(0, ByteTag.ZERO))
-        val intArray = IntArrayTag(IntArray(2))
-        assertFalse(intArray.addTag(0, StringTag.EMPTY))
-        assertTrue(intArray.addTag(0, IntTag.ZERO))
-        val longArray = LongArrayTag(LongArray(2))
-        assertFalse(longArray.addTag(0, StringTag.EMPTY))
-        assertTrue(longArray.addTag(0, LongTag.ZERO))
-    }
-
-    @Test
     @JsName("testEquality")
     fun `test equality`() {
         val byteArrayOne = ByteArrayTag(byteArrayOf(1, 2))
@@ -65,13 +37,5 @@ class ArrayTagTests {
         assertEquals(longArrayOne.size, longArrayTwo.copy().size)
         assertTrue(longArrayOne.data.contentEquals(longArrayOne.copy().data))
         assertEquals(longArrayOne.size, longArrayOne.data.size)
-    }
-
-    @Test
-    @JsName("checkElementTypes")
-    fun `check element types`() {
-        assertEquals(ByteTag.ID, ByteArrayTag(ByteArray(0)).elementType)
-        assertEquals(IntTag.ID, IntArrayTag(IntArray(0)).elementType)
-        assertEquals(LongTag.ID, LongArrayTag(LongArray(0)).elementType)
     }
 }

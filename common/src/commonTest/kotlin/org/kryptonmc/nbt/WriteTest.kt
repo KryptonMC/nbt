@@ -14,6 +14,7 @@ import okio.utf8Size
 import org.kryptonmc.nbt.io.TagCompression
 import org.kryptonmc.nbt.io.TagIO
 import kotlin.js.JsName
+import kotlin.jvm.JvmStatic
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -41,93 +42,111 @@ class WriteTest {
     }
 
     @Test
-    @JsName("uncompressedUnnamed")
-    fun `uncompressed unnamed`() = checkWrite(TagCompression.NONE, "")
+    @JsName("testUncompressedUnnamed")
+    fun `test uncompressed unnamed`() {
+        checkWrite(tag, TagCompression.NONE, "")
+    }
 
     @Test
-    @JsName("uncompressedNamed")
-    fun `uncompressed named`() = checkWrite(TagCompression.NONE, "Test")
+    @JsName("testUncompressedNamed")
+    fun `test uncompressed named`() {
+        checkWrite(tag, TagCompression.NONE, "Test")
+    }
 
     @Test
-    @JsName("gzipUnnamed")
-    fun `gzip unnamed`() = checkWrite(TagCompression.GZIP, "")
+    @JsName("testGzipUnnamed")
+    fun `test gzip unnamed`() {
+        checkWrite(tag, TagCompression.GZIP, "")
+    }
 
     @Test
-    @JsName("gzipNamed")
-    fun `gzip named`() = checkWrite(TagCompression.GZIP, "Test")
+    @JsName("testGzipNamed")
+    fun `test gzip named`() {
+        checkWrite(tag, TagCompression.GZIP, "Test")
+    }
 
     @Test
-    @JsName("zlibUnnamed")
-    fun `zlib unnamed`() = checkWrite(TagCompression.ZLIB, "")
+    @JsName("testZlibUnnamed")
+    fun `test zlib unnamed`() {
+        checkWrite(tag, TagCompression.ZLIB, "")
+    }
 
     @Test
-    @JsName("zlibNamed")
-    fun `zlib named`() = checkWrite(TagCompression.ZLIB, "Test")
+    @JsName("testZlibNamed")
+    fun `test zlib named`() {
+        checkWrite(tag, TagCompression.ZLIB, "Test")
+    }
 
-    private fun checkWrite(compression: TagCompression, name: String) {
-        val buffer = Buffer()
-        TagIO.writeNamed(buffer, name, tag, compression)
-        val input = compression.decompress(buffer)
-        assertEquals(CompoundTag.ID.toByte(), input.readByte())
-        assertEquals(name.utf8Size().toShort(), input.readShort())
-        assertEquals(name, input.readUtf8(name.utf8Size()))
-        input.checkContents()
-    }
-}
+    companion object {
 
-private fun BufferedSource.checkContents() {
-    assertType(ByteTag.ID, "byte test") { assertEquals(1, readByte()) }
-    assertType(ShortTag.ID, "short test") { assertEquals(25, readShort()) }
-    assertType(IntTag.ID, "int test") { assertEquals(58329, readInt()) }
-    assertType(LongTag.ID, "long test") { assertEquals(19848395L, readLong()) }
-
-    // We check the bits here due to inconsistencies with floating point on different platforms
-    assertType(FloatTag.ID, "float test") { assertEquals(0.4231535F.toBits(), readInt()) }
-    assertType(DoubleTag.ID, "double test") { assertEquals(1.2136563264461.toBits(), readLong()) }
-
-    assertType(StringTag.ID, "string test") { assertEquals("cauidsgahsgdg", readUtf8(readShort().toLong())) }
-    assertType(ByteArrayTag.ID, "byte array test") {
-        assertEquals(3, readInt())
-        assertContentEquals(readByteArray(3), byteArrayOf(1, 4, 2))
-    }
-    assertType(IntArrayTag.ID, "int array test") {
-        assertEquals(3, readInt())
-        assertEquals(8, readInt())
-        assertEquals(9, readInt())
-        assertEquals(2, readInt())
-    }
-    assertType(LongArrayTag.ID, "long array test") {
-        assertEquals(3, readInt())
-        assertEquals(73, readLong())
-        assertEquals(492, readLong())
-        assertEquals(195, readLong())
-    }
-    assertType(ListTag.ID, "list test") {
-        assertEquals(IntTag.ID.toByte(), readByte())
-        assertEquals(3, readInt())
-        assertEquals(1, readInt())
-        assertEquals(74, readInt())
-        assertEquals(493029, readInt())
-    }
-    assertType(CompoundTag.ID, "compound test") {
-        assertType(ListTag.ID, "nested list") {
-            assertEquals(LongTag.ID.toByte(), readByte())
-            assertEquals(3, readInt())
-            assertEquals(74, readLong())
-            assertEquals(9385, readLong())
-            assertEquals(25412389589235, readLong())
+        @JvmStatic
+        private fun checkWrite(tag: CompoundTag, compression: TagCompression, name: String) {
+            val buffer = Buffer()
+            TagIO.writeNamed(buffer, name, tag, compression)
+            val input = compression.decompress(buffer)
+            assertEquals(CompoundTag.ID.toByte(), input.readByte())
+            assertEquals(name.utf8Size().toShort(), input.readShort())
+            assertEquals(name, input.readUtf8(name.utf8Size()))
+            checkContents(input)
         }
-        assertType(CompoundTag.ID, "nested compound") {
-            assertType(IntTag.ID, "nested int") { assertEquals(31235, readInt()) }
-            assertEquals(0, readByte())
-        }
-        assertEquals(0, readByte())
-    }
-    assertEquals(0, readByte())
-}
 
-private fun BufferedSource.assertType(type: Int, name: String, action: () -> Unit) {
-    assertEquals(type.toByte(), readByte())
-    assertEquals(name, readUtf8(readShort().toLong()))
-    action()
+        @JvmStatic
+        private fun checkContents(source: BufferedSource) {
+            assertType(source, ByteTag.ID, "byte test") { assertEquals(1, source.readByte()) }
+            assertType(source, ShortTag.ID, "short test") { assertEquals(25, source.readShort()) }
+            assertType(source, IntTag.ID, "int test") { assertEquals(58329, source.readInt()) }
+            assertType(source, LongTag.ID, "long test") { assertEquals(19848395L, source.readLong()) }
+
+            // We check the bits here due to inconsistencies with floating point on different platforms
+            assertType(source, FloatTag.ID, "float test") { assertEquals(0.4231535F.toBits(), source.readInt()) }
+            assertType(source, DoubleTag.ID, "double test") { assertEquals(1.2136563264461.toBits(), source.readLong()) }
+
+            assertType(source, StringTag.ID, "string test") { assertEquals("cauidsgahsgdg", source.readUtf8(source.readShort().toLong())) }
+            assertType(source, ByteArrayTag.ID, "byte array test") {
+                assertEquals(3, source.readInt())
+                assertContentEquals(source.readByteArray(3), byteArrayOf(1, 4, 2))
+            }
+            assertType(source, IntArrayTag.ID, "int array test") {
+                assertEquals(3, source.readInt())
+                assertEquals(8, source.readInt())
+                assertEquals(9, source.readInt())
+                assertEquals(2, source.readInt())
+            }
+            assertType(source, LongArrayTag.ID, "long array test") {
+                assertEquals(3, source.readInt())
+                assertEquals(73, source.readLong())
+                assertEquals(492, source.readLong())
+                assertEquals(195, source.readLong())
+            }
+            assertType(source, ListTag.ID, "list test") {
+                assertEquals(IntTag.ID.toByte(), source.readByte())
+                assertEquals(3, source.readInt())
+                assertEquals(1, source.readInt())
+                assertEquals(74, source.readInt())
+                assertEquals(493029, source.readInt())
+            }
+            assertType(source, CompoundTag.ID, "compound test") {
+                assertType(source, ListTag.ID, "nested list") {
+                    assertEquals(LongTag.ID.toByte(), source.readByte())
+                    assertEquals(3, source.readInt())
+                    assertEquals(74, source.readLong())
+                    assertEquals(9385, source.readLong())
+                    assertEquals(25412389589235, source.readLong())
+                }
+                assertType(source, CompoundTag.ID, "nested compound") {
+                    assertType(source, IntTag.ID, "nested int") { assertEquals(31235, source.readInt()) }
+                    assertEquals(0, source.readByte())
+                }
+                assertEquals(0, source.readByte())
+            }
+            assertEquals(0, source.readByte())
+        }
+
+        @JvmStatic
+        private fun assertType(source: BufferedSource, type: Int, name: String, action: () -> Unit) {
+            assertEquals(type.toByte(), source.readByte())
+            assertEquals(name, source.readUtf8(source.readShort().toLong()))
+            action()
+        }
+    }
 }

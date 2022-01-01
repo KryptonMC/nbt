@@ -113,4 +113,4 @@ internal fun md5Hash(input: ByteArray): ByteArray {
 }
 
 // This is a carbon copy of java.lang.Integer.rotateLeft
-private fun rotateLeft(i: Int, distance: Int) = (i shl distance) or (i ushr -distance)
+private fun rotateLeft(i: Int, distance: Int): Int = (i shl distance) or (i ushr -distance)

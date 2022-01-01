@@ -8,7 +8,6 @@
  */
 package org.kryptonmc.nbt
 
-import org.kryptonmc.nbt.util.floor
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,14 +20,14 @@ class NumberTagTests {
         val double = DoubleTag.of(57.5)
         assertEquals(double.toDouble(), double.value)
         assertEquals(double.toFloat(), double.value.toFloat())
-        assertEquals(double.toLong(), double.value.floor().toLong())
-        assertEquals(double.toInt(), double.value.floor())
-        assertEquals(double.toShort(), (double.value.floor() and '\uFFFF'.code).toShort())
-        assertEquals(double.toByte(), (double.value.floor() and 255).toByte())
+        assertEquals(double.toLong(), double.value.toInt().toLong())
+        assertEquals(double.toInt(), double.value.toInt())
+        assertEquals(double.toShort(), (double.value.toInt() and '\uFFFF'.code).toShort())
+        assertEquals(double.toByte(), (double.value.toInt() and 255).toByte())
         val float = FloatTag.of(83.7F)
-        assertEquals(float.toInt(), float.value.floor())
-        assertEquals(float.toShort(), (float.value.floor() and 65535).toShort())
-        assertEquals(float.toByte(), (float.value.floor() and 255).toByte())
+        assertEquals(float.toInt(), float.value.toInt())
+        assertEquals(float.toShort(), (float.value.toInt() and 65535).toShort())
+        assertEquals(float.toByte(), (float.value.toInt() and 255).toByte())
     }
 
     @Test

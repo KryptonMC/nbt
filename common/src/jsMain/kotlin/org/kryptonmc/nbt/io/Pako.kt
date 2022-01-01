@@ -129,10 +129,10 @@ internal value class ZLevel(val level: Int) {
 
     companion object {
 
-        val NO_COMPRESSION = ZLevel(Pako.Constants.Z_NO_COMPRESSION)
-        val BEST_SPEED = ZLevel(Pako.Constants.Z_BEST_SPEED)
-        val BEST_COMPRESSION = ZLevel(Pako.Constants.Z_BEST_COMPRESSION)
-        val DEFAULT_COMPRESSION = ZLevel(Pako.Constants.Z_DEFAULT_COMPRESSION)
+        val NO_COMPRESSION: ZLevel = ZLevel(Pako.Constants.Z_NO_COMPRESSION)
+        val BEST_SPEED: ZLevel = ZLevel(Pako.Constants.Z_BEST_SPEED)
+        val BEST_COMPRESSION: ZLevel = ZLevel(Pako.Constants.Z_BEST_COMPRESSION)
+        val DEFAULT_COMPRESSION: ZLevel = ZLevel(Pako.Constants.Z_DEFAULT_COMPRESSION)
     }
 }
 
@@ -152,12 +152,7 @@ internal enum class ZDataType(val dataType: Int) {
     UNKNOWN(Pako.Constants.Z_UNKNOWN),
 }
 
-internal class Deflate(
-    level: ZLevel? = null,
-    windowBits: Int? = null,
-    memLevel: Int? = null,
-    strategy: ZStrategy? = null,
-) {
+internal class Deflate(level: ZLevel? = null, windowBits: Int? = null, memLevel: Int? = null, strategy: ZStrategy? = null) {
 
     private val deflate = Pako.Deflate(
         json().apply {

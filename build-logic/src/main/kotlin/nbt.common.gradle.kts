@@ -28,6 +28,7 @@ kotlin {
 
 dependencies {
     "commonMainApi"(kotlin("stdlib-common"))
+    "commonMainApi"("org.jetbrains.kotlinx", "kotlinx-collections-immutable", "0.3.5")
     "commonMainApi"("com.squareup.okio", "okio-multiplatform", "3.0.0-alpha.9")
     "jvmMainApi"(kotlin("stdlib"))
     "jvmMainApi"("com.squareup.okio", "okio", "3.0.0-alpha.9")

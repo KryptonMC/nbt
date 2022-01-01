@@ -13,7 +13,6 @@ import okio.BufferedSource
 import org.kryptonmc.nbt.DoubleTag.Companion.ZERO
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
-import org.kryptonmc.nbt.util.floor
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
@@ -46,11 +45,11 @@ public class FloatTag private constructor(override val value: Float) : NumberTag
 
     override fun toString(): String = "FloatTag(value=$value)"
 
-    override fun toInt(): Int = value.floor()
+    override fun toInt(): Int = value.toInt()
 
-    override fun toShort(): Short = (value.floor() and 65535).toShort()
+    override fun toShort(): Short = (value.toInt() and 65535).toShort()
 
-    override fun toByte(): Byte = (value.floor() and 255).toByte()
+    override fun toByte(): Byte = (value.toInt() and 255).toByte()
 
     public companion object {
 

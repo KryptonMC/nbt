@@ -41,12 +41,6 @@ public class StringTag private constructor(public val value: String) : Tag {
 
     public companion object {
 
-        /**
-         * The string tag representing the empty string.
-         */
-        @JvmField
-        public val EMPTY: StringTag = StringTag("")
-
         public const val ID: Int = 8
         @JvmField
         public val TYPE: TagType = TagType("TAG_String", true)
@@ -66,6 +60,7 @@ public class StringTag private constructor(public val value: String) : Tag {
                 output.writeUtf8(value.value)
             }
         }
+        private val EMPTY = StringTag("")
 
         /**
          * Creates a new string tag holding the given [value].
@@ -74,6 +69,17 @@ public class StringTag private constructor(public val value: String) : Tag {
          * @return a new string tag
          */
         @JvmStatic
-        public fun of(value: String): StringTag = if (value.isEmpty()) EMPTY else StringTag(value)
+        public fun of(value: String): StringTag {
+            if (value.isEmpty()) return empty()
+            return StringTag(value)
+        }
+
+        /**
+         * Gets the string tag that holds the empty string.
+         *
+         * @return the empty string tag
+         */
+        @JvmStatic
+        public fun empty(): StringTag = EMPTY
     }
 }

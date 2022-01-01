@@ -6,9 +6,13 @@
  * This project is licensed under the terms of the MIT license.
  * For more details, please reference the LICENSE file in the top-level directory.
  */
+@file:JvmSynthetic
 package org.kryptonmc.nbt
 
+import kotlin.jvm.JvmSynthetic
+
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.SOURCE)
 @DslMarker
 internal annotation class NBTDsl
 
@@ -19,6 +23,7 @@ internal annotation class NBTDsl
  * @return a new compound tag
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun compound(builder: CompoundTag.Builder.() -> Unit): CompoundTag = CompoundTag.builder().apply(builder).build()
 
 /**
@@ -28,6 +33,7 @@ public inline fun compound(builder: CompoundTag.Builder.() -> Unit): CompoundTag
  * @return a new compound tag builder
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun buildCompound(builder: CompoundTag.Builder.() -> Unit): CompoundTag.Builder = CompoundTag.builder().apply(builder)
 
 /**
@@ -37,6 +43,7 @@ public inline fun buildCompound(builder: CompoundTag.Builder.() -> Unit): Compou
  * @return a new mutable compound tag
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun mutableCompound(builder: MutableCompoundTag.() -> Unit): MutableCompoundTag = MutableCompoundTag().apply(builder)
 
 /**
@@ -46,6 +53,7 @@ public inline fun mutableCompound(builder: MutableCompoundTag.() -> Unit): Mutab
  * @return a new list tag
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun list(builder: ListTag.Builder.() -> Unit): ListTag = ListTag.builder().apply(builder).build()
 
 /**
@@ -55,6 +63,7 @@ public inline fun list(builder: ListTag.Builder.() -> Unit): ListTag = ListTag.b
  * @return a new list tag builder
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun buildList(builder: ListTag.Builder.() -> Unit): ListTag.Builder = ListTag.builder().apply(builder)
 
 /**
@@ -64,4 +73,5 @@ public inline fun buildList(builder: ListTag.Builder.() -> Unit): ListTag.Builde
  * @return a new mutable list tag
  */
 @NBTDsl
+@JvmSynthetic
 public inline fun mutableList(builder: MutableListTag.() -> Unit): MutableListTag = MutableListTag().apply(builder)

@@ -34,14 +34,16 @@ public actual class UUID actual constructor(
         formatUnsignedLong0(mostSignificantBits, 4, buf, 14, 4)
         formatUnsignedLong0(mostSignificantBits ushr 16, 4, buf, 9, 4)
         formatUnsignedLong0(mostSignificantBits ushr 32, 4, buf, 0, 8)
-        buf[23] = '-'.code.toByte()
-        buf[18] = '-'.code.toByte()
-        buf[13] = '-'.code.toByte()
-        buf[8] = '-'.code.toByte()
+        buf[23] = SEPARATOR
+        buf[18] = SEPARATOR
+        buf[13] = SEPARATOR
+        buf[8] = SEPARATOR
         return buf.decodeToString()
     }
 
     public actual companion object {
+
+        private const val SEPARATOR = '_'.code.toByte()
 
         // Took the fromString parsing from FastUUID:
         // https://github.com/jchambers/fast-uuid/blob/9a60f414719792fe52d6273aa0f9d114f6f6469a/src/main/java/com/eatthepath/uuid/FastUUID.java

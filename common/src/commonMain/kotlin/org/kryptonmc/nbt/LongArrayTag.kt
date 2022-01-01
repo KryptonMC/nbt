@@ -15,23 +15,23 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import kotlin.jvm.JvmField
+import kotlin.jvm.JvmSynthetic
 
 /**
  * A tag that holds a long array.
  */
-public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), MutableCollectionTag<LongTag> {
+public class LongArrayTag(data: LongArray) : Tag {
 
     /**
      * The backing data for this tag.
      */
     public var data: LongArray = data
         private set
+    public val size: Int
+        get() = data.size
 
     override val id: Int = ID
-    override val elementType: Int = LongTag.ID
     override val type: TagType = TYPE
-    override val size: Int
-        get() = data.size
 
     /**
      * Creates a new long array tag from the given [data].
@@ -40,38 +40,31 @@ public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), Mut
      */
     public constructor(data: Collection<Long>) : this(data.toLongArray())
 
-    override fun get(index: Int): LongTag = LongTag.of(data[index])
+    public fun get(index: Int): Long = data[index]
 
-    override fun set(index: Int, element: LongTag): LongTag {
-        val oldValue = data[index]
-        data[index] = element.value
-        return LongTag.of(oldValue)
+    public fun set(index: Int, value: Long) {
+        data[index] = value
     }
 
-    override fun add(index: Int, element: LongTag) {
-        data = data.add(index, element.value)
+    public fun add(value: Long) {
+        data = data.copyOf(data.size + 1)
+        data[data.size - 1] = value
     }
 
-    override fun setTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data[index] = tag.toLong()
-        return true
+    public fun add(index: Int, value: Long) {
+        data = data.add(index, value)
     }
 
-    override fun addTag(index: Int, tag: Tag): Boolean {
-        if (tag !is NumberTag) return false
-        data = data.add(index, tag.toLong())
-        return true
-    }
-
-    override fun removeAt(index: Int): LongTag {
-        val oldValue = data[index]
+    public fun remove(index: Int) {
         data = data.remove(index)
-        return LongTag.of(oldValue)
     }
 
-    override fun clear() {
-        data = LongArray(0)
+    public fun forEach(action: (Long) -> Unit) {
+        data.forEach(action)
+    }
+
+    public fun clear() {
+        data = EMPTY_DATA
     }
 
     override fun write(output: BufferedSink): Unit = WRITER.write(output, this)
@@ -115,5 +108,7 @@ public class LongArrayTag(data: LongArray) : AbstractMutableList<LongTag>(), Mut
                 for (i in value.data.indices) output.writeLong(value.data[i])
             }
         }
+        @JvmSynthetic
+        internal val EMPTY_DATA: LongArray = LongArray(0)
     }
 }

@@ -8,6 +8,8 @@
  */
 package org.kryptonmc.nbt
 
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentMap
 import okio.BufferedSink
 import okio.BufferedSource
 import okio.utf8Size
@@ -24,15 +26,34 @@ import kotlin.jvm.JvmStatic
 
 /**
  * A tag that holds a map of keys to tags.
- *
- * @param tags the tags being held by this compound
  */
-public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMap()) : Tag, Map<String, Tag> by tags {
+public sealed class CompoundTag : Map<String, Tag>, Tag {
+
+    /**
+     * The backing map held by this compound tag.
+     */
+    public abstract val tags: Map<String, Tag>
 
     final override val id: Int = ID
     final override val type: TagType = TYPE
 
-    public fun type(name: String): Int = tags[name]?.id ?: 0
+    override val size: Int
+        get() = tags.size
+    override val entries: Set<Map.Entry<String, Tag>>
+        get() = tags.entries
+    override val keys: Set<String>
+        get() = tags.keys
+    override val values: Collection<Tag>
+        get() = tags.values
+
+    public fun type(name: String): Int {
+        val tag = tags[name] ?: return 0
+        return tag.id
+    }
+
+    final override fun containsKey(key: String): Boolean = tags.containsKey(key)
+
+    final override fun containsValue(value: Tag): Boolean = tags.containsValue(value)
 
     /**
      * Checks if this compound contains a tag with the given [name], and that
@@ -47,8 +68,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
         val type = type(name)
         if (type == typeId) return true
         if (typeId != 99) return false
-        return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID ||
-            type == FloatTag.ID || type == DoubleTag.ID
+        return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID || type == FloatTag.ID || type == DoubleTag.ID
     }
 
     /**
@@ -65,8 +85,10 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      */
     public fun hasUUID(name: String): Boolean {
         val value = tags[name] ?: return false
-        return value.type === IntArrayTag.TYPE && (value as IntArrayTag).data.size == 4
+        return value.id == IntArrayTag.ID && (value as IntArrayTag).data.size == 4
     }
+
+    final override fun get(key: String): Tag? = tags[key]
 
     /**
      * Gets the boolean value with the given [name], or returns the given
@@ -174,7 +196,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the byte array, or the default if not present
      */
     @JvmOverloads
-    public fun getByteArray(name: String, default: ByteArray = ByteArray(0)): ByteArray {
+    public fun getByteArray(name: String, default: ByteArray = ByteArrayTag.EMPTY_DATA): ByteArray {
         if (contains(name, ByteArrayTag.ID)) return (tags[name] as ByteArrayTag).data
         return default
     }
@@ -187,7 +209,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the integer array, or the default if not present
      */
     @JvmOverloads
-    public fun getIntArray(name: String, default: IntArray = IntArray(0)): IntArray {
+    public fun getIntArray(name: String, default: IntArray = IntArrayTag.EMPTY_DATA): IntArray {
         if (contains(name, IntArrayTag.ID)) return (tags[name] as IntArrayTag).data
         return default
     }
@@ -200,7 +222,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the long array, or the default if not present
      */
     @JvmOverloads
-    public fun getLongArray(name: String, default: LongArray = LongArray(0)): LongArray {
+    public fun getLongArray(name: String, default: LongArray = LongArrayTag.EMPTY_DATA): LongArray {
         if (contains(name, LongArrayTag.ID)) return (tags[name] as LongArrayTag).data
         return default
     }
@@ -276,7 +298,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putBoolean(key: String, value: Boolean): CompoundTag = put(key, ByteTag.of(value))
+    public abstract fun putBoolean(key: String, value: Boolean): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given byte [value] and
@@ -287,7 +309,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putByte(key: String, value: Byte): CompoundTag = put(key, ByteTag.of(value))
+    public abstract fun putByte(key: String, value: Byte): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given short [value] and
@@ -298,7 +320,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putShort(key: String, value: Short): CompoundTag = put(key, ShortTag.of(value))
+    public abstract fun putShort(key: String, value: Short): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given integer [value] and
@@ -309,7 +331,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putInt(key: String, value: Int): CompoundTag = put(key, IntTag.of(value))
+    public abstract fun putInt(key: String, value: Int): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given long [value] and
@@ -320,7 +342,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putLong(key: String, value: Long): CompoundTag = put(key, LongTag.of(value))
+    public abstract fun putLong(key: String, value: Long): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given float [value] and
@@ -331,7 +353,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putFloat(key: String, value: Float): CompoundTag = put(key, FloatTag.of(value))
+    public abstract fun putFloat(key: String, value: Float): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given double [value] and
@@ -342,7 +364,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putDouble(key: String, value: Double): CompoundTag = put(key, DoubleTag.of(value))
+    public abstract fun putDouble(key: String, value: Double): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given string [value] and
@@ -353,7 +375,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putString(key: String, value: String): CompoundTag = put(key, StringTag.of(value))
+    public abstract fun putString(key: String, value: String): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given UUID [value] and
@@ -366,7 +388,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putUUID(key: String, value: UUID): CompoundTag = put(key, value.toTag())
+    public abstract fun putUUID(key: String, value: UUID): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given byte array [value]
@@ -377,7 +399,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putByteArray(key: String, value: ByteArray): CompoundTag = put(key, ByteArrayTag(value))
+    public abstract fun putByteArray(key: String, value: ByteArray): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given integer array [value]
@@ -388,7 +410,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putIntArray(key: String, value: IntArray): CompoundTag = put(key, IntArrayTag(value))
+    public abstract fun putIntArray(key: String, value: IntArray): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given long array [value]
@@ -399,7 +421,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putLongArray(key: String, value: LongArray): CompoundTag = put(key, LongArrayTag(value))
+    public abstract fun putLongArray(key: String, value: LongArray): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given byte [values] and
@@ -410,7 +432,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putBytes(key: String, vararg values: Byte): CompoundTag = putByteArray(key, values)
+    public abstract fun putBytes(key: String, vararg values: Byte): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given integer [values] and
@@ -421,7 +443,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putInts(key: String, vararg values: Int): CompoundTag = putIntArray(key, values)
+    public abstract fun putInts(key: String, vararg values: Int): CompoundTag
 
     /**
      * Sets the given [key] in this compound to the given long [values] and
@@ -432,11 +454,11 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      * @return the resulting compound
      * @see put
      */
-    public open fun putLongs(key: String, vararg values: Long): CompoundTag = putLongArray(key, values)
+    public abstract fun putLongs(key: String, vararg values: Long): CompoundTag
 
-    public open fun update(key: String, builder: CompoundTag.() -> Unit): CompoundTag = put(key, getCompound(key).apply(builder))
+    public abstract fun update(key: String, builder: CompoundTag.() -> Unit): CompoundTag
 
-    public open fun update(key: String, type: Int, builder: ListTag.() -> Unit): CompoundTag = put(key, getList(key, type).apply(builder))
+    public abstract fun update(key: String, type: Int, builder: ListTag.() -> Unit): CompoundTag
 
     /**
      * Iterates over every tag in this compound, and for every tag that is a
@@ -612,8 +634,10 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
      */
     public fun immutable(): ImmutableCompoundTag {
         if (this is ImmutableCompoundTag) return this
-        return ImmutableCompoundTag(tags)
+        return ImmutableCompoundTag(tags.toPersistentMap())
     }
+
+    final override fun isEmpty(): Boolean = tags.isEmpty()
 
     final override fun write(output: BufferedSink) {
         WRITER.write(output, this)
@@ -918,11 +942,11 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
         public val WRITER: TagWriter<CompoundTag> = object : TagWriter<CompoundTag> {
 
             override fun write(output: BufferedSink, value: CompoundTag) {
-                value.tags.forEach { output.writeNamedTag(it.key, it.value) }
+                value.tags.forEach { writeNamedTag(output, it.key, it.value) }
                 output.writeByte(EndTag.ID)
             }
         }
-        private val EMPTY = ImmutableCompoundTag(emptyMap())
+        private val EMPTY = ImmutableCompoundTag(persistentMapOf())
 
         /**
          * Creates a new builder for building a compound tag.
@@ -932,11 +956,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
          */
         @JvmStatic
         @JvmOverloads
-        public fun builder(mutable: Boolean = true): Builder = Builder(mutable)
-
-        @JvmStatic
-        @Deprecated("Not all compound tags are mutable any more.", ReplaceWith("CompoundTag.mutable"))
-        public fun of(data: Map<String, Tag>): CompoundTag = mutable(data)
+        public fun builder(mutable: Boolean = false): Builder = Builder(mutable)
 
         /**
          * Creates a new mutable compound tag with the given [data].
@@ -947,7 +967,10 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
          * @return a new mutable compound tag
          */
         @JvmStatic
-        public fun mutable(data: Map<String, Tag>): CompoundTag = MutableCompoundTag(if (data is MutableMap) data else data.toMutableMap())
+        public fun mutable(data: Map<String, Tag>): CompoundTag {
+            val newData = if (data is MutableMap) data else data.toMutableMap()
+            return MutableCompoundTag(newData)
+        }
 
         /**
          * Creates a new immutable compound tag with the given [data].
@@ -956,7 +979,7 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
          * @return a new immutable compound tag
          */
         @JvmStatic
-        public fun immutable(data: Map<String, Tag>): CompoundTag = ImmutableCompoundTag(data)
+        public fun immutable(data: Map<String, Tag>): CompoundTag = ImmutableCompoundTag(data.toPersistentMap())
 
         /**
          * Gets the empty compound tag.
@@ -967,14 +990,15 @@ public sealed class CompoundTag(public open val tags: Map<String, Tag> = emptyMa
          */
         @JvmStatic
         public fun empty(): CompoundTag = EMPTY
-    }
-}
 
-private fun BufferedSink.writeNamedTag(name: String, tag: Tag) {
-    writeByte(tag.id)
-    if (tag.id != EndTag.ID) {
-        writeShort(name.utf8Size().toInt())
-        writeUtf8(name)
-        tag.write(this)
+        @JvmStatic
+        private fun writeNamedTag(sink: BufferedSink, name: String, tag: Tag) {
+            sink.writeByte(tag.id)
+            if (tag.id != EndTag.ID) {
+                sink.writeShort(name.utf8Size().toInt())
+                sink.writeUtf8(name)
+                tag.write(sink)
+            }
+        }
     }
 }

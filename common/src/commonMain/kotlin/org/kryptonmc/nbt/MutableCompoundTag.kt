@@ -8,10 +8,9 @@
  */
 package org.kryptonmc.nbt
 
-import org.kryptonmc.nbt.util.UUID
-import org.kryptonmc.nbt.util.toTag
-
-public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mutableMapOf()) : CompoundTag(tags), MutableMap<String, Tag> by tags {
+public class MutableCompoundTag(
+    override val tags: MutableMap<String, Tag> = mutableMapOf()
+) : ScopedCompoundTag<MutableCompoundTag>(), MutableMap<String, Tag> {
 
     override val size: Int
         get() = tags.size
@@ -22,50 +21,20 @@ public class MutableCompoundTag(override val tags: MutableMap<String, Tag> = mut
     override val values: MutableCollection<Tag>
         get() = tags.values
 
-    override fun copy(): MutableCompoundTag {
-        val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
-        return MutableCompoundTag(copy)
-    }
-
-    override fun get(key: String): Tag? = tags[key]
-
     override fun put(key: String, value: Tag): MutableCompoundTag = apply { tags[key] = value }
 
     override fun remove(key: String): MutableCompoundTag = apply { tags.remove(key) }
 
-    override fun putBoolean(key: String, value: Boolean): MutableCompoundTag = put(key, ByteTag.of(value))
+    override fun clear() {
+        tags.clear()
+    }
 
-    override fun putByte(key: String, value: Byte): MutableCompoundTag = put(key, ByteTag.of(value))
+    override fun putAll(from: Map<out String, Tag>) {
+        tags.putAll(from)
+    }
 
-    override fun putShort(key: String, value: Short): MutableCompoundTag = put(key, ShortTag.of(value))
-
-    override fun putInt(key: String, value: Int): MutableCompoundTag = put(key, IntTag.of(value))
-
-    override fun putLong(key: String, value: Long): MutableCompoundTag = put(key, LongTag.of(value))
-
-    override fun putFloat(key: String, value: Float): MutableCompoundTag = put(key, FloatTag.of(value))
-
-    override fun putDouble(key: String, value: Double): MutableCompoundTag = put(key, DoubleTag.of(value))
-
-    override fun putString(key: String, value: String): MutableCompoundTag = put(key, StringTag.of(value))
-
-    override fun putUUID(key: String, value: UUID): MutableCompoundTag = put(key, value.toTag())
-
-    override fun putByteArray(key: String, value: ByteArray): MutableCompoundTag = put(key, ByteArrayTag(value))
-
-    override fun putIntArray(key: String, value: IntArray): MutableCompoundTag = put(key, IntArrayTag(value))
-
-    override fun putLongArray(key: String, value: LongArray): MutableCompoundTag = put(key, LongArrayTag(value))
-
-    override fun putBytes(key: String, vararg values: Byte): MutableCompoundTag = putByteArray(key, values)
-
-    override fun putInts(key: String, vararg values: Int): MutableCompoundTag = putIntArray(key, values)
-
-    override fun putLongs(key: String, vararg values: Long): MutableCompoundTag = putLongArray(key, values)
-
-    override fun containsKey(key: String): Boolean = tags.containsKey(key)
-
-    override fun containsValue(value: Tag): Boolean = tags.containsValue(value)
-
-    override fun isEmpty(): Boolean = tags.isEmpty()
+    override fun copy(): MutableCompoundTag {
+        val copy = tags.mapValuesTo(mutableMapOf()) { it.value.copy() }
+        return MutableCompoundTag(copy)
+    }
 }

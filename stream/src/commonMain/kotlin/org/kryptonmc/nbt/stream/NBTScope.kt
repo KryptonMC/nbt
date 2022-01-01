@@ -10,10 +10,10 @@ package org.kryptonmc.nbt.stream
 
 internal object NBTScope {
 
-    const val BYTE_ARRAY = 1
-    const val INT_ARRAY = 2
-    const val LONG_ARRAY = 3
-    const val LIST = 4
-    const val COMPOUND = 5
-    val COLLECTION = BYTE_ARRAY..LIST
+    const val BYTE_ARRAY: Int = 1
+    const val INT_ARRAY: Int = 2
+    const val LONG_ARRAY: Int = 3
+    const val LIST: Int = 4
+    const val COMPOUND: Int = 5
+    val COLLECTION: IntRange = BYTE_ARRAY..LIST
 }
