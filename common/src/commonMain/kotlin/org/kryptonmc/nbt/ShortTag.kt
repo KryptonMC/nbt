@@ -31,7 +31,9 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineShort(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineShort(this)
+    }
 
     override fun copy(): ShortTag = this
 
@@ -45,7 +47,9 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
 
     public companion object {
 
-        private val CACHE = Array(1153) { ShortTag((-128 + it).toShort()) }
+        private const val LOWER_CACHE_LIMIT = -128
+        private const val UPPER_CACHE_LIMIT = 1024
+        private val CACHE = Array(UPPER_CACHE_LIMIT - LOWER_CACHE_LIMIT + 1) { ShortTag((LOWER_CACHE_LIMIT + it).toShort()) }
 
         /**
          * The short tag representing the constant zero.
@@ -57,17 +61,9 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
         @JvmField
         public val TYPE: TagType = TagType("TAG_Short", true)
         @JvmField
-        public val READER: TagReader<ShortTag> = object : TagReader<ShortTag> {
-
-            override fun read(input: BufferedSource, depth: Int) = of(input.readShort())
-        }
+        public val READER: TagReader<ShortTag> = TagReader { input, _ -> of(input.readShort()) }
         @JvmField
-        public val WRITER: TagWriter<ShortTag> = object : TagWriter<ShortTag> {
-
-            override fun write(output: BufferedSink, value: ShortTag) {
-                output.writeShort(value.value.toInt())
-            }
-        }
+        public val WRITER: TagWriter<ShortTag> = TagWriter { output, value -> output.writeShort(value.value.toInt()) }
 
         /**
          * Gets the short tag representing the given [value], if it is in the
@@ -78,6 +74,9 @@ public class ShortTag private constructor(override val value: Short) : NumberTag
          * @return a short tag representing the value
          */
         @JvmStatic
-        public fun of(value: Short): ShortTag = if (value in -128..1024) CACHE[value.toInt() + 128] else ShortTag(value)
+        public fun of(value: Short): ShortTag {
+            if (value in LOWER_CACHE_LIMIT..UPPER_CACHE_LIMIT) return CACHE[value.toInt() - LOWER_CACHE_LIMIT]
+            return ShortTag(value)
+        }
     }
 }

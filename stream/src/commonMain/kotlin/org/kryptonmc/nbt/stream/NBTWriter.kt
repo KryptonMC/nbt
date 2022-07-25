@@ -238,7 +238,7 @@ public interface NBTWriter : Closeable {
         }
         is CompoundTag -> {
             beginCompound()
-            tag.forEach {
+            tag.tags.forEach {
                 name(it.key)
                 write(it.value)
             }

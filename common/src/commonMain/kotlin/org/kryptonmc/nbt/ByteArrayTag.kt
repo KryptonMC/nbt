@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt
 
 import okio.BufferedSink
-import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
@@ -30,8 +29,10 @@ public class ByteArrayTag(data: ByteArray) : Tag {
     public val size: Int
         get() = data.size
 
-    override val id: Int = ID
-    override val type: TagType = TYPE
+    override val id: Int
+        get() = ID
+    override val type: TagType
+        get() = TYPE
 
     /**
      * Creates a new byte array tag from the given [data].
@@ -97,22 +98,16 @@ public class ByteArrayTag(data: ByteArray) : Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_Byte_Array")
         @JvmField
-        public val READER: TagReader<ByteArrayTag> = object : TagReader<ByteArrayTag> {
-
-            override fun read(input: BufferedSource, depth: Int): ByteArrayTag {
-                val size = input.readInt()
-                val bytes = ByteArray(size)
-                input.readFully(bytes)
-                return ByteArrayTag(bytes)
-            }
+        public val READER: TagReader<ByteArrayTag> = TagReader { input, _ ->
+            val size = input.readInt()
+            val bytes = ByteArray(size)
+            input.readFully(bytes)
+            ByteArrayTag(bytes)
         }
         @JvmField
-        public val WRITER: TagWriter<ByteArrayTag> = object : TagWriter<ByteArrayTag> {
-
-            override fun write(output: BufferedSink, value: ByteArrayTag) {
-                output.writeInt(value.data.size)
-                output.write(value.data)
-            }
+        public val WRITER: TagWriter<ByteArrayTag> = TagWriter { output, value ->
+            output.writeInt(value.data.size)
+            output.write(value.data)
         }
         @JvmSynthetic
         internal val EMPTY_DATA: ByteArray = ByteArray(0)

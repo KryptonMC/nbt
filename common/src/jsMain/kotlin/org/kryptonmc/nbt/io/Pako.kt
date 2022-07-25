@@ -111,9 +111,13 @@ internal enum class ZStatus(val status: Int) {
 
     companion object {
 
+        private const val MINIMUM_STATUS_ID = -6
+        private const val MAXIMUM_STATUS_ID = 2
+        private val VALUES = values()
+
         fun fromCode(status: Int): ZStatus {
-            require(status in -6..2) { "Invalid Status code: $status" }
-            return enumValues<ZStatus>()[status - 6]
+            require(status in MINIMUM_STATUS_ID..MAXIMUM_STATUS_ID) { "Invalid Status code: $status" }
+            return VALUES[status + MINIMUM_STATUS_ID]
         }
     }
 }
@@ -124,10 +128,13 @@ internal enum class ZStatus(val status: Int) {
 internal value class ZLevel(val level: Int) {
 
     init {
-        require(level in -1..9) { "Compression level must be in -1..9" }
+        require(level in MINIMUM_LEVEL..MAXIMUM_LEVEL) { "Compression level must be between $MINIMUM_LEVEL and $MAXIMUM_LEVEL!" }
     }
 
     companion object {
+
+        private const val MINIMUM_LEVEL = -1
+        private const val MAXIMUM_LEVEL = 9
 
         val NO_COMPRESSION: ZLevel = ZLevel(Pako.Constants.Z_NO_COMPRESSION)
         val BEST_SPEED: ZLevel = ZLevel(Pako.Constants.Z_BEST_SPEED)
@@ -181,12 +188,7 @@ internal class Deflate(level: ZLevel? = null, windowBits: Int? = null, memLevel:
 
     fun push(data: Uint8Array, flushMode: ZFlushMode = ZFlushMode.NO_FLUSH): Boolean = deflate.push(data, flushMode.flushMode)
 
-    class Options(
-        var level: ZLevel? = null,
-        var windowBits: Int? = null,
-        var memLevel: Int? = null,
-        var strategy: ZStrategy? = null,
-    )
+    class Options(var level: ZLevel? = null, var windowBits: Int? = null, var memLevel: Int? = null, var strategy: ZStrategy? = null)
 }
 
 internal class Inflate(windowBits: Int? = null) {

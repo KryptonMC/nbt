@@ -30,7 +30,9 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineDouble(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineDouble(this)
+    }
 
     override fun copy(): DoubleTag = this
 
@@ -67,17 +69,9 @@ public class DoubleTag private constructor(override val value: Double) : NumberT
         @JvmField
         public val TYPE: TagType = TagType("TAG_Double", true)
         @JvmField
-        public val READER: TagReader<DoubleTag> = object : TagReader<DoubleTag> {
-
-            override fun read(input: BufferedSource, depth: Int) = DoubleTag(Double.fromBits(input.readLong()))
-        }
+        public val READER: TagReader<DoubleTag> = TagReader { input, _ -> DoubleTag(Double.fromBits(input.readLong())) }
         @JvmField
-        public val WRITER: TagWriter<DoubleTag> = object : TagWriter<DoubleTag> {
-
-            override fun write(output: BufferedSink, value: DoubleTag) {
-                output.writeLong(value.value.toBits())
-            }
-        }
+        public val WRITER: TagWriter<DoubleTag> = TagWriter { output, value -> output.writeLong(value.value.toBits()) }
 
         /**
          * Creates a new double tag holding the given [value].

@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt
 
 import okio.BufferedSink
-import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
@@ -71,7 +70,9 @@ public class IntArrayTag(data: IntArray) : Tag {
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineIntArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineIntArray(this)
+    }
 
     override fun copy(): IntArrayTag {
         val copy = IntArray(data.size)
@@ -95,21 +96,19 @@ public class IntArrayTag(data: IntArray) : Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_Int_Array")
         @JvmField
-        public val READER: TagReader<IntArrayTag> = object : TagReader<IntArrayTag> {
-
-            override fun read(input: BufferedSource, depth: Int): IntArrayTag {
-                val size = input.readInt()
-                val ints = IntArray(size)
-                for (i in 0 until size) ints[i] = input.readInt()
-                return IntArrayTag(ints)
+        public val READER: TagReader<IntArrayTag> = TagReader { input, _ ->
+            val size = input.readInt()
+            val ints = IntArray(size)
+            for (i in 0 until size) {
+                ints[i] = input.readInt()
             }
+            IntArrayTag(ints)
         }
         @JvmField
-        public val WRITER: TagWriter<IntArrayTag> = object : TagWriter<IntArrayTag> {
-
-            override fun write(output: BufferedSink, value: IntArrayTag) {
-                output.writeInt(value.data.size)
-                for (i in value.data.indices) output.writeInt(value.data[i])
+        public val WRITER: TagWriter<IntArrayTag> = TagWriter { output, value ->
+            output.writeInt(value.data.size)
+            for (i in value.data.indices) {
+                output.writeInt(value.data[i])
             }
         }
         @JvmSynthetic

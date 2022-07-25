@@ -103,13 +103,9 @@ public actual class UUID actual constructor(
          * UUID wouldn't be interoperable with java.util.UUID, which would be annoying.
          */
         public actual fun fromString(string: String): UUID {
-            require(
-                string.length == UUID_STRING_LENGTH &&
-                string[8] == '-' &&
-                string[13] == '-' &&
-                string[18] == '-' &&
-                string[23] == '-'
-            ) { "Illegal UUID string $string!" }
+            require(string.length == UUID_STRING_LENGTH && string[8] == '-' && string[13] == '-' && string[18] == '-' && string[23] == '-') {
+                "Illegal UUID string $string!"
+            }
 
             var msb = toHexValue(string[0]) shl 60
             msb = msb or (toHexValue(string[1]) shl 56)

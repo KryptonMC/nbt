@@ -26,7 +26,7 @@ class ReadTests {
         assertEquals("hello world", nbt.first)
         assertIs<CompoundTag>(nbt.second)
         val tag = nbt.second as CompoundTag
-        assertTrue(tag.isNotEmpty())
+        assertTrue(tag.tags.isNotEmpty())
         assertEquals("name", tag.keys.first())
         assertIs<StringTag>(tag.values.first())
         assertEquals("Bananrama", (tag.values.first() as StringTag).value)
@@ -57,7 +57,7 @@ class ReadTests {
             assertEquals("Level", input.first)
             assertIs<CompoundTag>(input.second)
             val tag = input.second as CompoundTag
-            assertTrue(tag.isNotEmpty())
+            assertTrue(tag.tags.isNotEmpty())
             assertTrue(tag.contains("shortTest", ShortTag.ID))
             assertEquals(Short.MAX_VALUE, tag.getShort("shortTest"))
             assertTrue(tag.contains("longTest", LongTag.ID))
@@ -66,13 +66,13 @@ class ReadTests {
             assertEquals(Byte.MAX_VALUE, tag.getByte("byteTest"))
             assertTrue(tag.contains("byteArrayTest (the first 1000 values of (n*n*255+n*7)%100, starting with n=0 (0, 62, 34, 16, 8, ...))", ByteArrayTag.ID))
             assertTrue(tag.contains("listTest (long)", ListTag.ID))
-            assertTrue(tag.getList("listTest (long)", LongTag.ID).isNotEmpty())
+            assertTrue(tag.getList("listTest (long)", LongTag.ID).data.isNotEmpty())
             assertTrue(tag.contains("floatTest", FloatTag.ID))
             assertTrue(tag.contains("doubleTest", DoubleTag.ID))
             assertTrue(tag.contains("intTest", IntTag.ID))
             assertTrue(tag.contains("listTest (compound)", ListTag.ID))
-            assertTrue(tag.getList("listTest (compound)", CompoundTag.ID).isNotEmpty())
-            assertEquals("Compound tag #0", (tag.getList("listTest (compound)", CompoundTag.ID)[0] as CompoundTag).getString("name"))
+            assertTrue(tag.getList("listTest (compound)", CompoundTag.ID).data.isNotEmpty())
+            assertEquals("Compound tag #0", tag.getList("listTest (compound)", CompoundTag.ID).getCompound(0).getString("name"))
             assertTrue(tag.contains("nested compound test", CompoundTag.ID))
         }
     }

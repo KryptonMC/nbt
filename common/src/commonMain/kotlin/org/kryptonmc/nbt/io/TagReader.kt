@@ -6,7 +6,7 @@ import org.kryptonmc.nbt.Tag
 /**
  * A reader for reading tags of type [T].
  */
-public interface TagReader<out T : Tag> {
+public fun interface TagReader<out T : Tag> {
 
     /**
      * Reads the tag from the given [input].

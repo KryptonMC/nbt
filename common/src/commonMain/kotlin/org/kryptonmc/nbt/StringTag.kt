@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt
 
 import okio.BufferedSink
-import okio.BufferedSource
 import okio.utf8Size
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
@@ -25,7 +24,9 @@ public class StringTag private constructor(public val value: String) : Tag {
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineString(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineString(this)
+    }
 
     override fun copy(): StringTag = this
 
@@ -45,20 +46,14 @@ public class StringTag private constructor(public val value: String) : Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_String", true)
         @JvmField
-        public val READER: TagReader<StringTag> = object : TagReader<StringTag> {
-
-            override fun read(input: BufferedSource, depth: Int): StringTag {
-                val length = input.readShort()
-                return of(input.readUtf8(length.toLong()))
-            }
+        public val READER: TagReader<StringTag> = TagReader { input, _ ->
+            val length = input.readShort()
+            of(input.readUtf8(length.toLong()))
         }
         @JvmField
-        public val WRITER: TagWriter<StringTag> = object : TagWriter<StringTag> {
-
-            override fun write(output: BufferedSink, value: StringTag) {
-                output.writeShort(value.value.utf8Size().toInt())
-                output.writeUtf8(value.value)
-            }
+        public val WRITER: TagWriter<StringTag> = TagWriter { output, value ->
+            output.writeShort(value.value.utf8Size().toInt())
+            output.writeUtf8(value.value)
         }
         private val EMPTY = StringTag("")
 

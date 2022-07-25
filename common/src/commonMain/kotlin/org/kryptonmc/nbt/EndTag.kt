@@ -23,22 +23,20 @@ public object EndTag : Tag {
     @JvmField
     public val TYPE: TagType = TagType("TAG_End", true)
     @JvmField
-    public val READER: TagReader<EndTag> = object : TagReader<EndTag> {
-
-        override fun read(input: BufferedSource, depth: Int) = EndTag
-    }
+    public val READER: TagReader<EndTag> = TagReader { _, _ -> EndTag }
     @JvmField
-    public val WRITER: TagWriter<EndTag> = object : TagWriter<EndTag> {
-
-        override fun write(output: BufferedSink, value: EndTag) = Unit
-    }
+    public val WRITER: TagWriter<EndTag> = TagWriter { _, _ -> }
 
     override val id: Int = ID
     override val type: TagType = TYPE
 
-    override fun write(output: BufferedSink): Unit = Unit
+    override fun write(output: BufferedSink) {
+        // Nothing to write for end tags
+    }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineEnd(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineEnd(this)
+    }
 
     override fun copy(): EndTag = this
 

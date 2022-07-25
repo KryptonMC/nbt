@@ -10,7 +10,6 @@ package org.kryptonmc.nbt
 
 import kotlinx.collections.immutable.toPersistentList
 import okio.BufferedSink
-import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.io.Types
@@ -23,7 +22,7 @@ import kotlin.jvm.JvmStatic
 /**
  * A tag holding a list of values of the given tag type [elementType].
  */
-public sealed class ListTag : List<Tag>, Tag {
+public sealed class ListTag : Tag, Iterable<Tag> {
 
     /**
      * The backing data held by this list tag.
@@ -35,15 +34,15 @@ public sealed class ListTag : List<Tag>, Tag {
      */
     public abstract val elementType: Int
 
-    final override val id: Int = ID
-    final override val type: TagType = TYPE
+    final override val id: Int
+        get() = ID
+    final override val type: TagType
+        get() = TYPE
 
-    override val size: Int
+    public val size: Int
         get() = data.size
 
-    override fun contains(element: Tag): Boolean = data.contains(element)
-
-    override fun containsAll(elements: Collection<Tag>): Boolean = data.containsAll(elements)
+    public fun contains(element: Tag): Boolean = data.contains(element)
 
     /**
      * Gets the tag at the given [index].
@@ -51,7 +50,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param index the index
      * @return the tag
      */
-    override fun get(index: Int): Tag = data[index]
+    public fun get(index: Int): Tag = data[index]
 
     /**
      * Gets the boolean value at the given [index], or returns the given
@@ -145,10 +144,8 @@ public sealed class ListTag : List<Tag>, Tag {
      * @return the byte array, or the default if not present
      */
     @JvmOverloads
-    public fun getByteArray(
-        index: Int,
-        default: ByteArray = ByteArrayTag.EMPTY_DATA
-    ): ByteArray = get<ByteArrayTag>(index, ByteArrayTag.ID, null)?.data ?: default
+    public fun getByteArray(index: Int, default: ByteArray = ByteArrayTag.EMPTY_DATA): ByteArray =
+        get<ByteArrayTag>(index, ByteArrayTag.ID, null)?.data ?: default
 
     /**
      * Gets the integer array at the given [index], or returns the given
@@ -158,10 +155,8 @@ public sealed class ListTag : List<Tag>, Tag {
      * @return the integer array, or the default if not present
      */
     @JvmOverloads
-    public fun getIntArray(
-        index: Int,
-        default: IntArray = IntArrayTag.EMPTY_DATA
-    ): IntArray = get<IntArrayTag>(index, IntArrayTag.ID, null)?.data ?: default
+    public fun getIntArray(index: Int, default: IntArray = IntArrayTag.EMPTY_DATA): IntArray =
+        get<IntArrayTag>(index, IntArrayTag.ID, null)?.data ?: default
 
     /**
      * Gets the long array at the given [index], or returns the given
@@ -171,10 +166,8 @@ public sealed class ListTag : List<Tag>, Tag {
      * @return the long array, or the default if not present
      */
     @JvmOverloads
-    public fun getLongArray(
-        index: Int,
-        default: LongArray = LongArrayTag.EMPTY_DATA
-    ): LongArray = get<LongArrayTag>(index, LongArrayTag.ID, null)?.data ?: default
+    public fun getLongArray(index: Int, default: LongArray = LongArrayTag.EMPTY_DATA): LongArray =
+        get<LongArrayTag>(index, LongArrayTag.ID, null)?.data ?: default
 
     /**
      * Gets the list at the given [index], or returns the given [default] if
@@ -248,7 +241,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every byte value
      */
     public inline fun forEachByte(action: (Byte) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getByte(i))
         }
     }
@@ -260,7 +253,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every short value
      */
     public inline fun forEachShort(action: (Short) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getShort(i))
         }
     }
@@ -272,7 +265,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every integer value
      */
     public inline fun forEachInt(action: (Int) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getInt(i))
         }
     }
@@ -284,7 +277,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every long value
      */
     public inline fun forEachLong(action: (Long) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getLong(i))
         }
     }
@@ -296,7 +289,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every float value
      */
     public inline fun forEachFloat(action: (Float) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getFloat(i))
         }
     }
@@ -308,7 +301,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every double value
      */
     public inline fun forEachDouble(action: (Double) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getDouble(i))
         }
     }
@@ -320,7 +313,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every string value
      */
     public inline fun forEachString(action: (String) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getString(i))
         }
     }
@@ -332,7 +325,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every byte array
      */
     public inline fun forEachByteArray(action: (ByteArray) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getByteArray(i))
         }
     }
@@ -344,7 +337,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every integer array
      */
     public inline fun forEachIntArray(action: (IntArray) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getIntArray(i))
         }
     }
@@ -356,7 +349,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every long array
      */
     public inline fun forEachLongArray(action: (LongArray) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getLongArray(i))
         }
     }
@@ -368,7 +361,7 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every list
      */
     public inline fun forEachList(action: (ListTag) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getList(i))
         }
     }
@@ -380,24 +373,14 @@ public sealed class ListTag : List<Tag>, Tag {
      * @param action the action to apply to every compound
      */
     public inline fun forEachCompound(action: (CompoundTag) -> Unit) {
-        for (i in indices) {
+        for (i in data.indices) {
             action(getCompound(i))
         }
     }
 
+    public fun isEmpty(): Boolean = data.isEmpty()
+
     final override fun iterator(): Iterator<Tag> = data.iterator()
-
-    final override fun indexOf(element: Tag): Int = data.indexOf(element)
-
-    final override fun lastIndexOf(element: Tag): Int = data.lastIndexOf(element)
-
-    final override fun listIterator(): ListIterator<Tag> = data.listIterator()
-
-    final override fun listIterator(index: Int): ListIterator<Tag> = data.listIterator(index)
-
-    final override fun subList(fromIndex: Int, toIndex: Int): List<Tag> = data.subList(fromIndex, toIndex)
-
-    final override fun isEmpty(): Boolean = data.isEmpty()
 
     /**
      * Converts this tag to its mutable list equivalent.
@@ -424,9 +407,13 @@ public sealed class ListTag : List<Tag>, Tag {
         WRITER.write(output, this)
     }
 
-    final override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineList(this)
+    final override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineList(this)
+    }
 
     public abstract override fun copy(): ListTag
+
+    public fun toBuilder(): Builder = Builder(this is MutableListTag, elementType)
 
     final override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -598,6 +585,15 @@ public sealed class ListTag : List<Tag>, Tag {
         public fun addLongs(vararg values: Long): Builder = addLongArray(values)
 
         /**
+         * Removes the given [element].
+         *
+         * @param element the element
+         * @return this builder
+         */
+        @NBTDsl
+        public fun remove(element: Tag): Builder = apply { data.remove(element) }
+
+        /**
          * Creates a new list tag containing the values set in this builder.
          * Whether the resulting tag is mutable or immutable depends on what
          * was supplied to the builder when the builder functions were called.
@@ -613,31 +609,24 @@ public sealed class ListTag : List<Tag>, Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_List")
         @JvmField
-        public val READER: TagReader<ListTag> = object : TagReader<ListTag> {
-
-            override fun read(input: BufferedSource, depth: Int): ListTag {
-                if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
-                val type = input.readByte().toInt()
-                val size = input.readInt()
-                if (type == 0 && size > 0) throw RuntimeException("Missing required type byte for ListTag!")
-                val reader = Types.reader(type)
-                val data = ArrayList<Tag>(size)
-                for (i in 0 until size) {
-                    data.add(reader.read(input, depth + 1))
-                }
-                return MutableListTag(data, type)
+        public val READER: TagReader<ListTag> = TagReader { input, depth ->
+            if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
+            val type = input.readByte().toInt()
+            val size = input.readInt()
+            if (type == 0 && size > 0) throw RuntimeException("Missing required type byte for ListTag!")
+            val reader = Types.reader(type)
+            val data = ArrayList<Tag>(size)
+            for (i in 0 until size) {
+                data.add(reader.read(input, depth + 1))
             }
+            MutableListTag(data, type)
         }
         @JvmField
-        public val WRITER: TagWriter<ListTag> = object : TagWriter<ListTag> {
-
-            @Suppress("UNCHECKED_CAST")
-            override fun write(output: BufferedSink, value: ListTag) {
-                output.writeByte(value.elementType)
-                output.writeInt(value.data.size)
-                for (i in value.data.indices) {
-                    value.data[i].write(output)
-                }
+        public val WRITER: TagWriter<ListTag> = TagWriter { output, value ->
+            output.writeByte(value.elementType)
+            output.writeInt(value.data.size)
+            for (i in value.data.indices) {
+                value.data[i].write(output)
             }
         }
         private val EMPTY = ImmutableListTag()

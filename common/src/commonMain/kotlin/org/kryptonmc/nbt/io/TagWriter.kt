@@ -6,7 +6,7 @@ import org.kryptonmc.nbt.Tag
 /**
  * A writer for writing tags of type [T].
  */
-public interface TagWriter<in T : Tag> {
+public fun interface TagWriter<in T : Tag> {
 
     /**
      * Writes the given [value] to the given [output].

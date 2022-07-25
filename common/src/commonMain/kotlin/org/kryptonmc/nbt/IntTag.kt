@@ -31,7 +31,9 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
         WRITER.write(output, this)
     }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineInt(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineInt(this)
+    }
 
     override fun copy(): IntTag = this
 
@@ -47,7 +49,9 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
 
     public companion object {
 
-        private val CACHE = Array(1153) { IntTag(-128 + it) }
+        private const val LOWER_CACHE_LIMIT = -128
+        private const val UPPER_CACHE_LIMIT = 1024
+        private val CACHE = Array(UPPER_CACHE_LIMIT - LOWER_CACHE_LIMIT + 1) { IntTag(LOWER_CACHE_LIMIT + it) }
 
         /**
          * The integer tag representing the constant zero.
@@ -59,17 +63,9 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
         @JvmField
         public val TYPE: TagType = TagType("TAG_Int", true)
         @JvmField
-        public val READER: TagReader<IntTag> = object : TagReader<IntTag> {
-
-            override fun read(input: BufferedSource, depth: Int) = of(input.readInt())
-        }
+        public val READER: TagReader<IntTag> = TagReader { input, _ -> of(input.readInt()) }
         @JvmField
-        public val WRITER: TagWriter<IntTag> = object : TagWriter<IntTag> {
-
-            override fun write(output: BufferedSink, value: IntTag) {
-                output.writeInt(value.value)
-            }
-        }
+        public val WRITER: TagWriter<IntTag> = TagWriter { output, value -> output.writeInt(value.value) }
 
         /**
          * Gets the integer tag representing the given [value], if it is in the
@@ -80,6 +76,9 @@ public class IntTag private constructor(override val value: Int) : NumberTag(val
          * @return an integer tag representing the value
          */
         @JvmStatic
-        public fun of(value: Int): IntTag = if (value in -128..1024) CACHE[value + 128] else IntTag(value)
+        public fun of(value: Int): IntTag {
+            if (value in LOWER_CACHE_LIMIT..UPPER_CACHE_LIMIT) return CACHE[value - LOWER_CACHE_LIMIT]
+            return IntTag(value)
+        }
     }
 }

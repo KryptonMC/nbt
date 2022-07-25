@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt
 
 import okio.BufferedSink
-import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
@@ -67,9 +66,13 @@ public class LongArrayTag(data: LongArray) : Tag {
         data = EMPTY_DATA
     }
 
-    override fun write(output: BufferedSink): Unit = WRITER.write(output, this)
+    override fun write(output: BufferedSink) {
+        WRITER.write(output, this)
+    }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineLongArray(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineLongArray(this)
+    }
 
     override fun copy(): LongArrayTag {
         val copy = LongArray(data.size)
@@ -91,21 +94,19 @@ public class LongArrayTag(data: LongArray) : Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_Long_Array")
         @JvmField
-        public val READER: TagReader<LongArrayTag> = object : TagReader<LongArrayTag> {
-
-            override fun read(input: BufferedSource, depth: Int): LongArrayTag {
-                val size = input.readInt()
-                val longs = LongArray(size)
-                for (i in 0 until size) longs[i] = input.readLong()
-                return LongArrayTag(longs)
+        public val READER: TagReader<LongArrayTag> = TagReader { input, _ ->
+            val size = input.readInt()
+            val longs = LongArray(size)
+            for (i in 0 until size) {
+                longs[i] = input.readLong()
             }
+            LongArrayTag(longs)
         }
         @JvmField
-        public val WRITER: TagWriter<LongArrayTag> = object : TagWriter<LongArrayTag> {
-
-            override fun write(output: BufferedSink, value: LongArrayTag) {
-                output.writeInt(value.data.size)
-                for (i in value.data.indices) output.writeLong(value.data[i])
+        public val WRITER: TagWriter<LongArrayTag> = TagWriter { output, value ->
+            output.writeInt(value.data.size)
+            for (i in value.data.indices) {
+                output.writeLong(value.data[i])
             }
         }
         @JvmSynthetic

@@ -10,15 +10,12 @@ package org.kryptonmc.nbt
 
 import org.kryptonmc.nbt.io.Types
 
-public class MutableListTag(
-    public override val data: MutableList<Tag> = mutableListOf(),
-    elementType: Int = 0
-) : ScopedListTag<MutableListTag>() {
+public class MutableListTag(public override val data: MutableList<Tag>, elementType: Int = 0) : ScopedListTag<MutableListTag>() {
 
     override var elementType: Int = elementType
         private set
-    override val size: Int
-        get() = data.size
+
+    public constructor(elementType: Int = 0) : this(mutableListOf(), elementType)
 
     override fun set(index: Int, tag: Tag): MutableListTag = apply {
         if (updateType(tag)) {
@@ -47,19 +44,14 @@ public class MutableListTag(
         if (data.isEmpty()) elementType = EndTag.ID
     }
 
-    override fun contains(element: Tag): Boolean = data.contains(element)
-
-    override fun containsAll(elements: Collection<Tag>): Boolean = data.containsAll(elements)
-
     public fun clear() {
         data.clear()
         elementType = EndTag.ID
     }
 
     override fun copy(): MutableListTag {
-        val iterable = if (Types.of(elementType).isValue) data else data.map { it.copy() }
-        val list = ArrayList(iterable)
-        return MutableListTag(list, elementType)
+        val newData = if (Types.of(elementType).isValue) data else data.mapTo(mutableListOf(), Tag::copy)
+        return MutableListTag(newData, elementType)
     }
 
     private fun updateType(tag: Tag): Boolean {

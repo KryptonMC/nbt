@@ -17,10 +17,9 @@ import kotlinx.collections.immutable.persistentListOf
  * All attempts to write to an immutable tag will result in a new immutable tag
  * being created with the requested changes.
  */
-public class ImmutableListTag(
-    override val data: PersistentList<Tag> = persistentListOf(),
-    override val elementType: Int = 0
-) : ScopedListTag<ImmutableListTag>() {
+public class ImmutableListTag(override val data: PersistentList<Tag>, override val elementType: Int = 0) : ScopedListTag<ImmutableListTag>() {
+
+    public constructor(elementType: Int = 0) : this(persistentListOf(), elementType)
 
     override fun add(tag: Tag): ImmutableListTag {
         if (tag.id == 0) throw UnsupportedOperationException("Cannot add tag of type ${tag.id} to list of type $elementType!")

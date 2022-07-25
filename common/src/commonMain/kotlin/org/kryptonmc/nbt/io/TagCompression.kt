@@ -10,10 +10,7 @@ import kotlin.jvm.JvmField
  * @param decompressor the decompressor
  * @param compressor the compressor
  */
-public class TagCompression(
-    private val decompressor: (BufferedSource) -> BufferedSource,
-    private val compressor: (BufferedSink) -> BufferedSink
-) {
+public class TagCompression(private val decompressor: (BufferedSource) -> BufferedSource, private val compressor: (BufferedSink) -> BufferedSink) {
 
     /**
      * Applies the decompressor to the given [input] and returns the resulting

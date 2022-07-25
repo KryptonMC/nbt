@@ -4,7 +4,8 @@ import okio.ArrayIndexOutOfBoundsException
 import kotlin.jvm.JvmSynthetic
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L271
+ * Based on ArrayUtils `add` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L646
  */
 @JvmSynthetic
 internal fun ByteArray.add(index: Int, value: Byte): ByteArray {
@@ -17,7 +18,8 @@ internal fun ByteArray.add(index: Int, value: Byte): ByteArray {
 }
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L529
+ * Based on ArrayUtils `add` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L646
  */
 @JvmSynthetic
 internal fun IntArray.add(index: Int, value: Int): IntArray {
@@ -30,7 +32,8 @@ internal fun IntArray.add(index: Int, value: Int): IntArray {
 }
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L629
+ * Based on ArrayUtils `add` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L646
  */
 @JvmSynthetic
 internal fun LongArray.add(index: Int, value: Long): LongArray {
@@ -43,7 +46,8 @@ internal fun LongArray.add(index: Int, value: Long): LongArray {
 }
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4805
+ * Based on ArrayUtils `remove` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4997
  */
 @JvmSynthetic
 internal fun ByteArray.remove(index: Int): ByteArray {
@@ -55,7 +59,8 @@ internal fun ByteArray.remove(index: Int): ByteArray {
 }
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4937
+ * Based on ArrayUtils `remove` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4997
  */
 @JvmSynthetic
 internal fun IntArray.remove(index: Int): IntArray {
@@ -67,7 +72,8 @@ internal fun IntArray.remove(index: Int): IntArray {
 }
 
 /**
- * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4970
+ * Based on ArrayUtils `remove` from Commons Lang 3:
+ * https://github.com/apache/commons-lang/blob/11d40f5799b355dcec2b156f6c7a669abdde5de3/src/main/java/org/apache/commons/lang3/ArrayUtils.java#L4997
  */
 @JvmSynthetic
 internal fun LongArray.remove(index: Int): LongArray {

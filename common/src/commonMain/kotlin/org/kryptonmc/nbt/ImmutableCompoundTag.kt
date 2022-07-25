@@ -24,4 +24,6 @@ public class ImmutableCompoundTag(override val tags: PersistentMap<String, Tag> 
     override fun remove(key: String): ImmutableCompoundTag = ImmutableCompoundTag(tags.remove(key))
 
     override fun copy(): ImmutableCompoundTag = this // Immutable, no need to copy
+
+    override fun toBuilder(): Builder = Builder.create(tags.toMutableMap(), false)
 }

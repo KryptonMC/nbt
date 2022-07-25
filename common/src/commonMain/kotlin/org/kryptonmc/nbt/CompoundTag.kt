@@ -11,7 +11,6 @@ package org.kryptonmc.nbt
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import okio.BufferedSink
-import okio.BufferedSource
 import okio.utf8Size
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
@@ -23,37 +22,34 @@ import kotlin.jvm.JvmField
 import kotlin.jvm.JvmName
 import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
+import kotlin.jvm.JvmSynthetic
 
 /**
  * A tag that holds a map of keys to tags.
  */
-public sealed class CompoundTag : Map<String, Tag>, Tag {
+public sealed class CompoundTag : Tag {
 
     /**
      * The backing map held by this compound tag.
      */
     public abstract val tags: Map<String, Tag>
 
-    final override val id: Int = ID
-    final override val type: TagType = TYPE
+    final override val id: Int
+        get() = ID
+    final override val type: TagType
+        get() = TYPE
 
-    override val size: Int
+    public val size: Int
         get() = tags.size
-    override val entries: Set<Map.Entry<String, Tag>>
-        get() = tags.entries
-    override val keys: Set<String>
+    public open val keys: Set<String>
         get() = tags.keys
-    override val values: Collection<Tag>
+    public open val values: Collection<Tag>
         get() = tags.values
 
     public fun type(name: String): Int {
         val tag = tags[name] ?: return 0
         return tag.id
     }
-
-    final override fun containsKey(key: String): Boolean = tags.containsKey(key)
-
-    final override fun containsValue(value: Tag): Boolean = tags.containsValue(value)
 
     /**
      * Checks if this compound contains a tag with the given [name], and that
@@ -88,7 +84,14 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
         return value.id == IntArrayTag.ID && (value as IntArrayTag).data.size == 4
     }
 
-    final override fun get(key: String): Tag? = tags[key]
+    /**
+     * Gets the tag with the given [key] from this compound, or returns null
+     * if there is no tag with the given name in this compound.
+     *
+     * @param key the key of the tag
+     * @return the tag, or null if not present
+     */
+    public fun get(key: String): Tag? = tags[key]
 
     /**
      * Gets the boolean value with the given [name], or returns the given
@@ -467,7 +470,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every byte entry
      */
     public inline fun forEachByte(action: (String, Byte) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is ByteTag) continue
             action(key, value.value)
         }
@@ -480,7 +483,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every short entry
      */
     public inline fun forEachShort(action: (String, Short) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is ShortTag) continue
             action(key, value.value)
         }
@@ -493,7 +496,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every integer entry
      */
     public inline fun forEachInt(action: (String, Int) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is IntTag) continue
             action(key, value.value)
         }
@@ -506,7 +509,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every long entry
      */
     public inline fun forEachLong(action: (String, Long) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is LongTag) continue
             action(key, value.value)
         }
@@ -519,7 +522,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every float entry
      */
     public inline fun forEachFloat(action: (String, Float) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is FloatTag) continue
             action(key, value.value)
         }
@@ -532,7 +535,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every double entry
      */
     public inline fun forEachDouble(action: (String, Double) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is DoubleTag) continue
             action(key, value.value)
         }
@@ -545,7 +548,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every string entry
      */
     public inline fun forEachString(action: (String, String) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is StringTag) continue
             action(key, value.value)
         }
@@ -558,7 +561,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every byte array entry
      */
     public inline fun forEachByteArray(action: (String, ByteArray) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is ByteArrayTag) continue
             action(key, value.data)
         }
@@ -571,7 +574,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every integer array entry
      */
     public inline fun forEachIntArray(action: (String, IntArray) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is IntArrayTag) continue
             action(key, value.data)
         }
@@ -584,7 +587,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every long array entry
      */
     public inline fun forEachLongArray(action: (String, LongArray) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is LongArrayTag) continue
             action(key, value.data)
         }
@@ -597,7 +600,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every list entry
      */
     public inline fun forEachList(action: (String, ListTag) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is ListTag) continue
             action(key, value)
         }
@@ -610,7 +613,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      * @param action the action to apply to every compound entry
      */
     public inline fun forEachCompound(action: (String, CompoundTag) -> Unit) {
-        for ((key, value) in this) {
+        for ((key, value) in tags) {
             if (value !is CompoundTag) continue
             action(key, value)
         }
@@ -623,7 +626,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
      */
     public fun mutable(): MutableCompoundTag {
         if (this is MutableCompoundTag) return this
-        val newTags = if (tags is MutableMap) tags as MutableMap else tags.toMutableMap()
+        val newTags = if (tags is MutableMap) tags as MutableMap else HashMap(tags)
         return MutableCompoundTag(newTags)
     }
 
@@ -637,15 +640,19 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
         return ImmutableCompoundTag(tags.toPersistentMap())
     }
 
-    final override fun isEmpty(): Boolean = tags.isEmpty()
+    public fun isEmpty(): Boolean = tags.isEmpty()
 
     final override fun write(output: BufferedSink) {
         WRITER.write(output, this)
     }
 
-    final override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineCompound(this)
+    final override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineCompound(this)
+    }
 
     public abstract override fun copy(): CompoundTag
+
+    public abstract fun toBuilder(): Builder
 
     final override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -665,9 +672,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
     /**
      * A builder for building compound tags.
      */
-    public class Builder internal constructor(private val mutable: Boolean) {
-
-        private val tags = mutableMapOf<String, Tag>()
+    public class Builder private constructor(private val tags: MutableMap<String, Tag>, private val mutable: Boolean) {
 
         /**
          * Sets the value of the given [name] to the given [value].
@@ -676,6 +681,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          * @param value the value
          * @return this builder
          */
+        @NBTDsl
         public fun put(name: String, value: Tag): Builder = apply { tags[name] = value }
 
         /**
@@ -687,7 +693,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putByte")
-        public fun byte(name: String, value: Byte): Builder = apply { put(name, ByteTag.of(value)) }
+        public fun byte(name: String, value: Byte): Builder = put(name, ByteTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given boolean [value].
@@ -698,7 +704,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putBoolean")
-        public fun boolean(name: String, value: Boolean): Builder = apply { put(name, ByteTag.of(value)) }
+        public fun boolean(name: String, value: Boolean): Builder = put(name, ByteTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given short [value].
@@ -709,7 +715,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putShort")
-        public fun short(name: String, value: Short): Builder = apply { put(name, ShortTag.of(value)) }
+        public fun short(name: String, value: Short): Builder = put(name, ShortTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given integer [value].
@@ -720,7 +726,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putInt")
-        public fun int(name: String, value: Int): Builder = apply { put(name, IntTag.of(value)) }
+        public fun int(name: String, value: Int): Builder = put(name, IntTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given long [value].
@@ -731,7 +737,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putLong")
-        public fun long(name: String, value: Long): Builder = apply { put(name, LongTag.of(value)) }
+        public fun long(name: String, value: Long): Builder = put(name, LongTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given float [value].
@@ -742,7 +748,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putFloat")
-        public fun float(name: String, value: Float): Builder = apply { put(name, FloatTag.of(value)) }
+        public fun float(name: String, value: Float): Builder = put(name, FloatTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given double [value].
@@ -753,7 +759,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putDouble")
-        public fun double(name: String, value: Double): Builder = apply { put(name, DoubleTag.of(value)) }
+        public fun double(name: String, value: Double): Builder = put(name, DoubleTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given string [value].
@@ -764,7 +770,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putString")
-        public fun string(name: String, value: String): Builder = apply { put(name, StringTag.of(value)) }
+        public fun string(name: String, value: String): Builder = put(name, StringTag.of(value))
 
         /**
          * Sets the value of the given [name] to the given UUID [value].
@@ -777,7 +783,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putUUID")
-        public fun uuid(name: String, value: UUID): Builder = apply { put(name, value.toTag()) }
+        public fun uuid(name: String, value: UUID): Builder = put(name, value.toTag())
 
         /**
          * Sets the value of the given [name] to the given byte array [value].
@@ -788,7 +794,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putByteArray")
-        public fun byteArray(name: String, value: ByteArray): Builder = apply { put(name, ByteArrayTag(value)) }
+        public fun byteArray(name: String, value: ByteArray): Builder = put(name, ByteArrayTag(value))
 
         /**
          * Sets the values of the given [name] to the given byte [values].
@@ -799,7 +805,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putBytes")
-        public fun bytes(name: String, vararg values: Byte): Builder = apply { put(name, ByteArrayTag(values)) }
+        public fun bytes(name: String, vararg values: Byte): Builder = put(name, ByteArrayTag(values))
 
         /**
          * Sets the value of the given [name] to the given integer array
@@ -811,7 +817,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putIntArray")
-        public fun intArray(name: String, value: IntArray): Builder = apply { put(name, IntArrayTag(value)) }
+        public fun intArray(name: String, value: IntArray): Builder = put(name, IntArrayTag(value))
 
         /**
          * Sets the value of the given [name] to the given integer [values].
@@ -822,7 +828,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putInts")
-        public fun ints(name: String, vararg values: Int): Builder = apply { put(name, IntArrayTag(values)) }
+        public fun ints(name: String, vararg values: Int): Builder = put(name, IntArrayTag(values))
 
         /**
          * Sets the value of the given [name] to the given long array [value].
@@ -833,7 +839,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putLongArray")
-        public fun longArray(name: String, value: LongArray): Builder = apply { put(name, LongArrayTag(value)) }
+        public fun longArray(name: String, value: LongArray): Builder = put(name, LongArrayTag(value))
 
         /**
          * Sets the values of the given [name] to the given long [values].
@@ -844,7 +850,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putLongs")
-        public fun longs(name: String, vararg values: Long): Builder = apply { put(name, LongArrayTag(values)) }
+        public fun longs(name: String, vararg values: Long): Builder = put(name, LongArrayTag(values))
 
         /**
          * Sets the value of the given [name] to the result of building a new
@@ -856,9 +862,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putList")
-        public inline fun list(name: String, builder: ListTag.Builder.() -> Unit): Builder = apply {
-            put(name, ListTag.builder().apply(builder).build())
-        }
+        public inline fun list(name: String, builder: ListTag.Builder.() -> Unit): Builder = put(name, ListTag.builder().apply(builder).build())
 
         /**
          * Sets the value of the given [name] to the result of creating a new
@@ -871,9 +875,8 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putList")
-        public fun list(name: String, elementType: Int, vararg elements: Tag): Builder = apply {
+        public fun list(name: String, elementType: Int, vararg elements: Tag): Builder =
             put(name, MutableListTag(elements.toMutableList(), elementType))
-        }
 
         /**
          * Sets the value of the given [name] to the result of creating a new
@@ -901,9 +904,16 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @NBTDsl
         @JvmName("putCompound")
-        public inline fun compound(name: String, builder: Builder.() -> Unit): Builder = apply {
-            put(name, Companion.builder().apply(builder).build())
-        }
+        public inline fun compound(name: String, builder: Builder.() -> Unit): Builder = put(name, CompoundTag.builder().apply(builder).build())
+
+        /**
+         * Removes the value for the given [name].
+         *
+         * @param name the name
+         * @return this builder
+         */
+        @NBTDsl
+        public fun remove(name: String): Builder = apply { tags.remove(name) }
 
         /**
          * Creates a new compound tag containing the values set in this
@@ -914,6 +924,17 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          * @return a new compound tag
          */
         public fun build(): CompoundTag = if (mutable) mutable(tags) else immutable(tags)
+
+        public companion object {
+
+            @JvmStatic
+            @JvmSynthetic
+            internal fun create(tags: MutableMap<String, Tag>, mutable: Boolean): Builder = Builder(tags, mutable)
+
+            @JvmStatic
+            @JvmSynthetic
+            internal fun create(mutable: Boolean): Builder = create(mutableMapOf(), mutable)
+        }
     }
 
     public companion object {
@@ -922,29 +943,23 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
         @JvmField
         public val TYPE: TagType = TagType("TAG_Compound")
         @JvmField
-        public val READER: TagReader<CompoundTag> = object : TagReader<CompoundTag> {
-
-            override fun read(input: BufferedSource, depth: Int): CompoundTag {
-                if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
-                val tags = mutableMapOf<String, Tag>()
-                var type = input.readByte().toInt()
-                while (type != EndTag.ID) {
-                    val length = input.readShort()
-                    val name = input.readUtf8(length.toLong())
-                    val tag = Types.reader(type).read(input, depth + 1)
-                    tags[name] = tag
-                    type = input.readByte().toInt()
-                }
-                return MutableCompoundTag(tags)
+        public val READER: TagReader<CompoundTag> = TagReader { input, depth ->
+            if (depth > 512) throw RuntimeException("Depth too high! Given depth $depth is higher than maximum depth 512!")
+            val tags = mutableMapOf<String, Tag>()
+            var type = input.readByte().toInt()
+            while (type != EndTag.ID) {
+                val length = input.readShort()
+                val name = input.readUtf8(length.toLong())
+                val tag = Types.reader(type).read(input, depth + 1)
+                tags[name] = tag
+                type = input.readByte().toInt()
             }
+            MutableCompoundTag(tags)
         }
         @JvmField
-        public val WRITER: TagWriter<CompoundTag> = object : TagWriter<CompoundTag> {
-
-            override fun write(output: BufferedSink, value: CompoundTag) {
-                value.tags.forEach { writeNamedTag(output, it.key, it.value) }
-                output.writeByte(EndTag.ID)
-            }
+        public val WRITER: TagWriter<CompoundTag> = TagWriter { output, value ->
+            value.tags.forEach { writeNamedTag(output, it.key, it.value) }
+            output.writeByte(EndTag.ID)
         }
         private val EMPTY = ImmutableCompoundTag(persistentMapOf())
 
@@ -956,7 +971,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @JvmStatic
         @JvmOverloads
-        public fun builder(mutable: Boolean = false): Builder = Builder(mutable)
+        public fun builder(mutable: Boolean = false): Builder = Builder.create(mutable)
 
         /**
          * Creates a new mutable compound tag with the given [data].
@@ -968,7 +983,7 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
          */
         @JvmStatic
         public fun mutable(data: Map<String, Tag>): CompoundTag {
-            val newData = if (data is MutableMap) data else data.toMutableMap()
+            val newData = if (data is MutableMap) data else HashMap(data)
             return MutableCompoundTag(newData)
         }
 
@@ -994,11 +1009,10 @@ public sealed class CompoundTag : Map<String, Tag>, Tag {
         @JvmStatic
         private fun writeNamedTag(sink: BufferedSink, name: String, tag: Tag) {
             sink.writeByte(tag.id)
-            if (tag.id != EndTag.ID) {
-                sink.writeShort(name.utf8Size().toInt())
-                sink.writeUtf8(name)
-                tag.write(sink)
-            }
+            if (tag.id == EndTag.ID) return
+            sink.writeShort(name.utf8Size().toInt())
+            sink.writeUtf8(name)
+            tag.write(sink)
         }
     }
 }

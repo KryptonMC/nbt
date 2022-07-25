@@ -5,10 +5,7 @@ import kotlin.jvm.JvmStatic
 /**
  * A simple multi-platform UUID, aimed at use within this library only.
  */
-public expect class UUID(
-    mostSignificantBits: Long,
-    leastSignificantBits: Long
-) : Comparable<UUID> {
+public expect class UUID(mostSignificantBits: Long, leastSignificantBits: Long) : Comparable<UUID> {
 
     /**
      * The most significant bits of this UUID.

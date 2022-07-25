@@ -64,39 +64,36 @@ public data class StringTagExaminer(private val builder: StringBuilder = StringB
 
     override fun examineList(tag: ListTag) {
         builder.append('[')
-        for (i in tag.indices) {
+        for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(StringTagExaminer().examine(tag[i]))
+            builder.append(StringTagExaminer().examine(tag.get(i)))
         }
         builder.append(']')
     }
 
     override fun examineCompound(tag: CompoundTag) {
         builder.append('{')
-        val keys = tag.keys.toMutableList().apply { sort() }
-        keys.forEach {
+        tag.keys.sorted().forEach {
             if (builder.length != 1) builder.append(',')
-            builder.append(escape(it)).append(':').append(StringTagExaminer().examine(tag[it]!!))
+            builder.append(escape(it)).append(':').append(StringTagExaminer().examine(tag.get(it)!!))
         }
         builder.append('}')
     }
 
     override fun examineIntArray(tag: IntArrayTag) {
         builder.append("[I;")
-        val data = tag.data
-        for (i in data.indices) {
+        for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(data[i])
+            builder.append(tag.get(i))
         }
         builder.append(']')
     }
 
     override fun examineLongArray(tag: LongArrayTag) {
         builder.append("[L;")
-        val data = tag.data
-        for (i in data.indices) {
+        for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(data[i])
+            builder.append(tag.get(i))
         }
         builder.append(']')
     }

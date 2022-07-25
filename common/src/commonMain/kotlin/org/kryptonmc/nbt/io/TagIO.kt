@@ -24,8 +24,6 @@ public expect object TagIO {
      * @param input the input
      * @return the resulting compound tag
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun read(input: BufferedSource): CompoundTag
 
     /**
@@ -35,8 +33,6 @@ public expect object TagIO {
      * @param input the input
      * @return the resulting compound tag
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun read(input: BufferedSource, compression: TagCompression): CompoundTag
 
     /**
@@ -45,8 +41,6 @@ public expect object TagIO {
      * @param input the input
      * @return the resulting name to tag pair
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun readNamed(input: BufferedSource): Pair<String, Tag>
 
     /**
@@ -57,8 +51,6 @@ public expect object TagIO {
      * @param compression the compression
      * @return the resulting name to tag pair
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun readNamed(input: BufferedSource, compression: TagCompression): Pair<String, Tag>
 
     /**
@@ -67,8 +59,6 @@ public expect object TagIO {
      * @param output the output to write to
      * @param value the value to write
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun write(output: BufferedSink, value: CompoundTag)
 
     /**
@@ -79,8 +69,6 @@ public expect object TagIO {
      * @param compression the compression
      * @param value the value to write
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun write(output: BufferedSink, value: CompoundTag, compression: TagCompression)
 
     /**
@@ -91,8 +79,6 @@ public expect object TagIO {
      * @param name the name of the value to write
      * @param value the value to write
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun writeNamed(output: BufferedSink, name: String, value: CompoundTag)
 
     /**
@@ -104,7 +90,5 @@ public expect object TagIO {
      * @param value the value to write
      * @param compression the compression
      */
-    @JvmStatic
-    @Throws(IOException::class)
     public fun writeNamed(output: BufferedSink, name: String, value: CompoundTag, compression: TagCompression)
 }

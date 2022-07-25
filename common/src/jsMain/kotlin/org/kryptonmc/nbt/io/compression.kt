@@ -23,7 +23,7 @@ private class ZLIBSource(private val source: BufferedSource) : BufferedSource by
     private var inflationFinished = false
 
     private val inflate = Inflate().apply {
-        onData = { outBuffer.reset(it) }
+        onData = outBuffer::reset
         onEnd = { inflationFinished = true }
     }
 
@@ -86,10 +86,9 @@ private class ZLIBSink(private val sink: BufferedSink, gzip: Boolean, level: Int
 
     companion object {
 
-        private fun calculateWindowBits(gzip: Boolean): Int {
-            var base = 15
-            if (gzip) base += 16
-            return base
-        }
+        private const val DEFAULT_WINDOW_BITS = 15
+        private const val GZIP_WINDOW_BITS = DEFAULT_WINDOW_BITS + 16
+
+        private fun calculateWindowBits(gzip: Boolean): Int = if (gzip) GZIP_WINDOW_BITS else DEFAULT_WINDOW_BITS
     }
 }

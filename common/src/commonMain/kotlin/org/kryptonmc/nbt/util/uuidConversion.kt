@@ -4,6 +4,8 @@ import org.kryptonmc.nbt.IntArrayTag
 import org.kryptonmc.nbt.Tag
 import kotlin.jvm.JvmSynthetic
 
+private const val UNSIGNED_INT_MAX = 0xFFFFFFFF
+
 @JvmSynthetic
 internal fun Tag.toUUID(): UUID? {
     if (id != IntArrayTag.ID) return null
@@ -16,12 +18,12 @@ internal fun Tag.toUUID(): UUID? {
 internal fun UUID.toTag(): IntArrayTag = IntArrayTag(toIntArray())
 
 private fun IntArray.toUUID(): UUID = UUID(
-    (this[0].toLong() shl 32) or (this[1].toLong() and 4294967295L),
-    (this[2].toLong() shl 32) or (this[3].toLong() and 4294967295L)
+    (this[0].toLong() shl Int.SIZE_BITS) or (this[1].toLong() and UNSIGNED_INT_MAX),
+    (this[2].toLong() shl Int.SIZE_BITS) or (this[3].toLong() and UNSIGNED_INT_MAX)
 )
 
 private fun UUID.toIntArray(): IntArray {
     val most = mostSignificantBits
     val least = leastSignificantBits
-    return intArrayOf((most shr 32).toInt(), most.toInt(), (least shr 32).toInt(), least.toInt())
+    return intArrayOf((most shr Int.SIZE_BITS).toInt(), most.toInt(), (least shr Int.SIZE_BITS).toInt(), least.toInt())
 }

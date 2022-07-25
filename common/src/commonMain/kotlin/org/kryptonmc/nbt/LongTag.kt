@@ -9,7 +9,6 @@
 package org.kryptonmc.nbt
 
 import okio.BufferedSink
-import okio.BufferedSource
 import org.kryptonmc.nbt.io.TagReader
 import org.kryptonmc.nbt.io.TagWriter
 import kotlin.jvm.JvmField
@@ -27,9 +26,13 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
     override val id: Int = ID
     override val type: TagType = TYPE
 
-    override fun write(output: BufferedSink): Unit = WRITER.write(output, this)
+    override fun write(output: BufferedSink) {
+        WRITER.write(output, this)
+    }
 
-    override fun <T> examine(examiner: TagExaminer<T>): Unit = examiner.examineLong(this)
+    override fun <T> examine(examiner: TagExaminer<T>) {
+        examiner.examineLong(this)
+    }
 
     override fun copy(): LongTag = this
 
@@ -43,7 +46,9 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
 
     public companion object {
 
-        private val CACHE = Array(1153) { LongTag((-128 + it).toLong()) }
+        private const val LOWER_CACHE_LIMIT = -128
+        private const val UPPER_CACHE_LIMIT = 1024
+        private val CACHE = Array(UPPER_CACHE_LIMIT - LOWER_CACHE_LIMIT + 1) { LongTag((LOWER_CACHE_LIMIT + it).toLong()) }
 
         /**
          * The long tag representing the constant zero.
@@ -55,17 +60,9 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
         @JvmField
         public val TYPE: TagType = TagType("TAG_Long", true)
         @JvmField
-        public val READER: TagReader<LongTag> = object : TagReader<LongTag> {
-
-            override fun read(input: BufferedSource, depth: Int) = of(input.readLong())
-        }
+        public val READER: TagReader<LongTag> = TagReader { input, _ -> of(input.readLong()) }
         @JvmField
-        public val WRITER: TagWriter<LongTag> = object : TagWriter<LongTag> {
-
-            override fun write(output: BufferedSink, value: LongTag) {
-                output.writeLong(value.value)
-            }
-        }
+        public val WRITER: TagWriter<LongTag> = TagWriter { output, value -> output.writeLong(value.value) }
 
         /**
          * Gets the long tag representing the given [value], if it is in the
@@ -76,6 +73,9 @@ public class LongTag private constructor(override val value: Long) : NumberTag(v
          * @return a long tag representing the value
          */
         @JvmStatic
-        public fun of(value: Long): LongTag = if (value in -128..1024) CACHE[value.toInt() + 128] else LongTag(value)
+        public fun of(value: Long): LongTag {
+            if (value in LOWER_CACHE_LIMIT..UPPER_CACHE_LIMIT) return CACHE[value.toInt() - LOWER_CACHE_LIMIT]
+            return LongTag(value)
+        }
     }
 }
