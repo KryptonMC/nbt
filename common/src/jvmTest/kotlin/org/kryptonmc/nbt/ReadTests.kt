@@ -26,7 +26,7 @@ class ReadTests {
         assertEquals("hello world", nbt.first)
         assertIs<CompoundTag>(nbt.second)
         val tag = nbt.second as CompoundTag
-        assertTrue(tag.tags.isNotEmpty())
+        assertTrue(tag.data.isNotEmpty())
         assertEquals("name", tag.keys.first())
         assertIs<StringTag>(tag.values.first())
         assertEquals("Bananrama", (tag.values.first() as StringTag).value)
@@ -57,7 +57,7 @@ class ReadTests {
             assertEquals("Level", input.first)
             assertIs<CompoundTag>(input.second)
             val tag = input.second as CompoundTag
-            assertTrue(tag.tags.isNotEmpty())
+            assertTrue(tag.data.isNotEmpty())
             assertTrue(tag.contains("shortTest", ShortTag.ID))
             assertEquals(Short.MAX_VALUE, tag.getShort("shortTest"))
             assertTrue(tag.contains("longTest", LongTag.ID))

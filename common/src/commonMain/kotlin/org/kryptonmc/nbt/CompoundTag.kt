@@ -32,7 +32,7 @@ public sealed class CompoundTag : Tag {
     /**
      * The backing map held by this compound tag.
      */
-    public abstract val tags: Map<String, Tag>
+    public abstract val data: Map<String, Tag>
 
     final override val id: Int
         get() = ID
@@ -40,16 +40,18 @@ public sealed class CompoundTag : Tag {
         get() = TYPE
 
     public val size: Int
-        get() = tags.size
+        get() = data.size
     public open val keys: Set<String>
-        get() = tags.keys
+        get() = data.keys
     public open val values: Collection<Tag>
-        get() = tags.values
+        get() = data.values
 
     public fun type(name: String): Int {
-        val tag = tags[name] ?: return 0
+        val tag = data[name] ?: return 0
         return tag.id
     }
+
+    public fun contains(name: String): Boolean = data.containsKey(name)
 
     /**
      * Checks if this compound contains a tag with the given [name], and that
@@ -80,7 +82,7 @@ public sealed class CompoundTag : Tag {
      * otherwise
      */
     public fun hasUUID(name: String): Boolean {
-        val value = tags[name] ?: return false
+        val value = data[name] ?: return false
         return value.id == IntArrayTag.ID && (value as IntArrayTag).data.size == 4
     }
 
@@ -91,7 +93,7 @@ public sealed class CompoundTag : Tag {
      * @param key the key of the tag
      * @return the tag, or null if not present
      */
-    public fun get(key: String): Tag? = tags[key]
+    public fun get(key: String): Tag? = data[key]
 
     /**
      * Gets the boolean value with the given [name], or returns the given
@@ -175,7 +177,7 @@ public sealed class CompoundTag : Tag {
      */
     @JvmOverloads
     public fun getString(name: String, default: String = ""): String {
-        if (contains(name, StringTag.ID)) return (tags[name] as StringTag).value
+        if (contains(name, StringTag.ID)) return (data[name] as StringTag).value
         return default
     }
 
@@ -200,7 +202,7 @@ public sealed class CompoundTag : Tag {
      */
     @JvmOverloads
     public fun getByteArray(name: String, default: ByteArray = ByteArrayTag.EMPTY_DATA): ByteArray {
-        if (contains(name, ByteArrayTag.ID)) return (tags[name] as ByteArrayTag).data
+        if (contains(name, ByteArrayTag.ID)) return (data[name] as ByteArrayTag).data
         return default
     }
 
@@ -213,7 +215,7 @@ public sealed class CompoundTag : Tag {
      */
     @JvmOverloads
     public fun getIntArray(name: String, default: IntArray = IntArrayTag.EMPTY_DATA): IntArray {
-        if (contains(name, IntArrayTag.ID)) return (tags[name] as IntArrayTag).data
+        if (contains(name, IntArrayTag.ID)) return (data[name] as IntArrayTag).data
         return default
     }
 
@@ -226,7 +228,7 @@ public sealed class CompoundTag : Tag {
      */
     @JvmOverloads
     public fun getLongArray(name: String, default: LongArray = LongArrayTag.EMPTY_DATA): LongArray {
-        if (contains(name, LongArrayTag.ID)) return (tags[name] as LongArrayTag).data
+        if (contains(name, LongArrayTag.ID)) return (data[name] as LongArrayTag).data
         return default
     }
 
@@ -242,7 +244,7 @@ public sealed class CompoundTag : Tag {
     @JvmOverloads
     public fun getList(name: String, elementType: Int, default: ListTag = ListTag.empty()): ListTag {
         if (type(name) == ListTag.ID) {
-            val tag = tags[name] as ListTag
+            val tag = data[name] as ListTag
             return if (!tag.isEmpty() && tag.elementType != elementType) default else tag
         }
         return default
@@ -257,7 +259,7 @@ public sealed class CompoundTag : Tag {
      */
     @JvmOverloads
     public fun getCompound(name: String, default: CompoundTag = empty()): CompoundTag {
-        if (contains(name, ID)) return tags[name] as CompoundTag
+        if (contains(name, ID)) return data[name] as CompoundTag
         return default
     }
 
@@ -470,7 +472,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every byte entry
      */
     public inline fun forEachByte(action: (String, Byte) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is ByteTag) continue
             action(key, value.value)
         }
@@ -483,7 +485,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every short entry
      */
     public inline fun forEachShort(action: (String, Short) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is ShortTag) continue
             action(key, value.value)
         }
@@ -496,7 +498,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every integer entry
      */
     public inline fun forEachInt(action: (String, Int) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is IntTag) continue
             action(key, value.value)
         }
@@ -509,7 +511,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every long entry
      */
     public inline fun forEachLong(action: (String, Long) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is LongTag) continue
             action(key, value.value)
         }
@@ -522,7 +524,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every float entry
      */
     public inline fun forEachFloat(action: (String, Float) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is FloatTag) continue
             action(key, value.value)
         }
@@ -535,7 +537,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every double entry
      */
     public inline fun forEachDouble(action: (String, Double) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is DoubleTag) continue
             action(key, value.value)
         }
@@ -548,7 +550,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every string entry
      */
     public inline fun forEachString(action: (String, String) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is StringTag) continue
             action(key, value.value)
         }
@@ -561,7 +563,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every byte array entry
      */
     public inline fun forEachByteArray(action: (String, ByteArray) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is ByteArrayTag) continue
             action(key, value.data)
         }
@@ -574,7 +576,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every integer array entry
      */
     public inline fun forEachIntArray(action: (String, IntArray) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is IntArrayTag) continue
             action(key, value.data)
         }
@@ -587,7 +589,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every long array entry
      */
     public inline fun forEachLongArray(action: (String, LongArray) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is LongArrayTag) continue
             action(key, value.data)
         }
@@ -600,7 +602,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every list entry
      */
     public inline fun forEachList(action: (String, ListTag) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is ListTag) continue
             action(key, value)
         }
@@ -613,7 +615,7 @@ public sealed class CompoundTag : Tag {
      * @param action the action to apply to every compound entry
      */
     public inline fun forEachCompound(action: (String, CompoundTag) -> Unit) {
-        for ((key, value) in tags) {
+        for ((key, value) in data) {
             if (value !is CompoundTag) continue
             action(key, value)
         }
@@ -626,7 +628,7 @@ public sealed class CompoundTag : Tag {
      */
     public fun mutable(): MutableCompoundTag {
         if (this is MutableCompoundTag) return this
-        val newTags = if (tags is MutableMap) tags as MutableMap else HashMap(tags)
+        val newTags = if (data is MutableMap) data as MutableMap else HashMap(data)
         return MutableCompoundTag(newTags)
     }
 
@@ -637,10 +639,10 @@ public sealed class CompoundTag : Tag {
      */
     public fun immutable(): ImmutableCompoundTag {
         if (this is ImmutableCompoundTag) return this
-        return ImmutableCompoundTag(tags.toPersistentMap())
+        return ImmutableCompoundTag(data.toPersistentMap())
     }
 
-    public fun isEmpty(): Boolean = tags.isEmpty()
+    public fun isEmpty(): Boolean = data.isEmpty()
 
     final override fun write(output: BufferedSink) {
         WRITER.write(output, this)
@@ -657,15 +659,15 @@ public sealed class CompoundTag : Tag {
     final override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CompoundTag) return false
-        return tags == other.tags
+        return data == other.data
     }
 
-    final override fun hashCode(): Int = tags.hashCode()
+    final override fun hashCode(): Int = data.hashCode()
 
     final override fun toString(): String = asString()
 
     private fun getNumber(name: String): NumberTag? {
-        if (contains(name, 99)) return tags[name] as? NumberTag
+        if (contains(name, 99)) return data[name] as? NumberTag
         return null
     }
 
@@ -958,7 +960,7 @@ public sealed class CompoundTag : Tag {
         }
         @JvmField
         public val WRITER: TagWriter<CompoundTag> = TagWriter { output, value ->
-            value.tags.forEach { writeNamedTag(output, it.key, it.value) }
+            value.data.forEach { writeNamedTag(output, it.key, it.value) }
             output.writeByte(EndTag.ID)
         }
         private val EMPTY = ImmutableCompoundTag(persistentMapOf())

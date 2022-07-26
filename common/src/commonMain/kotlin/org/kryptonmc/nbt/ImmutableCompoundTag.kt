@@ -17,13 +17,13 @@ import kotlinx.collections.immutable.persistentMapOf
  * All attempts to write to an immutable tag will result in a new immutable tag
  * being created with the requested changes.
  */
-public class ImmutableCompoundTag(override val tags: PersistentMap<String, Tag> = persistentMapOf()) : ScopedCompoundTag<ImmutableCompoundTag>() {
+public class ImmutableCompoundTag(override val data: PersistentMap<String, Tag> = persistentMapOf()) : ScopedCompoundTag<ImmutableCompoundTag>() {
 
-    override fun put(key: String, value: Tag): ImmutableCompoundTag = ImmutableCompoundTag(tags.put(key, value))
+    override fun put(key: String, value: Tag): ImmutableCompoundTag = ImmutableCompoundTag(data.put(key, value))
 
-    override fun remove(key: String): ImmutableCompoundTag = ImmutableCompoundTag(tags.remove(key))
+    override fun remove(key: String): ImmutableCompoundTag = ImmutableCompoundTag(data.remove(key))
 
     override fun copy(): ImmutableCompoundTag = this // Immutable, no need to copy
 
-    override fun toBuilder(): Builder = Builder.create(tags.toMutableMap(), false)
+    override fun toBuilder(): Builder = Builder.create(data.toMutableMap(), false)
 }

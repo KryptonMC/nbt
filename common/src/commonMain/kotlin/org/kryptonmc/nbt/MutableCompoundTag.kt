@@ -8,24 +8,24 @@
  */
 package org.kryptonmc.nbt
 
-public class MutableCompoundTag(override val tags: MutableMap<String, Tag>) : ScopedCompoundTag<MutableCompoundTag>() {
+public class MutableCompoundTag(override val data: MutableMap<String, Tag>) : ScopedCompoundTag<MutableCompoundTag>() {
 
     public constructor() : this(mutableMapOf())
 
     override val keys: MutableSet<String>
-        get() = tags.keys
+        get() = data.keys
     override val values: MutableCollection<Tag>
-        get() = tags.values
+        get() = data.values
 
     public fun clear() {
-        tags.clear()
+        data.clear()
     }
 
-    override fun put(key: String, value: Tag): MutableCompoundTag = apply { tags[key] = value }
+    override fun put(key: String, value: Tag): MutableCompoundTag = apply { data[key] = value }
 
-    override fun remove(key: String): MutableCompoundTag = apply { tags.remove(key) }
+    override fun remove(key: String): MutableCompoundTag = apply { data.remove(key) }
 
-    override fun copy(): MutableCompoundTag = MutableCompoundTag(tags.mapValuesTo(mutableMapOf()) { it.value.copy() })
+    override fun copy(): MutableCompoundTag = MutableCompoundTag(data.mapValuesTo(mutableMapOf()) { it.value.copy() })
 
-    override fun toBuilder(): Builder = Builder.create(tags, true)
+    override fun toBuilder(): Builder = Builder.create(data, true)
 }

@@ -67,6 +67,7 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public fun asString ()Ljava/lang/String;
 	public static final fun builder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public static final fun builder (Z)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun contains (Ljava/lang/String;)Z
 	public final fun contains (Ljava/lang/String;I)Z
 	public abstract fun copy ()Lorg/kryptonmc/nbt/CompoundTag;
 	public static final fun empty ()Lorg/kryptonmc/nbt/CompoundTag;
@@ -97,6 +98,7 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public final fun getCompound (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun getCompound (Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public static synthetic fun getCompound$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Lorg/kryptonmc/nbt/CompoundTag;ILjava/lang/Object;)Lorg/kryptonmc/nbt/CompoundTag;
+	public abstract fun getData ()Ljava/util/Map;
 	public final fun getDouble (Ljava/lang/String;)D
 	public final fun getDouble (Ljava/lang/String;D)D
 	public static synthetic fun getDouble$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;DILjava/lang/Object;)D
@@ -127,7 +129,6 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public final fun getString (Ljava/lang/String;)Ljava/lang/String;
 	public final fun getString (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	public static synthetic fun getString$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
-	public abstract fun getTags ()Ljava/util/Map;
 	public final fun getType ()Lorg/kryptonmc/nbt/TagType;
 	public final fun getUUID (Ljava/lang/String;)Ljava/util/UUID;
 	public final fun getUUID (Ljava/lang/String;Ljava/util/UUID;)Ljava/util/UUID;
@@ -288,8 +289,8 @@ public final class org/kryptonmc/nbt/ImmutableCompoundTag : org/kryptonmc/nbt/Sc
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/CompoundTag;
 	public fun copy ()Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
-	public synthetic fun getTags ()Ljava/util/Map;
-	public fun getTags ()Lkotlinx/collections/immutable/PersistentMap;
+	public synthetic fun getData ()Ljava/util/Map;
+	public fun getData ()Lkotlinx/collections/immutable/PersistentMap;
 	public synthetic fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ImmutableCompoundTag;
 	public synthetic fun remove (Ljava/lang/String;)Lorg/kryptonmc/nbt/CompoundTag;
@@ -571,8 +572,8 @@ public final class org/kryptonmc/nbt/MutableCompoundTag : org/kryptonmc/nbt/Scop
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/CompoundTag;
 	public fun copy ()Lorg/kryptonmc/nbt/MutableCompoundTag;
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
+	public fun getData ()Ljava/util/Map;
 	public fun getKeys ()Ljava/util/Set;
-	public fun getTags ()Ljava/util/Map;
 	public fun getValues ()Ljava/util/Collection;
 	public synthetic fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/MutableCompoundTag;
