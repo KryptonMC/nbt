@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    "commonMainApi"(project(":nbt-common"))
+    api(project(":nbt-common"))
 }

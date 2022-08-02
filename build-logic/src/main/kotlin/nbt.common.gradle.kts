@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-    kotlin("multiplatform")
+    kotlin("jvm")
     id("org.cadixdev.licenser")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
@@ -15,30 +15,12 @@ repositories {
 
 kotlin {
     explicitApi()
-    jvm {
-        withJava()
-    }
-    js {
-        nodejs()
-    }
-    sourceSets.all {
-        languageSettings.optIn("okio.ExperimentalFileSystem")
-    }
 }
 
 dependencies {
-    "commonMainApi"(kotlin("stdlib-common"))
-    "commonMainApi"("org.jetbrains.kotlinx", "kotlinx-collections-immutable", "0.3.5")
-    "commonMainApi"("com.squareup.okio", "okio-multiplatform", "3.0.0-alpha.9")
-    "jvmMainApi"(kotlin("stdlib"))
-    "jvmMainApi"("com.squareup.okio", "okio", "3.0.0-alpha.9")
-    "jsMainApi"(kotlin("stdlib-js"))
-    "jsMainApi"("com.squareup.okio", "okio-nodefilesystem-js", "3.0.0-alpha.9")
-    "jsMainApi"(npm("pako", "2.0.3"))
-    "commonTestImplementation"(kotlin("test-common"))
-    "commonTestImplementation"(kotlin("test-annotations-common"))
-    "jvmTestImplementation"(kotlin("test-junit5"))
-    "jsTestImplementation"(kotlin("test-js"))
+    api(kotlin("stdlib"))
+    api("org.jetbrains.kotlinx", "kotlinx-collections-immutable", "0.3.5")
+    testImplementation(kotlin("test-junit5"))
 }
 
 license {
@@ -58,8 +40,12 @@ publishing {
 }
 
 tasks {
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(17)
+    }
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
     withType<Test> {
         useJUnitPlatform()

@@ -1,5 +1,5 @@
 public final class org/kryptonmc/nbt/stream/BinaryNBTReader : org/kryptonmc/nbt/stream/NBTReader {
-	public fun <init> (Lokio/BufferedSource;)V
+	public fun <init> (Ljava/io/DataInputStream;)V
 	public fun beginByteArray ()I
 	public fun beginCompound ()V
 	public fun beginIntArray ()I
@@ -27,7 +27,7 @@ public final class org/kryptonmc/nbt/stream/BinaryNBTReader : org/kryptonmc/nbt/
 }
 
 public final class org/kryptonmc/nbt/stream/BinaryNBTWriter : org/kryptonmc/nbt/stream/NBTWriter {
-	public fun <init> (Lokio/BufferedSink;)V
+	public fun <init> (Ljava/io/DataOutputStream;)V
 	public fun beginByteArray (I)V
 	public fun beginCompound ()V
 	public fun beginIntArray (I)V
@@ -60,7 +60,7 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTReader : java/io/Clo
 	public abstract fun beginIntArray ()I
 	public abstract fun beginList (I)I
 	public abstract fun beginLongArray ()I
-	public static fun binary (Lokio/BufferedSource;)Lorg/kryptonmc/nbt/stream/NBTReader;
+	public static fun binary (Ljava/io/InputStream;)Lorg/kryptonmc/nbt/stream/NBTReader;
 	public abstract fun endByteArray ()V
 	public abstract fun endCompound ()V
 	public abstract fun endIntArray ()V
@@ -82,7 +82,7 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTReader : java/io/Clo
 }
 
 public final class org/kryptonmc/nbt/stream/NBTReader$Companion {
-	public final fun binary (Lokio/BufferedSource;)Lorg/kryptonmc/nbt/stream/NBTReader;
+	public final fun binary (Ljava/io/InputStream;)Lorg/kryptonmc/nbt/stream/NBTReader;
 }
 
 public final class org/kryptonmc/nbt/stream/NBTReader$DefaultImpls {
@@ -96,7 +96,7 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTWriter : java/io/Clo
 	public abstract fun beginIntArray (I)V
 	public abstract fun beginList (II)V
 	public abstract fun beginLongArray (I)V
-	public static fun binary (Lokio/BufferedSink;)Lorg/kryptonmc/nbt/stream/NBTWriter;
+	public static fun binary (Ljava/io/OutputStream;)Lorg/kryptonmc/nbt/stream/NBTWriter;
 	public abstract fun end ()V
 	public abstract fun endByteArray ()V
 	public abstract fun endCompound ()V
@@ -117,7 +117,7 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTWriter : java/io/Clo
 }
 
 public final class org/kryptonmc/nbt/stream/NBTWriter$Companion {
-	public final fun binary (Lokio/BufferedSink;)Lorg/kryptonmc/nbt/stream/NBTWriter;
+	public final fun binary (Ljava/io/OutputStream;)Lorg/kryptonmc/nbt/stream/NBTWriter;
 }
 
 public final class org/kryptonmc/nbt/stream/NBTWriter$DefaultImpls {
