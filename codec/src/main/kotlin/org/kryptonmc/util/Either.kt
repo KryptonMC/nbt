@@ -29,8 +29,10 @@ public sealed interface Either<L, R> : App<Either.Mu<R>, L> {
     public val right: R?
         get() = null
 
+    @Suppress("NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
     public fun left(): Optional<L> = Optional.ofNullable(left)
 
+    @Suppress("NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
     public fun right(): Optional<R> = Optional.ofNullable(right)
 
     public fun ifLeft(consumer: Consumer<L>): Either<L, R> = this
