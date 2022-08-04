@@ -13,6 +13,7 @@ import org.kryptonmc.util.functional.Applicative
 import org.kryptonmc.util.functional.CocartesianLike
 import org.kryptonmc.util.functional.K1
 import org.kryptonmc.util.functional.Traversable
+import java.util.Objects
 import java.util.Optional
 import java.util.function.BiFunction
 import java.util.function.Consumer
@@ -69,7 +70,7 @@ public sealed interface Either<L, R> : App<Either.Mu<R>, L> {
 
         override fun equals(other: Any?): Boolean = this === other || (other is Left<*, *> && left == other.left)
 
-        override fun hashCode(): Int = 31 + left.hashCode()
+        override fun hashCode(): Int = Objects.hash(left)
 
         override fun toString(): String = "Left($left)"
     }
@@ -85,7 +86,7 @@ public sealed interface Either<L, R> : App<Either.Mu<R>, L> {
 
         override fun equals(other: Any?): Boolean = this === other || (other is Right<*, *> && right == other.right)
 
-        override fun hashCode(): Int = 31 + right.hashCode()
+        override fun hashCode(): Int = 31 + Objects.hash(left)
 
         override fun toString(): String = "Right($right)"
     }
@@ -110,8 +111,8 @@ public sealed interface Either<L, R> : App<Either.Mu<R>, L> {
             applicative: Applicative<F, *>,
             function: Function<A, App<F, B>>,
             input: App<Either.Mu<R2>, A>
-        ): App<F, App<Either.Mu<R2>, B>> = unbox(input)
-            .map({ left -> applicative.ap({ left(it) }, function.apply(left)) }, { applicative.point(right(it)) })
+        ): App<F, App<Either.Mu<R2>, B>> =
+            unbox(input).map({ left -> applicative.ap({ left(it) }, function.apply(left)) }, { applicative.point(right(it)) })
 
         override fun <A> to(input: App<Either.Mu<R2>, A>): App<Either.Mu<R2>, A> = input
 

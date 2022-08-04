@@ -27,4 +27,8 @@ public class UnboundedMapCodec<K, V>(override val keyCodec: Codec<K>, override v
         if (other == null || javaClass != other.javaClass) return false
         return Objects.equals(keyCodec, (other as UnboundedMapCodec<*, *>).keyCodec) && Objects.equals(valueCodec, other.valueCodec)
     }
+
+    override fun hashCode(): Int = Objects.hash(keyCodec, valueCodec)
+
+    override fun toString(): String = "UnboundedMapCodec[$keyCodec -> $valueCodec]"
 }

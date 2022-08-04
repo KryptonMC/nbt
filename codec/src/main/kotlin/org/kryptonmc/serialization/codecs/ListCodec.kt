@@ -25,7 +25,7 @@ public class ListCodec<T>(private val elementCodec: Codec<T>) : Codec<List<T>> {
     override fun decode(tag: Tag): List<T> {
         check(tag is ListTag) { "Expected list tag for list codec, got $tag!" }
         val result = persistentListOf<T>().builder()
-        val failed = persistentListOf<Tag>().builder()
+        val failed = mutableListOf<Tag>()
         tag.data.forEach {
             try {
                 result.add(elementCodec.decode(it))
@@ -33,8 +33,7 @@ public class ListCodec<T>(private val elementCodec: Codec<T>) : Codec<List<T>> {
                 failed.add(it)
             }
         }
-        val errors = failed.build()
-        if (errors.isNotEmpty()) error("Failed to decode list! Missing input: $errors")
+        if (failed.isNotEmpty()) error("Failed to decode list! Missing input: $failed")
         return result.build()
     }
 
@@ -44,7 +43,7 @@ public class ListCodec<T>(private val elementCodec: Codec<T>) : Codec<List<T>> {
         return Objects.equals(elementCodec, (other as ListCodec<*>).elementCodec)
     }
 
-    override fun hashCode(): Int = 31 + elementCodec.hashCode()
+    override fun hashCode(): Int = Objects.hash(elementCodec)
 
-    override fun toString(): String = "ListCodec($elementCodec)"
+    override fun toString(): String = "ListCodec[$elementCodec]"
 }

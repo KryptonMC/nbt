@@ -38,17 +38,17 @@ public class KeyDispatchCodec<K, V>(
         return valueDecoder.decode(input.get("value")!!)
     }
 
-    override fun encode(value: V, builder: CompoundTag.Builder): CompoundTag.Builder {
-        val elementEncoder = encoder.apply(value) ?: return builder
+    override fun encode(value: V, prefix: CompoundTag.Builder): CompoundTag.Builder {
+        val elementEncoder = encoder.apply(value) ?: return prefix
         if (elementEncoder is MapCodec.StandardCodec) {
-            return elementEncoder.codec.encode(value, builder).put(typeKey, keyCodec.encode(type.apply(value)))
+            return elementEncoder.codec.encode(value, prefix).put(typeKey, keyCodec.encode(type.apply(value)))
         }
-        builder.put(typeKey, keyCodec.encode(type.apply(value)))
-        builder.put("value", elementEncoder.encode(value))
-        return builder
+        prefix.put(typeKey, keyCodec.encode(type.apply(value)))
+        prefix.put("value", elementEncoder.encode(value))
+        return prefix
     }
 
-    override fun toString(): String = "KeyDispatchCodec($keyCodec $type $decoder)"
+    override fun toString(): String = "KeyDispatchCodec[$keyCodec $type $decoder]"
 
     public companion object {
 

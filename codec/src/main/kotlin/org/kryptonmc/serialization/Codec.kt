@@ -31,6 +31,7 @@ import java.nio.ByteBuffer
 import java.util.Arrays
 import java.util.Optional
 import java.util.function.Function
+import java.util.function.Supplier
 import java.util.function.UnaryOperator
 import java.util.stream.IntStream
 
@@ -38,9 +39,10 @@ public interface Codec<T> : Encoder<T>, Decoder<T> {
 
     public fun list(): Codec<List<T>> = list(this)
 
-    public fun <U> xmap(to: Function<T, U>, from: Function<U, T>): Codec<U> = of(comap(from), map(to))
+    public fun <U> xmap(to: Function<T, U>, from: Function<U, T>): Codec<U> = of(comap(from), map(to), toString() + "[xmapped]")
 
-    override fun field(name: String): MapCodec<T> = MapCodec.of(super<Encoder>.field(name), super<Decoder>.field(name))
+    override fun field(name: String): MapCodec<T> =
+        MapCodec.of(super<Encoder>.field(name), super<Decoder>.field(name)) { "Field[$name: ${toString()}]" }
 
     public fun nullableField(name: String): MapCodec<T?> = nullableField(name, this)
 
@@ -82,11 +84,16 @@ public interface Codec<T> : Encoder<T>, Decoder<T> {
         }
 
         @JvmStatic
-        public fun <T> of(encoder: Encoder<T>, decoder: Decoder<T>): Codec<T> = object : Codec<T> {
+        public fun <T> of(encoder: Encoder<T>, decoder: Decoder<T>): Codec<T> = of(encoder, decoder, "Codec[$encoder $decoder]")
+
+        @JvmStatic
+        public fun <T> of(encoder: Encoder<T>, decoder: Decoder<T>, name: String): Codec<T> = object : Codec<T> {
 
             override fun decode(tag: Tag): T = decoder.decode(tag)
 
             override fun encode(value: T): Tag = encoder.encode(value)
+
+            override fun toString(): String = name
         }
 
         @JvmStatic
@@ -106,6 +113,12 @@ public interface Codec<T> : Encoder<T>, Decoder<T> {
 
         @JvmStatic
         public fun <F> optionalField(name: String, elementCodec: Codec<F>): MapCodec<Optional<F>> = OptionalFieldCodec(name, elementCodec)
+
+        @JvmStatic
+        public fun <T> unit(default: T): Codec<T> = unit(Supplier { default })
+
+        @JvmStatic
+        public fun <T> unit(default: Supplier<T>): Codec<T> = MapCodec.unit(default).codec()
 
         @JvmStatic
         public fun intRange(min: Int, max: Int): Codec<Int> {

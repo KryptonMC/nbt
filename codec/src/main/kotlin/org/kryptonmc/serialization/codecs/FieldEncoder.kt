@@ -15,7 +15,7 @@ import java.util.Objects
 
 public class FieldEncoder<T>(private val name: String, private val elementEncoder: Encoder<T>) : MapEncoder<T> {
 
-    override fun encode(value: T, builder: CompoundTag.Builder): CompoundTag.Builder = builder.put(name, elementEncoder.encode(value))
+    override fun encode(value: T, prefix: CompoundTag.Builder): CompoundTag.Builder = prefix.put(name, elementEncoder.encode(value))
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,5 +25,5 @@ public class FieldEncoder<T>(private val name: String, private val elementEncode
 
     override fun hashCode(): Int = Objects.hash(name, elementEncoder)
 
-    override fun toString(): String = "FieldEncoder($name: $elementEncoder)"
+    override fun toString(): String = "FieldEncoder[$name: $elementEncoder]"
 }

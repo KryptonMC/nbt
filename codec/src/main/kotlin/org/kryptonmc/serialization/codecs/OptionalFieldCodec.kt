@@ -26,9 +26,9 @@ public class OptionalFieldCodec<T>(private val name: String, private val element
         }
     }
 
-    override fun encode(value: Optional<T>, builder: CompoundTag.Builder): CompoundTag.Builder {
-        if (value.isPresent) return builder.put(name, elementCodec.encode(value.get()))
-        return builder
+    override fun encode(value: Optional<T>, prefix: CompoundTag.Builder): CompoundTag.Builder {
+        if (value.isPresent) return prefix.put(name, elementCodec.encode(value.get()))
+        return prefix
     }
 
     override fun equals(other: Any?): Boolean {
@@ -39,5 +39,5 @@ public class OptionalFieldCodec<T>(private val name: String, private val element
 
     override fun hashCode(): Int = Objects.hash(name, elementCodec)
 
-    override fun toString(): String = "OptionalFieldCodec($name: $elementCodec)"
+    override fun toString(): String = "OptionalFieldCodec[$name: $elementCodec]"
 }

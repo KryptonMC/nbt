@@ -8,6 +8,7 @@
  */
 package org.kryptonmc.serialization
 
+import org.kryptonmc.nbt.CompoundTag
 import org.kryptonmc.serialization.codecs.FieldEncoder
 import org.kryptonmc.nbt.Tag
 import java.util.function.Function
@@ -26,11 +27,21 @@ public fun interface Encoder<T> {
 
     public fun field(name: String): MapEncoder<T> = FieldEncoder(name, this)
 
-    public fun <U> comap(mapper: Function<U, T>): Encoder<U> = Encoder { encode(mapper.apply(it)) }
+    public fun <U> comap(mapper: Function<U, T>): Encoder<U> = object : Encoder<U> {
+
+        override fun encode(value: U): Tag = this@Encoder.encode(mapper.apply(value))
+
+        override fun toString(): String = "${this@Encoder}[comapped]"
+    }
 
     public companion object {
 
         @JvmStatic
-        public fun <T> empty(): MapEncoder<T> = MapEncoder { _, builder -> builder }
+        public fun <T> empty(): MapEncoder<T> = object : MapEncoder<T> {
+
+            override fun encode(value: T, prefix: CompoundTag.Builder): CompoundTag.Builder = prefix
+
+            override fun toString(): String = "EmptyEncoder"
+        }
     }
 }

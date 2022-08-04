@@ -33,5 +33,5 @@ public class EitherCodec<L, R>(private val left: Codec<L>, private val right: Co
 
     override fun hashCode(): Int = Objects.hash(left, right)
 
-    override fun toString(): String = "EitherCodec($left, $right)"
+    override fun toString(): String = "EitherCodec[$left, $right]"
 }

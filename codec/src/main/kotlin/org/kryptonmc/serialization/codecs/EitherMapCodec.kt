@@ -23,8 +23,8 @@ public class EitherMapCodec<L, R>(private val left: MapCodec<L>, private val rig
         }
     }
 
-    override fun encode(value: Either<L, R>, builder: CompoundTag.Builder): CompoundTag.Builder =
-        value.map({ left.encode(it, builder) }, { right.encode(it, builder) })
+    override fun encode(value: Either<L, R>, prefix: CompoundTag.Builder): CompoundTag.Builder =
+        value.map({ left.encode(it, prefix) }, { right.encode(it, prefix) })
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -34,5 +34,5 @@ public class EitherMapCodec<L, R>(private val left: MapCodec<L>, private val rig
 
     override fun hashCode(): Int = Objects.hash(left, right)
 
-    override fun toString(): String = "EitherMapCodec($left, $right)"
+    override fun toString(): String = "EitherMapCodec[$left, $right]"
 }

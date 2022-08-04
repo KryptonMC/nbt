@@ -46,12 +46,23 @@ public class CompoundCodecBuilder<O, F> private constructor(
                     val fEncoder = f.encoder.apply(it)
                     val aEncoder = a.encoder.apply(it)
                     val aFromO = a.getter.apply(it)
-                    MapEncoder { value, builder ->
-                        aEncoder.encode(aFromO, builder)
-                        fEncoder.encode({ value }, builder)
+                    object : MapEncoder<R> {
+
+                        override fun encode(value: R, prefix: CompoundTag.Builder): CompoundTag.Builder {
+                            aEncoder.encode(aFromO, prefix)
+                            fEncoder.encode({ value }, prefix)
+                            return prefix
+                        }
+
+                        override fun toString(): String = "$fEncoder * $aEncoder"
                     }
                 },
-                { f.decoder.decode(it).apply(a.decoder.decode(it)) }
+                object : MapDecoder<R> {
+
+                    override fun decode(input: CompoundTag): R = f.decoder.decode(input).apply(a.decoder.decode(input))
+
+                    override fun toString(): String = "${f.decoder} * ${a.decoder}"
+                }
             )
         }
 
@@ -71,14 +82,24 @@ public class CompoundCodecBuilder<O, F> private constructor(
                     val aFromO = fa.getter.apply(it)
                     val bEncoder = fb.encoder.apply(it)
                     val bFromO = fb.getter.apply(it)
-                    MapEncoder { value, builder ->
-                        aEncoder.encode(aFromO, builder)
-                        bEncoder.encode(bFromO, builder)
-                        fEncoder.encode({ _, _ -> value }, builder)
-                        builder
+                    object : MapEncoder<R> {
+
+                        override fun encode(value: R, prefix: CompoundTag.Builder): CompoundTag.Builder {
+                            aEncoder.encode(aFromO, prefix)
+                            bEncoder.encode(bFromO, prefix)
+                            fEncoder.encode({ _, _ -> value }, prefix)
+                            return prefix
+                        }
+
+                        override fun toString(): String = "$fEncoder * $aEncoder * $bEncoder"
                     }
                 },
-                { f.decoder.decode(it).apply(fa.decoder.decode(it), fb.decoder.decode(it)) }
+                object : MapDecoder<R> {
+
+                    override fun decode(input: CompoundTag): R = f.decoder.decode(input).apply(fa.decoder.decode(input), fb.decoder.decode(input))
+
+                    override fun toString(): String = "${f.decoder} * ${fa.decoder} * ${fb.decoder}"
+                }
             )
         }
 
@@ -102,15 +123,26 @@ public class CompoundCodecBuilder<O, F> private constructor(
                     val bFromO = fb.getter.apply(it)
                     val cEncoder = fc.encoder.apply(it)
                     val cFromO = fc.getter.apply(it)
-                    MapEncoder { value, builder ->
-                        aEncoder.encode(aFromO, builder)
-                        bEncoder.encode(bFromO, builder)
-                        cEncoder.encode(cFromO, builder)
-                        fEncoder.encode({ _, _, _ -> value }, builder)
-                        builder
+                    object : MapEncoder<R> {
+
+                        override fun encode(value: R, prefix: CompoundTag.Builder): CompoundTag.Builder {
+                            aEncoder.encode(aFromO, prefix)
+                            bEncoder.encode(bFromO, prefix)
+                            cEncoder.encode(cFromO, prefix)
+                            fEncoder.encode({ _, _, _ -> value }, prefix)
+                            return prefix
+                        }
+
+                        override fun toString(): String = "$fEncoder * $aEncoder * $bEncoder * $cEncoder"
                     }
                 },
-                { f.decoder.decode(it).apply(fa.decoder.decode(it), fb.decoder.decode(it), fc.decoder.decode(it)) }
+                object : MapDecoder<R> {
+
+                    override fun decode(input: CompoundTag): R =
+                        f.decoder.decode(input).apply(fa.decoder.decode(input), fb.decoder.decode(input), fc.decoder.decode(input))
+
+                    override fun toString(): String = "${f.decoder} * ${fa.decoder} * ${fb.decoder} * ${fc.decoder}"
+                }
             )
         }
 
@@ -138,16 +170,27 @@ public class CompoundCodecBuilder<O, F> private constructor(
                     val cFromO = fc.getter.apply(it)
                     val dEncoder = fd.encoder.apply(it)
                     val dFromO = fd.getter.apply(it)
-                    MapEncoder { value, builder ->
-                        aEncoder.encode(aFromO, builder)
-                        bEncoder.encode(bFromO, builder)
-                        cEncoder.encode(cFromO, builder)
-                        dEncoder.encode(dFromO, builder)
-                        fEncoder.encode({ _, _, _, _ -> value }, builder)
-                        builder
+                    object : MapEncoder<R> {
+
+                        override fun encode(value: R, prefix: CompoundTag.Builder): CompoundTag.Builder {
+                            aEncoder.encode(aFromO, prefix)
+                            bEncoder.encode(bFromO, prefix)
+                            cEncoder.encode(cFromO, prefix)
+                            dEncoder.encode(dFromO, prefix)
+                            fEncoder.encode({ _, _, _, _ -> value }, prefix)
+                            return prefix
+                        }
+
+                        override fun toString(): String = "$fEncoder * $aEncoder * $bEncoder * $cEncoder * $dEncoder"
                     }
                 },
-                { f.decoder.decode(it).apply(fa.decoder.decode(it), fb.decoder.decode(it), fc.decoder.decode(it), fd.decoder.decode(it)) }
+                object : MapDecoder<R> {
+
+                    override fun decode(input: CompoundTag): R = f.decoder.decode(input)
+                        .apply(fa.decoder.decode(input), fb.decoder.decode(input), fc.decoder.decode(input), fd.decoder.decode(input))
+
+                    override fun toString(): String = "${f.decoder} * ${fa.decoder} * ${fb.decoder} * ${fc.decoder} * ${fd.decoder}"
+                }
             )
         }
 
@@ -161,7 +204,9 @@ public class CompoundCodecBuilder<O, F> private constructor(
 
                         private val encoder = unbox.encoder.apply(it)
 
-                        override fun encode(value: R, builder: CompoundTag.Builder): CompoundTag.Builder = encoder.encode(getter.apply(it), builder)
+                        override fun encode(value: R, prefix: CompoundTag.Builder): CompoundTag.Builder = encoder.encode(getter.apply(it), prefix)
+
+                        override fun toString(): String = "$encoder[mapped]"
                     }
                 },
                 unbox.decoder.map(function)
@@ -198,8 +243,16 @@ public class CompoundCodecBuilder<O, F> private constructor(
 
         @JvmStatic
         public fun <O> build(builderBox: App<Mu<O>, O>): MapCodec<O> {
-            val builder = unbox(builderBox)
-            return MapCodec.of({ value, tag -> builder.encoder.apply(value).encode(value, tag) }, builder.decoder::decode)
+            val unboxed = unbox(builderBox)
+            return object : MapCodec<O> {
+
+                override fun decode(input: CompoundTag): O = unboxed.decoder.decode(input)
+
+                override fun encode(value: O, prefix: CompoundTag.Builder): CompoundTag.Builder =
+                    unboxed.encoder.apply(value).encode(value, prefix)
+
+                override fun toString(): String = "RecordCodec[${unboxed.decoder}]"
+            }
         }
     }
 }

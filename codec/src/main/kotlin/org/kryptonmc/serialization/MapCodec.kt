@@ -41,23 +41,27 @@ public interface MapCodec<T> : MapEncoder<T>, MapDecoder<T> {
 
     public fun orElseGet(valueGetter: Supplier<T>): MapCodec<T> = mapResult(null) { valueGetter.get() }
 
-    public fun mapResult(encodeError: Consumer<Exception>?, decodeError: Function<Exception, T>): MapCodec<T> = of(
-        { value, builder ->
-            try {
-                encode(value, builder)
+    public fun mapResult(encodeError: Consumer<Exception>?, decodeError: Function<Exception, T>): MapCodec<T> = object : MapCodec<T> {
+
+        override fun encode(value: T, prefix: CompoundTag.Builder): CompoundTag.Builder {
+            return try {
+                encode(value, prefix)
             } catch (exception: Exception) {
                 encodeError?.accept(exception)
-                builder
+                prefix
             }
-        },
-        {
-            try {
-                decode(it)
+        }
+
+        override fun decode(input: CompoundTag): T {
+            return try {
+                decode(input)
             } catch (exception: Exception) {
                 decodeError.apply(exception)
             }
         }
-    )
+
+        override fun toString(): String = "${this@MapCodec}[mapResult ${encodeError?.toString().orEmpty()} $decodeError]"
+    }
 
     public fun <O> getting(getter: Function<O, T>): CompoundCodecBuilder<O, T> = CompoundCodecBuilder.of(getter, this)
 
@@ -73,12 +77,20 @@ public interface MapCodec<T> : MapEncoder<T>, MapDecoder<T> {
 
     public companion object {
 
+        @JvmField
+        public val EMPTY: MapCodec<Unit> = of(Encoder.empty(), Decoder.unit(Unit))
+
         @JvmStatic
-        public fun <T> of(encoder: MapEncoder<T>, decoder: MapDecoder<T>): MapCodec<T> = object : MapCodec<T> {
+        public fun <T> of(encoder: MapEncoder<T>, decoder: MapDecoder<T>): MapCodec<T> = of(encoder, decoder) { "MapCodec[$encoder $decoder]" }
+
+        @JvmStatic
+        public fun <T> of(encoder: MapEncoder<T>, decoder: MapDecoder<T>, name: Supplier<String>): MapCodec<T> = object : MapCodec<T> {
 
             override fun decode(input: CompoundTag): T = decoder.decode(input)
 
-            override fun encode(value: T, builder: CompoundTag.Builder): CompoundTag.Builder = encoder.encode(value, builder)
+            override fun encode(value: T, prefix: CompoundTag.Builder): CompoundTag.Builder = encoder.encode(value, prefix)
+
+            override fun toString(): String = name.get()
         }
 
         @JvmStatic

@@ -24,9 +24,9 @@ public class NullableFieldCodec<T>(private val name: String, private val element
         }
     }
 
-    override fun encode(value: T?, builder: CompoundTag.Builder): CompoundTag.Builder {
-        if (value != null) return builder.put(name, elementCodec.encode(value))
-        return builder
+    override fun encode(value: T?, prefix: CompoundTag.Builder): CompoundTag.Builder {
+        if (value != null) return prefix.put(name, elementCodec.encode(value))
+        return prefix
     }
 
     override fun equals(other: Any?): Boolean {
@@ -37,5 +37,5 @@ public class NullableFieldCodec<T>(private val name: String, private val element
 
     override fun hashCode(): Int = Objects.hash(name, elementCodec)
 
-    override fun toString(): String = "NullableFieldCodec($name: $elementCodec)"
+    override fun toString(): String = "NullableFieldCodec[$name: $elementCodec]"
 }

@@ -28,5 +28,5 @@ public class FieldDecoder<T>(private val name: String, private val elementDecode
 
     override fun hashCode(): Int = Objects.hash(name, elementDecoder)
 
-    override fun toString(): String = "FieldDecoder($name: $elementDecoder)"
+    override fun toString(): String = "FieldDecoder[$name: $elementDecoder]"
 }

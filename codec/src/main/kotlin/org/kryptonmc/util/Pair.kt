@@ -13,8 +13,10 @@ import org.kryptonmc.util.functional.Applicative
 import org.kryptonmc.util.functional.CartesianLike
 import org.kryptonmc.util.functional.K1
 import org.kryptonmc.util.functional.Traversable
+import java.util.Objects
 import java.util.function.Function
 
+@JvmRecord
 public data class Pair<F, S>(public val first: F, public val second: S) : App<Pair.Mu<S>, F> {
 
     public fun <F2> mapFirst(function: Function<F, F2>): Pair<F2, S> = of(function.apply(first), second)
@@ -23,9 +25,9 @@ public data class Pair<F, S>(public val first: F, public val second: S) : App<Pa
 
     public fun swap(): Pair<S, F> = of(second, first)
 
-    override fun equals(other: Any?): Boolean = this === other || (other is Pair<*, *> && first == other.first && second == other.second)
+    override fun equals(other: Any?): Boolean = other is Pair<*, *> && first == other.first && second == other.second
 
-    override fun hashCode(): Int = 31 * (31 + first.hashCode()) + second.hashCode()
+    override fun hashCode(): Int = Objects.hash(first, second)
 
     override fun toString(): String = "($first, $second)"
 

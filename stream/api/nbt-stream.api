@@ -23,7 +23,6 @@ public final class org/kryptonmc/nbt/stream/BinaryNBTReader : org/kryptonmc/nbt/
 	public fun nextString ()Ljava/lang/String;
 	public fun nextType ()B
 	public fun peekType ()B
-	public fun read ()Lorg/kryptonmc/nbt/Tag;
 }
 
 public final class org/kryptonmc/nbt/stream/BinaryNBTWriter : org/kryptonmc/nbt/stream/NBTWriter {
@@ -50,7 +49,6 @@ public final class org/kryptonmc/nbt/stream/BinaryNBTWriter : org/kryptonmc/nbt/
 	public fun value (Ljava/util/UUID;)V
 	public fun value (S)V
 	public fun value (Z)V
-	public fun write (Lorg/kryptonmc/nbt/Tag;)V
 }
 
 public abstract interface class org/kryptonmc/nbt/stream/NBTReader : java/io/Closeable {
@@ -78,15 +76,11 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTReader : java/io/Clo
 	public abstract fun nextString ()Ljava/lang/String;
 	public abstract fun nextType ()B
 	public abstract fun peekType ()B
-	public abstract fun read ()Lorg/kryptonmc/nbt/Tag;
+	public fun read ()Lorg/kryptonmc/nbt/Tag;
 }
 
 public final class org/kryptonmc/nbt/stream/NBTReader$Companion {
 	public final fun binary (Ljava/io/InputStream;)Lorg/kryptonmc/nbt/stream/NBTReader;
-}
-
-public final class org/kryptonmc/nbt/stream/NBTReader$DefaultImpls {
-	public static fun read (Lorg/kryptonmc/nbt/stream/NBTReader;)Lorg/kryptonmc/nbt/Tag;
 }
 
 public abstract interface class org/kryptonmc/nbt/stream/NBTWriter : java/io/Closeable {
@@ -113,14 +107,10 @@ public abstract interface class org/kryptonmc/nbt/stream/NBTWriter : java/io/Clo
 	public abstract fun value (Ljava/util/UUID;)V
 	public abstract fun value (S)V
 	public abstract fun value (Z)V
-	public abstract fun write (Lorg/kryptonmc/nbt/Tag;)V
+	public fun write (Lorg/kryptonmc/nbt/Tag;)V
 }
 
 public final class org/kryptonmc/nbt/stream/NBTWriter$Companion {
 	public final fun binary (Ljava/io/OutputStream;)Lorg/kryptonmc/nbt/stream/NBTWriter;
-}
-
-public final class org/kryptonmc/nbt/stream/NBTWriter$DefaultImpls {
-	public static fun write (Lorg/kryptonmc/nbt/stream/NBTWriter;Lorg/kryptonmc/nbt/Tag;)V
 }
 
