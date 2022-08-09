@@ -13,7 +13,8 @@ public final class org/kryptonmc/nbt/ByteArrayTag : org/kryptonmc/nbt/Tag {
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
-	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEach (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public final fun get (I)B
 	public final fun getData ()[B
 	public fun getId ()I
@@ -75,18 +76,30 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public static final fun empty ()Lorg/kryptonmc/nbt/CompoundTag;
 	public final fun equals (Ljava/lang/Object;)Z
 	public final fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
-	public final fun forEachByte (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachByteArray (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachCompound (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachDouble (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachFloat (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachInt (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachIntArray (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachList (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachLong (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachLongArray (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachShort (Lkotlin/jvm/functions/Function2;)V
-	public final fun forEachString (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachByte (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachByte (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachByteArray (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachByteArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachCompound (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachCompound (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachDouble (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachDouble (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachFloat (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachFloat (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachInt (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachInt (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachIntArray (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachIntArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachList (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachList (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachLong (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachLong (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachLongArray (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachLongArray (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachShort (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachShort (Lkotlin/jvm/functions/Function2;)V
+	public final fun forEachString (Ljava/util/function/BiConsumer;)V
+	public final synthetic fun forEachString (Lkotlin/jvm/functions/Function2;)V
 	public final fun get (Ljava/lang/String;)Lorg/kryptonmc/nbt/Tag;
 	public final fun getBoolean (Ljava/lang/String;)Z
 	public final fun getBoolean (Ljava/lang/String;Z)Z
@@ -166,8 +179,10 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public abstract fun toBuilder ()Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun toString ()Ljava/lang/String;
 	public final fun type (Ljava/lang/String;)I
-	public abstract fun update (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
-	public abstract fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun update (Ljava/lang/String;ILjava/util/function/Consumer;)Lorg/kryptonmc/nbt/CompoundTag;
+	public abstract synthetic fun update (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
+	public final fun update (Ljava/lang/String;Ljava/util/function/Consumer;)Lorg/kryptonmc/nbt/CompoundTag;
+	public abstract synthetic fun update (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag;
 	public fun values ()Ljava/util/Collection;
 	public final fun write (Ljava/io/DataOutput;)V
 }
@@ -344,7 +359,8 @@ public final class org/kryptonmc/nbt/IntArrayTag : org/kryptonmc/nbt/Tag {
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
-	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEach (Ljava/util/function/IntConsumer;)V
+	public final synthetic fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public final fun get (I)I
 	public final fun getData ()[I
 	public fun getId ()I
@@ -404,18 +420,30 @@ public abstract class org/kryptonmc/nbt/ListTag : java/lang/Iterable, kotlin/jvm
 	public static final fun empty ()Lorg/kryptonmc/nbt/ListTag;
 	public final fun equals (Ljava/lang/Object;)Z
 	public final fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
-	public final fun forEachByte (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachByteArray (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachCompound (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachDouble (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachFloat (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachInt (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachIntArray (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachList (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachLong (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachLongArray (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachShort (Lkotlin/jvm/functions/Function1;)V
-	public final fun forEachString (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachByte (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachByte (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachByteArray (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachByteArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachCompound (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachCompound (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachDouble (Ljava/util/function/DoubleConsumer;)V
+	public final synthetic fun forEachDouble (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachFloat (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachFloat (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachInt (Ljava/util/function/IntConsumer;)V
+	public final synthetic fun forEachInt (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachIntArray (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachIntArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachList (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachList (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachLong (Ljava/util/function/LongConsumer;)V
+	public final synthetic fun forEachLong (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachLongArray (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachLongArray (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachShort (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachShort (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachString (Ljava/util/function/Consumer;)V
+	public final synthetic fun forEachString (Lkotlin/jvm/functions/Function1;)V
 	public final fun get (I)Lorg/kryptonmc/nbt/Tag;
 	public final fun getBoolean (I)Z
 	public final fun getBoolean (IZ)Z
@@ -554,7 +582,8 @@ public final class org/kryptonmc/nbt/LongArrayTag : org/kryptonmc/nbt/Tag {
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun examine (Lorg/kryptonmc/nbt/TagExaminer;)V
-	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEach (Ljava/util/function/LongConsumer;)V
+	public final synthetic fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public final fun get (I)J
 	public final fun getData ()[J
 	public fun getId ()I

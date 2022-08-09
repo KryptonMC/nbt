@@ -13,6 +13,7 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import java.io.DataOutput
+import java.util.function.Consumer
 
 /**
  * A tag that holds a byte array.
@@ -58,8 +59,13 @@ public class ByteArrayTag(data: ByteArray) : Tag {
         data = data.remove(index)
     }
 
-    public fun forEach(action: (Byte) -> Unit) {
+    @JvmSynthetic
+    public inline fun forEach(action: (Byte) -> Unit) {
         data.forEach(action)
+    }
+
+    public fun forEach(action: Consumer<Byte>) {
+        data.forEach(action::accept)
     }
 
     public fun clear() {

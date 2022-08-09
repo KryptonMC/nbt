@@ -13,6 +13,7 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import java.io.DataOutput
+import java.util.function.LongConsumer
 
 /**
  * A tag that holds a long array.
@@ -58,8 +59,13 @@ public class LongArrayTag(data: LongArray) : Tag {
         data = data.remove(index)
     }
 
-    public fun forEach(action: (Long) -> Unit) {
+    @JvmSynthetic
+    public inline fun forEach(action: (Long) -> Unit) {
         data.forEach(action)
+    }
+
+    public fun forEach(action: LongConsumer) {
+        data.forEach(action::accept)
     }
 
     public fun clear() {

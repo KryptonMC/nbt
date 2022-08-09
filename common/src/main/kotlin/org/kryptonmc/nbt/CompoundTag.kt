@@ -19,6 +19,8 @@ import org.kryptonmc.nbt.util.toTag
 import org.kryptonmc.nbt.util.toUUID
 import java.io.DataOutput
 import java.util.UUID
+import java.util.function.BiConsumer
+import java.util.function.Consumer
 
 /**
  * A tag that holds a map of keys to tags.
@@ -472,9 +474,15 @@ public sealed class CompoundTag : Tag {
      */
     public abstract fun putLongs(key: String, vararg values: Long): CompoundTag
 
+    @JvmSynthetic
     public abstract fun update(key: String, builder: CompoundTag.() -> Unit): CompoundTag
 
+    public fun update(key: String, builder: Consumer<CompoundTag>): CompoundTag = update(key, builder::accept)
+
+    @JvmSynthetic
     public abstract fun update(key: String, type: Int, builder: ListTag.() -> Unit): CompoundTag
+
+    public fun update(key: String, type: Int, builder: Consumer<ListTag>): CompoundTag = update(key, type, builder::accept)
 
     /**
      * Iterates over every tag in this compound, and for every tag that is a
@@ -482,11 +490,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every byte entry
      */
+    @JvmSynthetic
     public inline fun forEachByte(action: (String, Byte) -> Unit) {
         for ((key, value) in data) {
             if (value !is ByteTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachByte(action: BiConsumer<String, Byte>) {
+        forEachByte(action::accept)
     }
 
     /**
@@ -495,11 +508,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every short entry
      */
+    @JvmSynthetic
     public inline fun forEachShort(action: (String, Short) -> Unit) {
         for ((key, value) in data) {
             if (value !is ShortTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachShort(action: BiConsumer<String, Short>) {
+        forEachShort(action::accept)
     }
 
     /**
@@ -508,11 +526,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every integer entry
      */
+    @JvmSynthetic
     public inline fun forEachInt(action: (String, Int) -> Unit) {
         for ((key, value) in data) {
             if (value !is IntTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachInt(action: BiConsumer<String, Int>) {
+        forEachInt(action::accept)
     }
 
     /**
@@ -521,11 +544,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every long entry
      */
+    @JvmSynthetic
     public inline fun forEachLong(action: (String, Long) -> Unit) {
         for ((key, value) in data) {
             if (value !is LongTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachLong(action: BiConsumer<String, Long>) {
+        forEachLong(action::accept)
     }
 
     /**
@@ -534,11 +562,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every float entry
      */
+    @JvmSynthetic
     public inline fun forEachFloat(action: (String, Float) -> Unit) {
         for ((key, value) in data) {
             if (value !is FloatTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachFloat(action: BiConsumer<String, Float>) {
+        forEachFloat(action::accept)
     }
 
     /**
@@ -547,11 +580,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every double entry
      */
+    @JvmSynthetic
     public inline fun forEachDouble(action: (String, Double) -> Unit) {
         for ((key, value) in data) {
             if (value !is DoubleTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachDouble(action: BiConsumer<String, Double>) {
+        forEachDouble(action::accept)
     }
 
     /**
@@ -560,11 +598,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every string entry
      */
+    @JvmSynthetic
     public inline fun forEachString(action: (String, String) -> Unit) {
         for ((key, value) in data) {
             if (value !is StringTag) continue
             action(key, value.value)
         }
+    }
+
+    public fun forEachString(action: BiConsumer<String, String>) {
+        forEachString(action::accept)
     }
 
     /**
@@ -573,11 +616,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every byte array entry
      */
+    @JvmSynthetic
     public inline fun forEachByteArray(action: (String, ByteArray) -> Unit) {
         for ((key, value) in data) {
             if (value !is ByteArrayTag) continue
             action(key, value.data)
         }
+    }
+
+    public fun forEachByteArray(action: BiConsumer<String, ByteArray>) {
+        forEachByteArray(action::accept)
     }
 
     /**
@@ -586,11 +634,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every integer array entry
      */
+    @JvmSynthetic
     public inline fun forEachIntArray(action: (String, IntArray) -> Unit) {
         for ((key, value) in data) {
             if (value !is IntArrayTag) continue
             action(key, value.data)
         }
+    }
+
+    public fun forEachIntArray(action: BiConsumer<String, IntArray>) {
+        forEachIntArray(action::accept)
     }
 
     /**
@@ -599,11 +652,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every long array entry
      */
+    @JvmSynthetic
     public inline fun forEachLongArray(action: (String, LongArray) -> Unit) {
         for ((key, value) in data) {
             if (value !is LongArrayTag) continue
             action(key, value.data)
         }
+    }
+
+    public fun forEachLongArray(action: BiConsumer<String, LongArray>) {
+        forEachLongArray(action::accept)
     }
 
     /**
@@ -612,11 +670,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every list entry
      */
+    @JvmSynthetic
     public inline fun forEachList(action: (String, ListTag) -> Unit) {
         for ((key, value) in data) {
             if (value !is ListTag) continue
             action(key, value)
         }
+    }
+
+    public fun forEachList(action: BiConsumer<String, ListTag>) {
+        forEachList(action::accept)
     }
 
     /**
@@ -625,11 +688,16 @@ public sealed class CompoundTag : Tag {
      *
      * @param action the action to apply to every compound entry
      */
+    @JvmSynthetic
     public inline fun forEachCompound(action: (String, CompoundTag) -> Unit) {
         for ((key, value) in data) {
             if (value !is CompoundTag) continue
             action(key, value)
         }
+    }
+
+    public fun forEachCompound(action: BiConsumer<String, CompoundTag>) {
+        forEachCompound(action::accept)
     }
 
     /**

@@ -17,6 +17,10 @@ import org.kryptonmc.nbt.io.Types
 import org.kryptonmc.nbt.util.toTag
 import java.io.DataOutput
 import java.util.UUID
+import java.util.function.Consumer
+import java.util.function.DoubleConsumer
+import java.util.function.IntConsumer
+import java.util.function.LongConsumer
 
 /**
  * A tag holding a list of values of the given tag type [elementType].
@@ -259,10 +263,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every byte value
      */
+    @JvmSynthetic
     public inline fun forEachByte(action: (Byte) -> Unit) {
         for (i in data.indices) {
             action(getByte(i))
         }
+    }
+
+    public fun forEachByte(action: Consumer<Byte>) {
+        forEachByte(action::accept)
     }
 
     /**
@@ -271,10 +280,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every short value
      */
+    @JvmSynthetic
     public inline fun forEachShort(action: (Short) -> Unit) {
         for (i in data.indices) {
             action(getShort(i))
         }
+    }
+
+    public fun forEachShort(action: Consumer<Short>) {
+        forEachShort(action::accept)
     }
 
     /**
@@ -283,10 +297,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every integer value
      */
+    @JvmSynthetic
     public inline fun forEachInt(action: (Int) -> Unit) {
         for (i in data.indices) {
             action(getInt(i))
         }
+    }
+
+    public fun forEachInt(action: IntConsumer) {
+        forEachInt(action::accept)
     }
 
     /**
@@ -295,10 +314,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every long value
      */
+    @JvmSynthetic
     public inline fun forEachLong(action: (Long) -> Unit) {
         for (i in data.indices) {
             action(getLong(i))
         }
+    }
+
+    public fun forEachLong(action: LongConsumer) {
+        forEachLong(action::accept)
     }
 
     /**
@@ -307,10 +331,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every float value
      */
+    @JvmSynthetic
     public inline fun forEachFloat(action: (Float) -> Unit) {
         for (i in data.indices) {
             action(getFloat(i))
         }
+    }
+
+    public fun forEachFloat(action: Consumer<Float>) {
+        forEachFloat(action::accept)
     }
 
     /**
@@ -319,10 +348,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every double value
      */
+    @JvmSynthetic
     public inline fun forEachDouble(action: (Double) -> Unit) {
         for (i in data.indices) {
             action(getDouble(i))
         }
+    }
+
+    public fun forEachDouble(action: DoubleConsumer) {
+        forEachDouble(action::accept)
     }
 
     /**
@@ -331,10 +365,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every string value
      */
+    @JvmSynthetic
     public inline fun forEachString(action: (String) -> Unit) {
         for (i in data.indices) {
             action(getString(i))
         }
+    }
+
+    public fun forEachString(action: Consumer<String>) {
+        forEachString(action::accept)
     }
 
     /**
@@ -343,10 +382,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every byte array
      */
+    @JvmSynthetic
     public inline fun forEachByteArray(action: (ByteArray) -> Unit) {
         for (i in data.indices) {
             action(getByteArray(i))
         }
+    }
+
+    public fun forEachByteArray(action: Consumer<ByteArray>) {
+        forEachByteArray(action::accept)
     }
 
     /**
@@ -355,10 +399,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every integer array
      */
+    @JvmSynthetic
     public inline fun forEachIntArray(action: (IntArray) -> Unit) {
         for (i in data.indices) {
             action(getIntArray(i))
         }
+    }
+
+    public fun forEachIntArray(action: Consumer<IntArray>) {
+        forEachIntArray(action::accept)
     }
 
     /**
@@ -367,10 +416,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every long array
      */
+    @JvmSynthetic
     public inline fun forEachLongArray(action: (LongArray) -> Unit) {
         for (i in data.indices) {
             action(getLongArray(i))
         }
+    }
+
+    public fun forEachLongArray(action: Consumer<LongArray>) {
+        forEachLongArray(action::accept)
     }
 
     /**
@@ -379,10 +433,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every list
      */
+    @JvmSynthetic
     public inline fun forEachList(action: (ListTag) -> Unit) {
         for (i in data.indices) {
             action(getList(i))
         }
+    }
+
+    public fun forEachList(action: Consumer<ListTag>) {
+        forEachList(action::accept)
     }
 
     /**
@@ -391,10 +450,15 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      *
      * @param action the action to apply to every compound
      */
+    @JvmSynthetic
     public inline fun forEachCompound(action: (CompoundTag) -> Unit) {
         for (i in data.indices) {
             action(getCompound(i))
         }
+    }
+
+    public fun forEachCompound(action: Consumer<CompoundTag>) {
+        forEachCompound(action::accept)
     }
 
     public fun isEmpty(): Boolean = data.isEmpty()

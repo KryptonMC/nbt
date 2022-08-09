@@ -13,6 +13,7 @@ import org.kryptonmc.nbt.io.TagWriter
 import org.kryptonmc.nbt.util.add
 import org.kryptonmc.nbt.util.remove
 import java.io.DataOutput
+import java.util.function.IntConsumer
 
 /**
  * A tag that holds an integer array.
@@ -58,8 +59,13 @@ public class IntArrayTag(data: IntArray) : Tag {
         data = data.remove(index)
     }
 
-    public fun forEach(action: (Int) -> Unit) {
+    @JvmSynthetic
+    public inline fun forEach(action: (Int) -> Unit) {
         data.forEach(action)
+    }
+
+    public fun forEach(action: IntConsumer) {
+        data.forEach(action::accept)
     }
 
     public fun clear() {
