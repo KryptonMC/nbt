@@ -15,4 +15,8 @@ public abstract class AbstractCollectionTag<T : Tag> : AbstractList<T>(), Collec
     final override fun addTag(index: Int, tag: T) {
         add(index, tag)
     }
+
+    final override fun addTag(tag: T) {
+        add(tag)
+    }
 }

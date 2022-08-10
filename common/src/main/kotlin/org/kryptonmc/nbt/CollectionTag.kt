@@ -27,4 +27,11 @@ public sealed interface CollectionTag<T : Tag> : Collection<T>, Tag {
      * @param tag the tag to add
      */
     public fun addTag(index: Int, tag: T)
+
+    /**
+     * Adds the given [tag] to this collection.
+     *
+     * @param tag the tag to add
+     */
+    public fun addTag(tag: T)
 }

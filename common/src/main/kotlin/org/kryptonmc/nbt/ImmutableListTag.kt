@@ -37,6 +37,10 @@ public class ImmutableListTag(override val data: PersistentList<Tag>, override v
         // Do nothing, this tag is immutable, and this function is designed for mutable tags.
     }
 
+    override fun addTag(tag: Tag) {
+        // Do nothing, this tag is immutable, and this function is designed for mutable tags.
+    }
+
     override fun removeAt(index: Int): ImmutableListTag {
         val result = data.removeAt(index)
         val newType = if (result.isEmpty()) EndTag.ID else elementType

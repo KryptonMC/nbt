@@ -1,6 +1,7 @@
 public abstract class org/kryptonmc/nbt/AbstractCollectionTag : java/util/AbstractList, org/kryptonmc/nbt/CollectionTag {
 	public fun <init> ()V
 	public final fun addTag (ILorg/kryptonmc/nbt/Tag;)V
+	public final fun addTag (Lorg/kryptonmc/nbt/Tag;)V
 	public final fun contains (Ljava/lang/Object;)Z
 	public fun contains (Lorg/kryptonmc/nbt/Tag;)Z
 	public abstract fun getSize ()I
@@ -92,6 +93,7 @@ public final class org/kryptonmc/nbt/ByteTag$Companion {
 
 public abstract interface class org/kryptonmc/nbt/CollectionTag : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker, org/kryptonmc/nbt/Tag {
 	public abstract fun addTag (ILorg/kryptonmc/nbt/Tag;)V
+	public abstract fun addTag (Lorg/kryptonmc/nbt/Tag;)V
 	public abstract fun getElementType ()I
 }
 
@@ -365,6 +367,7 @@ public final class org/kryptonmc/nbt/ImmutableListTag : org/kryptonmc/nbt/Scoped
 	public fun add (Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ImmutableListTag;
 	public synthetic fun add (Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ListTag;
 	public fun addTag (ILorg/kryptonmc/nbt/Tag;)V
+	public fun addTag (Lorg/kryptonmc/nbt/Tag;)V
 	public fun copy ()Lorg/kryptonmc/nbt/ListTag;
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/Tag;
 	public synthetic fun getData ()Ljava/util/List;
@@ -725,6 +728,7 @@ public final class org/kryptonmc/nbt/MutableListTag : org/kryptonmc/nbt/ScopedLi
 	public synthetic fun add (Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/ListTag;
 	public fun add (Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/MutableListTag;
 	public fun addTag (ILorg/kryptonmc/nbt/Tag;)V
+	public fun addTag (Lorg/kryptonmc/nbt/Tag;)V
 	public final fun clear ()V
 	public synthetic fun copy ()Lorg/kryptonmc/nbt/ListTag;
 	public fun copy ()Lorg/kryptonmc/nbt/MutableListTag;
