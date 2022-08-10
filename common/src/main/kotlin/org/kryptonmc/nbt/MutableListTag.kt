@@ -30,11 +30,17 @@ public class MutableListTag(public override val data: MutableList<Tag>, elementT
         throw UnsupportedOperationException("Cannot add tag of type ${tag.id} to list of type $elementType!")
     }
 
-    override fun add(tag: Tag): MutableListTag {
+    override fun add(tag: Tag): MutableListTag = apply { genericAdd(tag) { data.add(tag) } }
+
+    override fun addTag(index: Int, tag: Tag) {
+        genericAdd(tag) { data.add(index, tag) }
+    }
+
+    private inline fun genericAdd(tag: Tag, adder: () -> Unit) {
         if (tag.id == 0) throw UnsupportedOperationException("Cannot add end tag to list!")
         if (updateType(tag)) {
-            data.add(tag)
-            return this
+            adder()
+            return
         }
         throw UnsupportedOperationException("Cannot add tag of type ${tag.id} to list of type $elementType!")
     }

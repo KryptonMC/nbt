@@ -25,7 +25,7 @@ import java.util.function.LongConsumer
 /**
  * A tag holding a list of values of the given tag type [elementType].
  */
-public sealed class ListTag : Tag, Iterable<Tag> {
+public sealed class ListTag : CollectionTag<Tag> {
 
     /**
      * The backing data held by this list tag.
@@ -35,7 +35,7 @@ public sealed class ListTag : Tag, Iterable<Tag> {
     /**
      * The type of element held by this list tag.
      */
-    public abstract val elementType: Int
+    public abstract override val elementType: Int
 
     /**
      * If this list tag is mutable, meaning writes will modify the internal
@@ -56,8 +56,8 @@ public sealed class ListTag : Tag, Iterable<Tag> {
     final override val type: TagType
         get() = TYPE
 
-    public val size: Int
-        @JvmName("size") get() = data.size
+    override val size: Int
+        get() = data.size
 
     /**
      * Checks if this list tag contains the given [element].
@@ -65,7 +65,9 @@ public sealed class ListTag : Tag, Iterable<Tag> {
      * @param element the element
      * @return true if this list tag contains the element, false otherwise
      */
-    public fun contains(element: Tag): Boolean = data.contains(element)
+    final override fun contains(element: Tag): Boolean = data.contains(element)
+
+    final override fun containsAll(elements: Collection<Tag>): Boolean = data.containsAll(elements)
 
     /**
      * Gets the tag at the given [index].
@@ -461,7 +463,7 @@ public sealed class ListTag : Tag, Iterable<Tag> {
         forEachCompound(action::accept)
     }
 
-    public fun isEmpty(): Boolean = data.isEmpty()
+    override fun isEmpty(): Boolean = data.isEmpty()
 
     final override fun iterator(): Iterator<Tag> = data.iterator()
 

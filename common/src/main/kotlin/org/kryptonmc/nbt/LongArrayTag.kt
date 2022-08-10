@@ -18,15 +18,17 @@ import java.util.function.LongConsumer
 /**
  * A tag that holds a long array.
  */
-public class LongArrayTag(data: LongArray) : Tag {
+public class LongArrayTag(data: LongArray) : AbstractCollectionTag<LongTag>() {
 
     /**
      * The backing data for this tag.
      */
     public var data: LongArray = data
         private set
-    public val size: Int
+    override val size: Int
         get() = data.size
+    override val elementType: Int
+        get() = LongTag.ID
 
     override val id: Int
         get() = ID
@@ -40,10 +42,16 @@ public class LongArrayTag(data: LongArray) : Tag {
      */
     public constructor(data: Collection<Long>) : this(data.toLongArray())
 
-    public fun get(index: Int): Long = data[index]
+    override fun get(index: Int): LongTag = LongTag.of(data[index])
 
     public fun set(index: Int, value: Long) {
         data[index] = value
+    }
+
+    override fun set(index: Int, element: LongTag): LongTag {
+        val old = data[index]
+        data[index] = element.value
+        return LongTag.of(old)
     }
 
     public fun add(value: Long) {
@@ -55,20 +63,30 @@ public class LongArrayTag(data: LongArray) : Tag {
         data = data.add(index, value)
     }
 
+    override fun add(index: Int, element: LongTag) {
+        add(index, element.value)
+    }
+
     public fun remove(index: Int) {
         data = data.remove(index)
     }
 
+    override fun removeAt(index: Int): LongTag {
+        val old = data[index]
+        data = data.remove(index)
+        return LongTag.of(old)
+    }
+
     @JvmSynthetic
-    public inline fun forEach(action: (Long) -> Unit) {
+    public inline fun forEachLong(action: (Long) -> Unit) {
         data.forEach(action)
     }
 
-    public fun forEach(action: LongConsumer) {
+    public fun forEachLong(action: LongConsumer) {
         data.forEach(action::accept)
     }
 
-    public fun clear() {
+    override fun clear() {
         data = EMPTY_DATA
     }
 

@@ -18,15 +18,17 @@ import java.util.function.Consumer
 /**
  * A tag that holds a byte array.
  */
-public class ByteArrayTag(data: ByteArray) : Tag {
+public class ByteArrayTag(data: ByteArray) : AbstractCollectionTag<ByteTag>() {
 
     /**
      * The backing data for this tag.
      */
     public var data: ByteArray = data
         private set
-    public val size: Int
-        @JvmName("size") get() = data.size
+    override val size: Int
+        get() = data.size
+    override val elementType: Int
+        get() = ByteTag.ID
 
     override val id: Int
         get() = ID
@@ -40,10 +42,16 @@ public class ByteArrayTag(data: ByteArray) : Tag {
      */
     public constructor(data: Collection<Byte>) : this(data.toByteArray())
 
-    public fun get(index: Int): Byte = data[index]
+    override fun get(index: Int): ByteTag = ByteTag.of(data[index])
 
     public fun set(index: Int, value: Byte) {
         data[index] = value
+    }
+
+    override fun set(index: Int, element: ByteTag): ByteTag {
+        val old = data[index]
+        data[index] = element.value
+        return ByteTag.of(old)
     }
 
     public fun add(value: Byte) {
@@ -55,20 +63,30 @@ public class ByteArrayTag(data: ByteArray) : Tag {
         data = data.add(index, value)
     }
 
+    override fun add(index: Int, element: ByteTag) {
+        add(index, element.value)
+    }
+
     public fun remove(index: Int) {
         data = data.remove(index)
     }
 
+    override fun removeAt(index: Int): ByteTag {
+        val old = data[index]
+        data = data.remove(index)
+        return ByteTag.of(old)
+    }
+
     @JvmSynthetic
-    public inline fun forEach(action: (Byte) -> Unit) {
+    public inline fun forEachByte(action: (Byte) -> Unit) {
         data.forEach(action)
     }
 
-    public fun forEach(action: Consumer<Byte>) {
+    public fun forEachByte(action: Consumer<Byte>) {
         data.forEach(action::accept)
     }
 
-    public fun clear() {
+    override fun clear() {
         data = EMPTY_DATA
     }
 

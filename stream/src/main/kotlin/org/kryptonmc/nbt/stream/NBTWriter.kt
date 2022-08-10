@@ -247,17 +247,17 @@ public interface NBTWriter : Closeable {
             }
             is ByteArrayTag -> {
                 beginByteArray(tag.size)
-                tag.forEach { value(it) }
+                tag.forEachByte { value(it) }
                 endByteArray()
             }
             is IntArrayTag -> {
                 beginIntArray(tag.size)
-                tag.forEach { value(it) }
+                tag.forEachInt { value(it) }
                 endIntArray()
             }
             is LongArrayTag -> {
                 beginLongArray(tag.size)
-                tag.forEach { value(it) }
+                tag.forEachLong { value(it) }
                 endLongArray()
             }
             else -> error("Don't know how to write $tag!")

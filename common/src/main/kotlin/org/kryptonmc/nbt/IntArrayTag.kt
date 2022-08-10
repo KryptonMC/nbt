@@ -18,15 +18,17 @@ import java.util.function.IntConsumer
 /**
  * A tag that holds an integer array.
  */
-public class IntArrayTag(data: IntArray) : Tag {
+public class IntArrayTag(data: IntArray) : AbstractCollectionTag<IntTag>() {
 
     /**
      * The backing data for this tag.
      */
     public var data: IntArray = data
         private set
-    public val size: Int
+    override val size: Int
         get() = data.size
+    override val elementType: Int
+        get() = IntTag.ID
 
     override val id: Int
         get() = ID
@@ -40,10 +42,16 @@ public class IntArrayTag(data: IntArray) : Tag {
      */
     public constructor(data: Collection<Int>) : this(data.toIntArray())
 
-    public fun get(index: Int): Int = data[index]
+    override fun get(index: Int): IntTag = IntTag.of(data[index])
 
     public fun set(index: Int, value: Int) {
         data[index] = value
+    }
+
+    override fun set(index: Int, element: IntTag): IntTag {
+        val old = data[index]
+        data[index] = element.value
+        return IntTag.of(old)
     }
 
     public fun add(value: Int) {
@@ -55,20 +63,30 @@ public class IntArrayTag(data: IntArray) : Tag {
         data = data.add(index, value)
     }
 
+    override fun add(index: Int, element: IntTag) {
+        add(index, element.value)
+    }
+
     public fun remove(index: Int) {
         data = data.remove(index)
     }
 
+    override fun removeAt(index: Int): IntTag {
+        val old = data[index]
+        data = data.remove(index)
+        return IntTag.of(old)
+    }
+
     @JvmSynthetic
-    public inline fun forEach(action: (Int) -> Unit) {
+    public inline fun forEachInt(action: (Int) -> Unit) {
         data.forEach(action)
     }
 
-    public fun forEach(action: IntConsumer) {
+    public fun forEachInt(action: IntConsumer) {
         data.forEach(action::accept)
     }
 
-    public fun clear() {
+    override fun clear() {
         data = EMPTY_DATA
     }
 

@@ -54,7 +54,7 @@ public class StringTagExaminer : TagExaminer<String> {
         builder.append("[B;")
         for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(tag.get(i)).append('B')
+            builder.append(tag.data[i]).append('B')
         }
         builder.append(']')
     }
@@ -85,7 +85,7 @@ public class StringTagExaminer : TagExaminer<String> {
         builder.append("[I;")
         for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(tag.get(i))
+            builder.append(tag.data[i])
         }
         builder.append(']')
     }
@@ -94,7 +94,7 @@ public class StringTagExaminer : TagExaminer<String> {
         builder.append("[L;")
         for (i in 0 until tag.size) {
             if (i != 0) builder.append(',')
-            builder.append(tag.get(i)).append('L')
+            builder.append(tag.data[i]).append('L')
         }
         builder.append(']')
     }
