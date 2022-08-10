@@ -191,7 +191,9 @@ public abstract class org/kryptonmc/nbt/CompoundTag$Builder {
 	public static final field Companion Lorg/kryptonmc/nbt/CompoundTag$Builder$Companion;
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public abstract fun build ()Lorg/kryptonmc/nbt/CompoundTag;
-	protected fun getTags ()Ljava/util/Map;
+	public final fun from (Lorg/kryptonmc/nbt/CompoundTag$Builder;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun from (Lorg/kryptonmc/nbt/CompoundTag;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	protected fun getData ()Ljava/util/Map;
 	public static final synthetic fun immutable$nbt_common (Lkotlinx/collections/immutable/PersistentMap;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public static final synthetic fun mutable$nbt_common (Ljava/util/Map;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun put (Ljava/lang/String;Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
@@ -199,7 +201,8 @@ public abstract class org/kryptonmc/nbt/CompoundTag$Builder {
 	public final fun putByte (Ljava/lang/String;B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putByteArray (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putBytes (Ljava/lang/String;[B)Lorg/kryptonmc/nbt/CompoundTag$Builder;
-	public final fun putCompound (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putCompound (Ljava/lang/String;Ljava/util/function/Consumer;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final synthetic fun putCompound (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putDouble (Ljava/lang/String;D)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putFloat (Ljava/lang/String;F)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putInt (Ljava/lang/String;I)Lorg/kryptonmc/nbt/CompoundTag$Builder;
@@ -207,7 +210,8 @@ public abstract class org/kryptonmc/nbt/CompoundTag$Builder {
 	public final fun putInts (Ljava/lang/String;[I)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putList (Ljava/lang/String;ILjava/util/Collection;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putList (Ljava/lang/String;I[Lorg/kryptonmc/nbt/Tag;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
-	public final fun putList (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final fun putList (Ljava/lang/String;Ljava/util/function/Consumer;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
+	public final synthetic fun putList (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putLong (Ljava/lang/String;J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putLongArray (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
 	public final fun putLongs (Ljava/lang/String;[J)Lorg/kryptonmc/nbt/CompoundTag$Builder;
@@ -544,6 +548,8 @@ public abstract class org/kryptonmc/nbt/ListTag$Builder {
 	public final fun addString (Ljava/lang/String;)Lorg/kryptonmc/nbt/ListTag$Builder;
 	public final fun addUUID (Ljava/util/UUID;)Lorg/kryptonmc/nbt/ListTag$Builder;
 	public abstract fun build ()Lorg/kryptonmc/nbt/ListTag;
+	public final fun from (Lorg/kryptonmc/nbt/ListTag$Builder;)Lorg/kryptonmc/nbt/ListTag$Builder;
+	public final fun from (Lorg/kryptonmc/nbt/ListTag;)Lorg/kryptonmc/nbt/ListTag$Builder;
 	protected fun getData ()Ljava/util/List;
 	protected final fun getElementType ()I
 	public static final synthetic fun immutable$nbt_common (Lkotlinx/collections/immutable/PersistentList;I)Lorg/kryptonmc/nbt/ListTag$Builder;

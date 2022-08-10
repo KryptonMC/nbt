@@ -749,7 +749,7 @@ public sealed class CompoundTag : Tag {
     /**
      * A builder for building compound tags.
      */
-    public sealed class Builder(protected open val tags: MutableMap<String, Tag>) {
+    public sealed class Builder(protected open val data: MutableMap<String, Tag>) {
 
         /**
          * Sets the value of the given [name] to the given [value].
@@ -759,7 +759,7 @@ public sealed class CompoundTag : Tag {
          * @return this builder
          */
         @NBTDsl
-        public fun put(name: String, value: Tag): Builder = apply { tags[name] = value }
+        public fun put(name: String, value: Tag): Builder = apply { data[name] = value }
 
         /**
          * Sets the value of the given [name] to the given byte [value].
@@ -939,8 +939,11 @@ public sealed class CompoundTag : Tag {
          */
         @NBTDsl
         @JvmName("putList")
+        @JvmSynthetic
         public inline fun list(name: String, builder: ListTag.Builder.() -> Unit): Builder =
             put(name, ListTag.immutableBuilder().apply(builder).build())
+
+        public fun putList(name: String, builder: Consumer<ListTag.Builder>): Builder = list(name, builder::accept)
 
         /**
          * Sets the value of the given [name] to the result of creating a new
@@ -980,7 +983,10 @@ public sealed class CompoundTag : Tag {
          */
         @NBTDsl
         @JvmName("putCompound")
+        @JvmSynthetic
         public inline fun compound(name: String, builder: Builder.() -> Unit): Builder = put(name, immutableBuilder().apply(builder).build())
+
+        public fun putCompound(name: String, builder: Consumer<Builder>): Builder = compound(name, builder::accept)
 
         /**
          * Removes the value for the given [name].
@@ -989,7 +995,31 @@ public sealed class CompoundTag : Tag {
          * @return this builder
          */
         @NBTDsl
-        public fun remove(name: String): Builder = apply { tags.remove(name) }
+        public fun remove(name: String): Builder = apply { data.remove(name) }
+
+        /**
+         * Adds all the values from the [other] builder to this builder.
+         *
+         * This is useful for avoiding the need to create a new tag to merge
+         * two tags that are in the process of being built.
+         *
+         * @param other the other builder to add the tags from
+         * @return this builder
+         */
+        @NBTDsl
+        public fun from(other: Builder): Builder = apply { data.putAll(other.data) }
+
+        /**
+         * Adds all the values from the [other] tag to this builder.
+         *
+         * This is a handy shortcut that is equivalent to looping over the
+         * other's data and calling `put` on this builder.
+         *
+         * @param other the other tag to add the tags from
+         * @return this builder
+         */
+        @NBTDsl
+        public fun from(other: CompoundTag): Builder = apply { data.putAll(other.data) }
 
         /**
          * Creates a new compound tag containing the values set in this
@@ -1013,14 +1043,14 @@ public sealed class CompoundTag : Tag {
         }
     }
 
-    private class ImmutableBuilder(override val tags: PersistentMap.Builder<String, Tag>) : Builder(tags) {
+    private class ImmutableBuilder(override val data: PersistentMap.Builder<String, Tag>) : Builder(data) {
 
-        override fun build(): CompoundTag = ImmutableCompoundTag(tags.build())
+        override fun build(): CompoundTag = ImmutableCompoundTag(data.build())
     }
 
     private class MutableBuilder(tags: MutableMap<String, Tag>) : Builder(tags) {
 
-        override fun build(): CompoundTag = MutableCompoundTag(tags)
+        override fun build(): CompoundTag = MutableCompoundTag(data)
     }
 
     public companion object {

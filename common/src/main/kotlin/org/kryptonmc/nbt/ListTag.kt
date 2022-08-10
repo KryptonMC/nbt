@@ -671,6 +671,30 @@ public sealed class ListTag : Tag, Iterable<Tag> {
         public fun remove(element: Tag): Builder = apply { data.remove(element) }
 
         /**
+         * Adds all the values from the [other] builder to this builder.
+         *
+         * This is useful for avoiding the need to create a new tag to merge
+         * two tags that are in the process of being built.
+         *
+         * @param other the other builder to add the tags from
+         * @return this builder
+         */
+        @NBTDsl
+        public fun from(other: Builder): Builder = apply { data.addAll(other.data) }
+
+        /**
+         * Adds all the values from the [other] tag to this builder.
+         *
+         * This is a handy shortcut that is equivalent to looping over the
+         * other's data and calling `put` on this builder.
+         *
+         * @param other the other tag to add the tags from
+         * @return this builder
+         */
+        @NBTDsl
+        public fun from(other: ListTag): Builder = apply { data.addAll(other.data) }
+
+        /**
          * Creates a new list tag containing the values set in this builder.
          * Whether the resulting tag is mutable or immutable depends on what
          * was supplied to the builder when the builder functions were called.
