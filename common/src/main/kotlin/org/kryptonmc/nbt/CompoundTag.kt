@@ -195,6 +195,17 @@ public sealed class CompoundTag : Tag {
     }
 
     /**
+     * Gets the UUID value with the given [name], or returns null if there is
+     * no UUID value with the given [name].
+     *
+     * How a UUID is defined is described by [hasUUID].
+     *
+     * @param name the name of the tag
+     * @return the UUID value, or null if not present
+     */
+    public fun getUUID(name: String): UUID? = get(name)?.toUUID()
+
+    /**
      * Gets the UUID value with the given [name], or returns the given
      * [default] value if there is no UUID value with the given [name].
      *
@@ -203,8 +214,7 @@ public sealed class CompoundTag : Tag {
      * @param name the name of the tag
      * @return the UUID value, or the default if not present
      */
-    @JvmOverloads
-    public fun getUUID(name: String, default: UUID? = null): UUID? = get(name)?.toUUID() ?: default
+    public fun getUUID(name: String, default: UUID): UUID = getUUID(name) ?: default
 
     /**
      * Gets the byte array with the given [name], or returns the given

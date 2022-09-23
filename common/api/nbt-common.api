@@ -178,7 +178,6 @@ public abstract class org/kryptonmc/nbt/CompoundTag : org/kryptonmc/nbt/Tag {
 	public final fun getType ()Lorg/kryptonmc/nbt/TagType;
 	public final fun getUUID (Ljava/lang/String;)Ljava/util/UUID;
 	public final fun getUUID (Ljava/lang/String;Ljava/util/UUID;)Ljava/util/UUID;
-	public static synthetic fun getUUID$default (Lorg/kryptonmc/nbt/CompoundTag;Ljava/lang/String;Ljava/util/UUID;ILjava/lang/Object;)Ljava/util/UUID;
 	public final fun hasUUID (Ljava/lang/String;)Z
 	public final fun hashCode ()I
 	public final fun immutable ()Lorg/kryptonmc/nbt/ImmutableCompoundTag;
