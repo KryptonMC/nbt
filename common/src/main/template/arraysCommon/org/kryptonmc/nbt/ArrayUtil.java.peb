@@ -1,0 +1,33 @@
+package org.kryptonmc.nbt;
+
+/**
+ * Utilities for adding to and removing from arrays.
+ */
+final class ArrayUtil {
+{% for type in variants %}
+
+    static {{ type.value.element }}[] add(final {{ type.value.element }}[] original, final int index, final {{ type.value.element }} value) {
+        final int length = original.length;
+        if (index > length || index < 0) throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds for length " + length + "!");
+        final {{ type.value.element }}[] result = new {{ type.value.element }}[length + 1];
+        System.arraycopy(original, 0, result, 0, index);
+        result[index] = value;
+        if (index < length) System.arraycopy(original, index, result, index + 1, length - index);
+        return result;
+    }
+{% endfor %}
+{% for type in variants %}
+
+    static {{ type.value.element }}[] remove(final {{ type.value.element }}[] original, final int index) {
+        final int length = original.length;
+        if (index < 0 || index >= length) throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds for length " + length + "!");
+        final {{ type.value.element }}[] result = new {{ type.value.element }}[length - 1];
+        System.arraycopy(original, 0, result, 0, index);
+        if (index < length - 1) System.arraycopy(original, index + 1, result, index, length - index - 1);
+        return result;
+    }
+{% endfor %}
+
+    private ArrayUtil() {
+    }
+}

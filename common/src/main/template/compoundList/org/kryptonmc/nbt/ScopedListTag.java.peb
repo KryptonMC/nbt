@@ -1,0 +1,69 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' ? "@NotNull " : "" }}{% endmacro %}
+package org.kryptonmc.nbt;
+
+import org.jetbrains.annotations.NotNull;
+
+sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permits ImmutableListTag, MutableListTag {
+
+    @Override
+    @NotNull T add(final @NotNull Tag tag);
+
+    @Override
+    @NotNull T remove(final int index);
+
+    @Override
+    @NotNull T remove(final @NotNull Tag tag);
+
+    @Override
+    @NotNull T set(final int index, final @NotNull Tag tag);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    @Override
+    @NotNull T set{{ type.value.E }}(final int index, final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+    @Override
+    @NotNull T set{{ type.value.plural }}(final int index, final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+
+    @Override
+    @NotNull T copy();
+
+    sealed interface Builder<B extends Builder<B>> extends ListTag.Builder permits ImmutableListTag.Builder, MutableListTag.Builder {
+
+        @Override
+        @NotNull B add(final @NotNull Tag tag);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+        @Override
+        default @NotNull B add{{ type.value.E }}(final {{ notNullIfObject(type) }}{{ type.value.e }} value) {
+{% if type.value.E == 'Boolean' %}
+            return add(ByteTag.of(value));
+{% else %}
+            return add({{ type.value.E }}Tag.of(value));
+{% endif %}
+        }
+{% if type.value.type == 'array' %}
+
+        @Override
+        default @NotNull B add{{ type.value.plural }}(final {{ type.value.componentType }}@NotNull... values) {
+            return add({{ type.value.E }}Tag.of(values));
+        }
+{% endif %}
+{% endif %}
+{% endfor %}
+
+        @Override
+        @NotNull B remove(final @NotNull Tag element);
+
+        @Override
+        @NotNull B from(final @NotNull ListTag.Builder other);
+
+        @Override
+        @NotNull B from(final @NotNull ListTag other);
+    }
+}

@@ -1,0 +1,87 @@
+package org.kryptonmc.nbt;
+
+import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+
+/**
+ * A tag that holds a byte value.
+ */
+public sealed interface {{E}}Tag extends NumberTag permits {{E}}TagImpl {
+
+    /**
+     * The {{e}} tag representing the constant zero.
+     */
+{% if cached == 'none' %}
+    @NotNull {{E}}Tag ZERO = new {{E}}TagImpl({{ zero }});
+{% elseif E == 'Byte' or E == 'Short' %}
+    @NotNull {{E}}Tag ZERO = of(({{e}}) 0);
+{% else %}
+    @NotNull {{E}}Tag ZERO = of(0);
+{% endif %}
+{% if E == 'Byte' %}
+    /**
+     * The byte tag representing the constant one.
+     */
+    @NotNull ByteTag ONE = of((byte) 1);
+{% endif %}
+
+    /**
+     * The ID of this type of tag.
+     *
+     * <p>Used for {@link CollectionTag#elementType()} and in the serialized
+     * binary form.</p>
+     */
+    int ID = {{ id }};
+    /**
+     * The reader for reading {{e}} tags.
+     */
+    @NotNull TagReader<{{E}}Tag> READER = (input, depth) -> of(input.read{{E}}());
+    /**
+     * The writer for writing {{e}} tags.
+     */
+    @NotNull TagWriter<{{E}}Tag> WRITER = (output, value) -> output.write{{E}}(value.value());
+    /**
+     * The tag type for this tag.
+     */
+    @NotNull TagType<{{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, READER);
+
+    /**
+     * Gets {{ E == 'Int' ? "an" : "a" }} {{e}} tag representing the given value.
+     *
+     * @param value the backing value
+     * @return {{ E == 'Int' ? "an" : "a" }} {{e}} tag representing the value
+     */
+    static @NotNull {{E}}Tag of(final {{e}} value) {
+{% if cached == 'none' %}
+        return value == {{ zero }} ? ZERO : new {{E}}TagImpl(value);
+{% else %}
+        return {{E}}TagImpl.of(value);
+{% endif %}
+    }
+{% if E == 'Byte' %}
+
+    /**
+     * Gets the byte tag representing the given value.
+     *
+     * <p>The boolean here will be converted to its byte representation, i.e.
+     * ONE for a true value, and ZERO for a false one.</p>
+     *
+     * @param value the value
+     * @return the byte tag representing the value
+     */
+    static @NotNull ByteTag of(final boolean value) {
+        return value ? ONE : ZERO;
+    }
+{% endif %}
+
+    /**
+     * Gets the underlying value of this {{e}} tag.
+     *
+     * @return the value
+     */
+     {{e}} value();
+
+    @Override
+    @NotNull {{E}}Tag copy();
+}

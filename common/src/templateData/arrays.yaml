@@ -1,0 +1,16 @@
+variants:
+  byte:
+    element: "byte"
+    e: "byte"
+    E: "Byte"
+    ConsumerImport: "org.kryptonmc.nbt.util.ByteConsumer"
+  int:
+    element: "int"
+    e: "int"
+    E: "Int"
+    ConsumerImport: "java.util.function.IntConsumer"
+  long:
+    element: "long"
+    e: "long"
+    E: "Long"
+    ConsumerImport: "java.util.function.LongConsumer"

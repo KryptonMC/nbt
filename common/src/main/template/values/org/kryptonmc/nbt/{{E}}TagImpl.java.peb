@@ -1,0 +1,133 @@
+package org.kryptonmc.nbt;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+
+record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
+{% if cached != 'none' %}
+
+    static {{E}}Tag of(final {{e}} value) {
+{% if cached == 'all' %}
+        return Cache.CACHE[value - Cache.LOWER_LIMIT];
+{% elseif cached == 'some' %}
+        if (value >= Cache.LOWER_LIMIT && value <= Cache.UPPER_LIMIT) return Cache.CACHE[{{ E == 'Long' ? "(int) " : "" }}value - Cache.LOWER_LIMIT];
+        return new {{E}}TagImpl(value);
+{% else %}
+        return value == {{ zero }} ? ZERO : new {{E}}TagImpl(value)
+{% endif %}
+    }
+{% endif %}
+
+    @Override
+    public int id() {
+        return ID;
+    }
+
+    @Override
+    public @NotNull TagType<{{E}}Tag> type() {
+        return TYPE;
+    }
+
+    @Override
+    public void write(final @NotNull DataOutput output) throws IOException {
+        WRITER.write(output, this);
+    }
+
+    @Override
+    public <T> void visit(final @NotNull TagVisitor<T> visitor) {
+        visitor.visit{{E}}(this);
+    }
+
+    @Override
+    public @NotNull {{E}}Tag copy() {
+        return this;
+    }
+{% if cached == 'all' %}
+
+    @Override
+    public boolean equals(final Object obj) {
+        return this == obj;
+    }
+{% endif %}
+
+    @Override
+    public @NotNull Number asNumber() {
+        return value;
+    }
+
+    @Override
+    public double toDouble() {
+        return value;
+    }
+
+    @Override
+    public float toFloat() {
+        return {{ E == 'Double' ? "(float) value" : "value" }};
+    }
+
+    @Override
+    public long toLong() {
+{% if E == 'Double' %}
+        return (long) Math.floor(value);
+{% elseif E == 'Float' %}
+        return (long) value;
+{% else %}
+        return value;
+{% endif %}
+    }
+
+    @Override
+    public int toInt() {
+{% if type == 'real' %}
+        return FloorMath.floor(value);
+{% elseif E == 'Long' %}
+        return (int) value;
+{% else %}
+        return value;
+{% endif %}
+    }
+
+    @Override
+    public short toShort() {
+{% if type == 'real' %}
+        return (short) (FloorMath.floor(value) & 0xFFFF);
+{% elseif E == 'Int' or E == 'Long' %}
+        return (short) (value & 0xFFFF);
+{% else %}
+        return value;
+{% endif %}
+    }
+
+    @Override
+    public byte toByte() {
+{% if type == 'real' %}
+        return (byte) (FloorMath.floor(value) & 0xFF);
+{% elseif E != 'Byte' %}
+        return (byte) (value & 0xFF);
+{% else %}
+        return value;
+{% endif %}
+    }
+{% if cached != 'none' %}
+
+    private static final class Cache {
+
+        public static final int LOWER_LIMIT = -128;
+{% if cached == 'some' %}
+        public static final int UPPER_LIMIT = 1024;
+{% endif %}
+        public static final {{E}}Tag[] CACHE = new {{E}}Tag[{{ cached == 'all' ? "256" : "UPPER_LIMIT - LOWER_LIMIT + 1" }}];
+
+        static {
+            for (int i = 0; i < CACHE.length; i++) {
+{% if E == 'Byte' or E == 'Short' %}
+                CACHE[i] = new {{E}}TagImpl(({{e}}) (i + LOWER_LIMIT));
+{% else %}
+                CACHE[i] = new {{E}}TagImpl(i + LOWER_LIMIT);
+{% endif %}
+            }
+        }
+    }
+{% endif %}
+}

@@ -1,0 +1,91 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' ? "@NotNull " : "" }}{% endmacro %}
+package org.kryptonmc.nbt;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+import org.pcollections.TreePVector;
+
+sealed interface ScopedCompoundTag<T extends ScopedCompoundTag<T>> extends CompoundTag permits ImmutableCompoundTag, MutableCompoundTag {
+
+    @Override
+    @NotNull T remove(final @NotNull String name);
+
+    @Override
+    @NotNull T put(final @NotNull String name, final @NotNull Tag value);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    @Override
+    @NotNull T put{{ type.value.E }}(final @NotNull String name, final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+    @Override
+    @NotNull T put{{ type.value.plural }}(final @NotNull String name, final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+
+    @Override
+    @NotNull T copy();
+
+    sealed interface Builder<B extends Builder<B>> extends CompoundTag.Builder permits ImmutableCompoundTag.Builder, MutableCompoundTag.Builder {
+
+        @Override
+        @NotNull B put(final @NotNull String name, final @NotNull Tag value);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+        @Override
+        default @NotNull B put{{ type.value.E }}(final @NotNull String name, final {{ notNullIfObject(type) }}{{ type.value.e }} value) {
+{% if type.value.E == 'Boolean' %}
+            return put(name, ByteTag.of(value));
+{% else %}
+            return put(name, {{ type.value.E }}Tag.of(value));
+{% endif %}
+        }
+{% if type.value.type == 'array' %}
+
+        @Override
+        default @NotNull B put{{ type.value.plural }}(final @NotNull String name, final {{ type.value.componentType }}@NotNull... values) {
+            return put(name, {{ type.value.E }}Tag.of(values));
+        }
+{% endif %}
+{% endif %}
+{% endfor %}
+
+        @Override
+        default @NotNull B putList(final @NotNull String name, final @NotNull Consumer<ListTag.Builder> builder) {
+            final var list = ImmutableListTag.builder();
+            builder.accept(list);
+            return put(name, list.build());
+        }
+
+        @Override
+        default @NotNull B putList(final @NotNull String name, final int elementType, final @NotNull Tag@NotNull... elements) {
+            return putList(name, elementType, Arrays.asList(elements));
+        }
+
+        @Override
+        default @NotNull B putList(final @NotNull String name, final int elementType, final @NotNull Collection<Tag> elements) {
+            return put(name, ImmutableListTag.of(TreePVector.from(elements), elementType));
+        }
+
+        @Override
+        default @NotNull B putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.Builder> builder) {
+            final var compound = ImmutableCompoundTag.builder();
+            builder.accept(compound);
+            return put(name, compound.build());
+        }
+
+        @Override
+        @NotNull B remove(final @NotNull String name);
+
+        @Override
+        @NotNull B from(final @NotNull CompoundTag.Builder other);
+
+        @Override
+        @NotNull B from(final @NotNull CompoundTag other);
+    }
+}

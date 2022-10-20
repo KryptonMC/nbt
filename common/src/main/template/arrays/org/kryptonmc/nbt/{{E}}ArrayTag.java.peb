@@ -1,0 +1,127 @@
+package org.kryptonmc.nbt;
+
+import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+import {{ConsumerImport}};
+
+/**
+ * A tag that holds a {{e}} array.
+ */
+public sealed interface {{E}}ArrayTag extends ListCollectionTag<{{E}}Tag>, ScopedTag<{{E}}ArrayTag> permits {{E}}ArrayTagImpl {
+
+    /**
+     * The ID of this type of tag.
+     *
+     * <p>Used for {@link CollectionTag#elementType()} and in the serialized
+     * binary form.</p>
+     */
+{% if E == 'Byte' %}
+    int ID = 7;
+{% elseif E == 'Int' %}
+    int ID = 11;
+{% else %}
+    int ID = 12;
+{% endif %}
+    /**
+     * The reader for reading {{e}} array tags.
+     */
+    @NotNull TagReader<{{E}}ArrayTag> READER = (input, depth) -> {
+        final int length = input.readInt();
+        final {{e}}[] data = new {{e}}[length];
+{% if E == 'Byte' %}
+        input.readFully(data);
+{% else %}
+        for (int i = 0; i < length; i++) {
+            data[i] = input.read{{E}}();
+        }
+{% endif %}
+        return new {{E}}ArrayTagImpl(data);
+    };
+    /**
+     * The writer for writing {{e}} array tags.
+     */
+    @NotNull TagWriter<{{E}}ArrayTag> WRITER = (output, value) -> {
+        output.writeInt(value.getData().length);
+{% if E == 'Byte' %}
+        output.write(value.getData());
+{% else %}
+        for (final {{e}} element : value.getData()) {
+            output.write{{E}}(element);
+        }
+{% endif %}
+    };
+    /**
+     * The tag type for this tag.
+     */
+    @NotNull TagType<{{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, READER);
+
+    /**
+     * Creates a new {{e}} array tag with the given data.
+     *
+     * @param data the data
+     * @return a new {{e}} array tag
+     */
+    static @NotNull {{E}}ArrayTag of(final {{e}}@NotNull[] data) {
+        return new {{E}}ArrayTagImpl(data);
+    }
+
+    /**
+     * Gets the backing data for this tag.
+     *
+     * @return the backing data
+     */
+    {{e}}@NotNull[] getData();
+
+    /**
+     * Sets the backing data for this tag to the given data.
+     *
+     * @param data the new backing data
+     */
+    void setData(final {{e}}@NotNull[] data);
+
+    @Override
+    @NotNull {{E}}Tag get(final int index);
+
+    /**
+     * Sets the element at the given index to the given value.
+     *
+     * @param index the index
+     * @param value the value
+     */
+    void set(final int index, final {{e}} value);
+
+    @Override
+    @NotNull {{E}}Tag set(final int index, final @NotNull {{E}}Tag element);
+
+    /**
+     * Adds the given value to this tag.
+     *
+     * @param value the value to add
+     */
+    void add(final {{e}} value);
+
+    /**
+     * Adds the given value to this tag at the given index.
+     *
+     * @param index the index
+     * @param value the value to add
+     */
+    void add(final int index, final {{e}} value);
+
+    @Override
+    void add(final int index, final @NotNull {{E}}Tag element);
+
+    @Override
+    @NotNull {{E}}Tag remove(final int index);
+
+    @Override
+    void clear();
+
+    /**
+     * Performs the given action on every element in this tag.
+     *
+     * @param action the action to perform
+     */
+    void forEach{{E}}(final @NotNull {{E}}Consumer action);
+}

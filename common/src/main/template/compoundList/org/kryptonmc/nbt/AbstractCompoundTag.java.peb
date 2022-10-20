@@ -1,0 +1,224 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' or type.value.type == 'compound' ? "@NotNull " : "" }}{% endmacro %}
+{% macro dataFromType(type) %}
+{% if type.value.type == 'primitive' or type.value.type == 'object' %}.value(){% elseif type.value.type != 'compound' %}.getData(){% else %}{% endif %}
+{% endmacro %}
+package org.kryptonmc.nbt;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.ObjDoubleConsumer;
+import java.util.function.ObjIntConsumer;
+import java.util.function.ObjLongConsumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+import org.kryptonmc.nbt.util.ObjByteConsumer;
+import org.kryptonmc.nbt.util.ObjFloatConsumer;
+import org.kryptonmc.nbt.util.ObjShortConsumer;
+import org.kryptonmc.nbt.util.Types;
+import org.pcollections.HashTreePMap;
+
+abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements CompoundTag permits MutableCompoundTagImpl, ImmutableCompoundTagImpl {
+
+    static TagReader<CompoundTag> READER = (input, depth) -> {
+        if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+        final Map<String, Tag> result = new HashMap<>();
+        for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
+            final String name = input.readUTF();
+            final Tag tag = Types.of(type).read(input, depth + 1);
+            result.put(name, tag);
+        }
+        return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
+    };
+    static TagWriter<CompoundTag> WRITER = (output, value) -> {
+        for (final var entry : value.getData().entrySet()) {
+            output.writeByte(entry.getValue().id());
+            System.out.println("Name: " + entry.getKey() + ", Tag: " + entry.getValue().type().name() + ", ID: " + entry.getValue().id());
+            if (entry.getValue().id() == EndTag.ID) continue;
+            output.writeUTF(entry.getKey());
+            entry.getValue().write(output);
+        }
+        output.writeByte(EndTag.ID);
+    };
+
+    @Override
+    public final int id() {
+        return ID;
+    }
+
+    @Override
+    public final @NotNull TagType<CompoundTag> type() {
+        return TYPE;
+    }
+
+    @Override
+    public final int size() {
+        return getData().size();
+    }
+
+    @Override
+    public final boolean isEmpty() {
+        return getData().isEmpty();
+    }
+
+    @Override
+    public final @NotNull Set<String> keySet() {
+        return getData().keySet();
+    }
+
+    @Override
+    public final @NotNull Collection<Tag> values() {
+        return getData().values();
+    }
+
+    @Override
+    public final int type(final @NotNull String name) {
+        final var tag = getData().get(name);
+        return tag == null ? EndTag.ID : tag.id();
+    }
+
+    @Override
+    public final boolean contains(final @NotNull String name) {
+        return getData().containsKey(name);
+    }
+
+    @Override
+    public final boolean contains(final @NotNull String name, final int typeId) {
+        final var type = type(name);
+        if (type == typeId) return true;
+        if (typeId != 99) return false;
+        return type == ByteTag.ID || type == ShortTag.ID || type == IntTag.ID || type == LongTag.ID || type == FloatTag.ID || type == DoubleTag.ID;
+    }
+
+    @Override
+    public final @Nullable Tag get(final @NotNull String name) {
+        return getData().get(name);
+    }
+{% for type in variants %}
+
+    @Override
+    public final {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final @NotNull String name,{{ type.value.E == 'List' ? " final int elementType," : "" }} final {{ notNullIfObject(type) }}{{ type.value.e }} defaultValue) {
+{% if type.value.E == 'Boolean' %}
+        final NumberTag tag = contains(name, 99) ? (NumberTag) getData().get(name) : null;
+        return tag == null ? defaultValue : tag.toByte() != 0;
+{% elseif type.value.E == 'List' %}
+        if (type(name) != ListTag.ID) return defaultValue;
+        final var tag = (ListTag) getData().get(name);
+        return !tag.isEmpty() && tag.elementType() != elementType ? defaultValue : tag;
+{% elseif type.value.type == 'primitive' %}
+        final NumberTag tag = contains(name, 99) ? (NumberTag) getData().get(name) : null;
+        return tag != null ? tag.to{{ type.value.E }}() : defaultValue;
+{% else %}
+        return contains(name, {{ type.value.E }}Tag.ID) ? (({{ type.value.E }}Tag) getData().get(name)){{ dataFromType(type) }} : defaultValue;
+{% endif %}
+    }
+{% endfor %}
+
+    @Override
+    public abstract @NotNull T put(final @NotNull String name, final @NotNull Tag value);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    @Override
+    public final @NotNull T put{{ type.value.E }}(final @NotNull String name, final {{ notNullIfObject(type) }}{{ type.value.e }} value) {
+{% if type.value.E == 'Boolean' %}
+        return put(name, ByteTag.of(value));
+{% else %}
+        return put(name, {{ type.value.E }}Tag.of(value));
+{% endif %}
+    }
+{% if type.value.type == 'array' %}
+
+    @Override
+    public final @NotNull T put{{ type.value.plural }}(final @NotNull String name, final {{ type.value.componentType }}@NotNull... values) {
+        return put(name, {{ type.value.E }}Tag.of(values));
+    }
+{% endif %}
+{% endif %}
+{% endfor %}
+
+    @Override
+    public final @NotNull T update(final @NotNull String name, final @NotNull Function<CompoundTag, CompoundTag> action) {
+        return put(name, action.apply(getCompound(name)));
+    }
+
+    @Override
+    public final @NotNull T update(final @NotNull String name, final int type, final @NotNull Function<ListTag, ListTag> action) {
+        return put(name, action.apply(getList(name, type)));
+    }
+{% for type in variants %}
+{% if type.value.E != 'Boolean' %}
+
+    @Override
+    public final void forEach{{ type.value.E }}(final @NotNull {{ type.value.biConsumer }} action) {
+        for (final var entry : getData().entrySet()) {
+            if (entry.getValue() instanceof final {{ type.value.E }}Tag tag) action.accept(entry.getKey(), tag{{ dataFromType(type) }});
+        }
+    }
+{% endif %}
+{% endfor %}
+
+    @Override
+    public final void write(final @NotNull DataOutput output) throws IOException {
+        WRITER.write(output, this);
+    }
+
+    @Override
+    public final <U> void visit(final @NotNull TagVisitor<U> visitor) {
+        visitor.visitCompound(this);
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return this == obj || (obj instanceof final AbstractCompoundTag<?> other && getData().equals(other.getData()));
+    }
+
+    @Override
+    public final int hashCode() {
+        return getData().hashCode();
+    }
+
+    @SuppressWarnings("unchecked")
+    static abstract sealed class Builder<B extends Builder<B, T>, T extends CompoundTag> implements CompoundTag.Builder permits ImmutableCompoundTagImpl.Builder, MutableCompoundTagImpl.Builder {
+
+        protected final Map<String, Tag> data;
+
+        protected Builder(final Map<String, Tag> data) {
+            this.data = data;
+        }
+
+        @Override
+        public @NotNull B put(final @NotNull String name, final @NotNull Tag value) {
+            data.put(name, value);
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B remove(final @NotNull String name) {
+            data.remove(name);
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B from(final CompoundTag.@NotNull Builder other) {
+            data.putAll(((Builder<?, ?>) other).data);
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B from(final @NotNull CompoundTag other) {
+            data.putAll(other.getData());
+            return (B) this;
+        }
+
+        @Override
+        public abstract @NotNull T build();
+    }
+}

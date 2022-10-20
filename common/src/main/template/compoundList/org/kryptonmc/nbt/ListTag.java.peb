@@ -1,0 +1,302 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' or type.value.type == 'compound' ? "@NotNull " : "" }}{% endmacro %}
+package org.kryptonmc.nbt;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+import org.kryptonmc.nbt.util.ByteConsumer;
+import org.kryptonmc.nbt.util.FloatConsumer;
+import org.kryptonmc.nbt.util.ShortConsumer;
+import org.pcollections.TreePVector;
+
+/**
+ * A list tag.
+ */
+public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> permits AbstractListTag, ScopedListTag {
+
+    /**
+     * The empty list tag.
+     */
+    @NotNull ListTag EMPTY = new ImmutableListTagImpl(TreePVector.empty(), EndTag.ID);
+
+    /**
+     * The ID of this type of tag.
+     *
+     * <p>Used for {@link CollectionTag#elementType()} and in the serialized
+     * binary form.</p>
+     */
+    int ID = 9;
+    /**
+     * The reader for reading list tags.
+     */
+    @NotNull TagReader<ListTag> READER = AbstractListTag.READER;
+    /**
+     * The writer for writing list tags.
+     */
+    @NotNull TagWriter<ListTag> WRITER = AbstractListTag.WRITER;
+    /**
+     * The tag type for this tag.
+     */
+    @NotNull TagType<ListTag> TYPE = new TagType<>("TAG_List", false, READER);
+
+    /**
+     * Gets the backing data for this list tag.
+     *
+     * @return the backing data
+     */
+    @NotNull List<Tag> getData();
+
+    @Override
+    int elementType();
+
+    /**
+     * Checks if this list tag is a mutable list tag.
+     *
+     * @return true if this list tag is mutable, false otherwise
+     */
+    default boolean isMutable() {
+        return this instanceof MutableListTag;
+    }
+
+    /**
+     * Checks if this list tag is an immutable list tag.
+     *
+     * @return true if this list tag is immutable, false otherwise
+     */
+    default boolean isImmutable() {
+        return this instanceof ImmutableListTag;
+    }
+
+    /**
+     * Checks if this list tag contains the given element.
+     *
+     * @param element the element
+     * @return true if this list tag contains the element, false otherwise
+     */
+    boolean contains(final @NotNull Tag element);
+
+    /**
+     * Checks if this list tag contains the all given elements.
+     *
+     * @param elements the elements
+     * @return true if this list tag contains all the elements, false otherwise
+     */
+    boolean containsAll(final @NotNull Collection<? extends Tag> elements);
+
+    /**
+     * Gets the tag at the given index.
+     *
+     * @param index the index
+     * @return the tag
+     */
+    @NotNull Tag get(final int index);
+{% for type in variants %}
+
+    /**
+     * Gets the {{ type.value.name }} value at the given index, or returns the
+     * default value if there is no {{ type.value.name }} value at the given index.
+     *
+     * @param index the index
+     * @param defaultValue the default value to return if the value was not present
+     * @return the {{ type.value.name }} value, or the default value if not present
+     */
+    {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final int index, final {{ notNullIfObject(type) }}{{ type.value.e }} defaultValue);
+
+    /**
+     * Gets the {{ type.value.name }} value at the given index, or returns {{ type.value.defaultName }}
+
+     * if there is no {{ type.value.name }} value at the given index.
+     *
+     * @param index the index
+     * @return the {{ type.value.name }} value, or {{ type.value.defaultName }} if not present
+     */
+    default {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final int index) {
+        return get{{ type.value.E }}(index, {{ type.value.default }});
+    }
+{% endfor %}
+
+    /**
+     * Adds the given tag to this list and returns the resulting list.
+     *
+     * <p>If the ID of the given tag does not match the {@link #elementType()}
+     * of this list tag, this method will throw an {@link UnsupportedOperationException}.</p>
+     *
+     * @param tag the tag to add
+     * @return the resulting list tag
+     * @throws UnsupportedOperationException if the given tag is not of the
+     * correct type for this list
+     */
+    @NotNull ListTag add(final @NotNull Tag tag);
+
+    /**
+     * Removes the tag at the given index from this list and returns the
+     * resulting list tag.
+     *
+     * @param index the index of the tag to remove
+     * @return the resulting list tag
+     */
+    @NotNull ListTag remove(final int index);
+
+    /**
+     * Removes the given tag from this list and returns the resulting list tag.
+     *
+     * @param tag the tag to remove
+     * @return the resulting list tag
+     */
+    @NotNull ListTag remove(final @NotNull Tag tag);
+
+    /**
+     * Sets the tag at the given index in this list to the given tag and
+     * returns the resulting list tag.
+     *
+     * @param index the index to set
+     * @param tag the new tag value
+     * @return the resulting list tag
+     */
+    @NotNull ListTag set(final int index, final @NotNull Tag tag);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    /**
+     * Sets the tag at the given index in this list to the given {{ type.value.name }} value
+     * and returns the resulting list tag.
+     *
+     * @param index the index to set
+     * @param value the new {{ type.value.name }} value
+     * @return the resulting list tag
+     */
+    @NotNull ListTag set{{ type.value.E }}(final int index, final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+    /**
+     * Sets the tag at the given index in this list to the given {{ type.value.componentType }} values
+     * and returns the resulting list tag.
+     *
+     * @param index the index to set
+     * @param values the new {{ type.value.componentType }} values
+     * @return the resulting list tag
+     */
+    @NotNull ListTag set{{ type.value.plural }}(final int index, final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+{% for type in variants %}
+{% if type.value.E != 'Boolean' %}
+
+    /**
+     * Performs the given action on every {{ type.value.name }} in this list.
+     *
+     * @param action the action to perform
+     */
+    void forEach{{ type.value.E }}(final @NotNull {{ type.value.consumer }} action);
+{% endif %}
+{% endfor %}
+
+    /**
+     * Converts this list tag to its mutable equivalent.
+     *
+     * <p>If this tag is already mutable, it will simply return itself.
+     * It will <strong>not</strong> create a defensive copy.</p>
+     *
+     * @return this tag in its mutable form
+     */
+    @NotNull MutableListTag asMutable();
+
+    /**
+     * Converts this list tag to its immutable equivalent.
+     *
+     * <p>If this tag is already immutable, it will simply return itself.</p>
+     *
+     * @return this tag in its immutable form
+     */
+    @NotNull ImmutableListTag asImmutable();
+
+    /**
+     * Converts this list tag in to a builder with the {@link #getData() data}
+     * of this tag already applied, allowing for easy bulk changes.
+     *
+     * @return this list tag as a builder
+     */
+    @NotNull Builder toBuilder();
+
+    /**
+     * A builder for building list tags.
+     */
+    sealed interface Builder permits AbstractListTag.Builder, ScopedListTag.Builder {
+
+        /**
+         * Adds the given tag to this builder.
+         *
+         * @param tag the tag to add
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder add(final @NotNull Tag tag);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+        /**
+         * Adds the given {{ type.value.name }} value to this builder.
+         *
+         * @param value the value to add
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder add{{ type.value.E }}(final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+        /**
+         * Adds the given {{ type.value.componentType }} values to this builder.
+         *
+         * @param values the values to add
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder add{{ type.value.plural }}(final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+
+        /**
+         * Removes the given element from this builder.
+         *
+         * @param element the element to remove
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder remove(final @NotNull Tag element);
+
+        /**
+         * Adds all the tags from the given other builder to this builder.
+         *
+         * @param other the other builder
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder from(final @NotNull Builder other);
+
+        /**
+         * Adds all the values from the other tag to this builder.
+         *
+         * @param other the other tag
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder from(final @NotNull ListTag other);
+
+        /**
+         * Builds this builder into a list tag.
+         *
+         * @return the built list tag
+         */
+        @Contract(value = "-> new", pure = true)
+        @NotNull ListTag build();
+    }
+}

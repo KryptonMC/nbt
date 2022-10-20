@@ -1,0 +1,399 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' or type.value.type == 'compound' ? "@NotNull " : "" }}{% endmacro %}
+package org.kryptonmc.nbt;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.ObjDoubleConsumer;
+import java.util.function.ObjIntConsumer;
+import java.util.function.ObjLongConsumer;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+import org.kryptonmc.nbt.util.ObjByteConsumer;
+import org.kryptonmc.nbt.util.ObjFloatConsumer;
+import org.kryptonmc.nbt.util.ObjShortConsumer;
+import org.pcollections.HashTreePMap;
+
+/**
+ * A tag that holds a map of keys to tags.
+ */
+public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits AbstractCompoundTag, ScopedCompoundTag {
+
+    /**
+     * The empty compound tag.
+     */
+    @NotNull CompoundTag EMPTY = new ImmutableCompoundTagImpl(HashTreePMap.empty());
+
+    /**
+     * The ID of this type of tag.
+     *
+     * <p>Used for {@link CollectionTag#elementType()} and in the serialized
+     * binary form.</p>
+     */
+    int ID = 10;
+    /**
+     * The reader for reading compound tags.
+     */
+    @NotNull TagReader<CompoundTag> READER = AbstractCompoundTag.READER;
+    /**
+     * The writer for writing compound tags.
+     */
+    @NotNull TagWriter<CompoundTag> WRITER = AbstractCompoundTag.WRITER;
+    /**
+     * The tag type for this tag.
+     */
+    @NotNull TagType<CompoundTag> TYPE = new TagType<>("TAG_Compound", false, READER);
+
+    /**
+     * Gets the backing data for this compound tag.
+     *
+     * @return the backing data
+     */
+    @NotNull Map<String, Tag> getData();
+
+    /**
+     * Checks if this compound tag is a mutable compound tag.
+     *
+     * @return true if this compound tag is mutable, false otherwise
+     */
+    default boolean isMutable() {
+        return this instanceof MutableCompoundTag;
+    }
+
+    /**
+     * Checks if this compound tag is an immutable compound tag.
+     *
+     * @return true if this compound tag is immutable, false otherwise
+     */
+    default boolean isImmutable() {
+        return this instanceof ImmutableCompoundTag;
+    }
+
+    /**
+     * Gets the size of this compound tag.
+     *
+     * @return the size
+     */
+    int size();
+
+    /**
+     * Checks if this compound tag is empty.
+     *
+     * @return true if this compound tag is empty, false otherwise
+     */
+    boolean isEmpty();
+
+    /**
+     * Gets the keys in this compound tag.
+     *
+     * @return the keys
+     */
+    @NotNull Set<String> keySet();
+
+    /**
+     * Gets the values in this compound tag.
+     *
+     * @return the values
+     */
+    @NotNull Collection<Tag> values();
+
+    /**
+     * Gets the type of the tag with the given name.
+     *
+     * @param name the name
+     * @return the tag type ID
+     */
+    int type(final @NotNull String name);
+
+    /**
+     * Checks if this compound tag contains the given name (key).
+     *
+     * @param name the name
+     * @return true if this compound tag contains a tag with the given name,
+     *         false otherwise
+     */
+    boolean contains(final @NotNull String name);
+
+    /**
+     * Checks if this compound tag contains the given name (key), and that the
+     * retrieved tag is of the given expected type.
+     *
+     * @param name the name
+     * @param type the ID of the expected tag type
+     * @return true if this compound tag contains a tag with the given name and
+     *         of the given type, false otherwise
+     */
+    boolean contains(final @NotNull String name, final int type);
+
+    /**
+     * Gets the tag with the given name from this compound, or returns null
+     * if there is no tag with the given name in this compound.
+     *
+     * @param name the name of the tag
+     * @return the tag, or null if not present
+     */
+    @Nullable Tag get(final @NotNull String name);
+{% for type in variants %}
+
+    /**
+     * Gets the {{ type.value.name }} value for the given name, or returns the
+     * default value if there is no {{ type.value.name }} value for the given name.
+     *
+     * @param name the name
+{% if type.value.E == 'List' %}
+     * @param elementType the element type
+{% endif %}
+     * @param defaultValue the default value to return if the value was not present
+     * @return the {{ type.value.name }} value, or the default value if not present
+     */
+    {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final @NotNull String name,{{ type.value.E == 'List' ? " final int elementType," : "" }} final {{ notNullIfObject(type) }}{{ type.value.e }} defaultValue);
+
+    /**
+     * Gets the {{ type.value.name }} value for the given name, or returns {{ type.value.defaultName }}
+
+     * if there is no {{ type.value.name }} value for the given name.
+     *
+     * @param name the name
+{% if type.value.E == 'List' %}
+     * @param elementType the element type
+{% endif %}
+     * @return the {{ type.value.name }} value, or {{ type.value.defaultName }} if not present
+     */
+    default {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final @NotNull String name{{ type.value.E == 'List' ? ", final int elementType" : "" }}) {
+        return get{{ type.value.E }}(name,{{ type.value.E == 'List' ? " elementType," : "" }} {{ type.value contains "defaultC" ? type.value.defaultC : type.value.default }});
+    }
+{% endfor %}
+
+    /**
+     * Sets the given name in this compound to the given value and returns the
+     * resulting compound tag.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the resulting compound
+     */
+    @NotNull CompoundTag put(final @NotNull String name, final @NotNull Tag value);
+
+    /**
+     * Removes the given name from this compound and returns the resulting
+     * compound.
+     *
+     * @param name the name
+     * @return the resulting compound
+     */
+    @NotNull CompoundTag remove(final @NotNull String name);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    /**
+     * Sets the given name in this compound to the given {{ type.value.name }} value and
+     * returns the resulting compound.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the resulting compound
+     */
+    @NotNull CompoundTag put{{ type.value.E }}(final @NotNull String name, final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+    /**
+     * Sets the given name in this compound to the given {{ type.value.componentType }} values and
+     * returns the resulting compound.
+     *
+     * @param name the name
+     * @param values the values
+     * @return the resulting compound
+     */
+    @NotNull CompoundTag put{{ type.value.plural }}(final @NotNull String name, final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+
+    /**
+     * Gets the compound tag with the given name, applies the given action to
+     * the compound tag, puts the resulting compound tag in to this compound,
+     * and returns the resulting compound tag.
+     *
+     * @param name the name
+     * @param action the action to apply
+     * @return the resulting compound tag
+     */
+    @NotNull CompoundTag update(final @NotNull String name, final @NotNull Function<CompoundTag, CompoundTag> action);
+
+    /**
+     * Gets the list tag with the given name, storing elements of the given
+     * type, applies the given action to the list tag, puts the resulting list
+     * tag in to this compound, and returns the resulting list tag.
+     *
+     * @param name the name
+     * @param type the element type
+     * @param action the action to apply
+     * @return the resulting compound tag
+     */
+    @NotNull CompoundTag update(final @NotNull String name, final int type, final @NotNull Function<ListTag, ListTag> action);
+{% for type in variants %}
+{% if type.value.E != 'Boolean' %}
+
+    /**
+     * Performs the given action on every {{ type.value.name }} in this compound.
+     *
+     * @param action the action to perform
+     */
+    void forEach{{ type.value.E }}(final @NotNull {{ type.value.biConsumer }} action);
+{% endif %}
+{% endfor %}
+
+    /**
+     * Converts this compound tag to its mutable equivalent.
+     *
+     * <p>If this tag is already mutable, it will simply return itself.
+     * It will <strong>not</strong> create a defensive copy.</p>
+     *
+     * @return this tag in its mutable form
+     */
+    @NotNull MutableCompoundTag asMutable();
+
+    /**
+     * Converts this compound tag to its immutable equivalent.
+     *
+     * <p>If this tag is already immutable, it will simply return itself.</p>
+     *
+     * @return this tag in its immutable form
+     */
+    @NotNull ImmutableCompoundTag asImmutable();
+
+    /**
+     * Converts this compound tag in to a builder with the {@link #getData() data}
+     * of this tag already applied, allowing for easy bulk changes.
+     *
+     * @return this compound tag as a builder
+     */
+    @NotNull Builder toBuilder();
+
+    /**
+     * A builder for building compound tags.
+     */
+    sealed interface Builder permits AbstractCompoundTag.Builder, ScopedCompoundTag.Builder {
+
+        /**
+         * Sets the value of the tag with the given name to the given value.
+         *
+         * @param name the name
+         * @param value the value
+         * @return this builder
+         */
+        @Contract(value = "_, _ -> this", mutates = "this")
+        @NotNull Builder put(final @NotNull String name, final @NotNull Tag value);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+        /**
+         * Sets the value of the tag with the given name to the given value.
+         *
+         * @param name the name
+         * @param value the value
+         * @return this builder
+         */
+        @Contract(value = "_, _ -> this", mutates = "this")
+        @NotNull Builder put{{ type.value.E }}(final @NotNull String name, final {{ notNullIfObject(type) }}{{ type.value.e }} value);
+{% if type.value.type == 'array' %}
+
+        /**
+         * Sets the value of the tag with the given name to the given values.
+         *
+         * @param name the name
+         * @param values the values
+         * @return this builder
+         */
+        @Contract(value = "_, _ -> this", mutates = "this")
+        @NotNull Builder put{{ type.value.plural }}(final @NotNull String name, final {{ type.value.componentType }}@NotNull... values);
+{% endif %}
+{% endif %}
+{% endfor %}
+
+        /**
+         * Sets the value of the tag with the given name to the result of
+         * applying the given builder function to a new builder.
+         *
+         * @param name the name
+         * @param builder the builder
+         * @return this builder
+         */
+        @Contract(value = "_, _ -> this", mutates = "this")
+        @NotNull Builder putList(final @NotNull String name, final @NotNull Consumer<ListTag.Builder> builder);
+
+        /**
+         * Sets the value of the tag with the given name to the given value.
+         *
+         * @param name the name
+         * @param elementType the element type
+         * @param elements the elements
+         * @return this builder
+         */
+        @Contract(value = "_, _, _ -> this", mutates = "this")
+        @NotNull Builder putList(final @NotNull String name, final int elementType, final @NotNull Tag@NotNull... elements);
+
+        /**
+         * Sets the value of the tag with the given name to the given value.
+         *
+         * @param name the name
+         * @param elementType the element type
+         * @param elements the elements
+         * @return this builder
+         */
+        @Contract(value = "_, _, _ -> this", mutates = "this")
+        @NotNull Builder putList(final @NotNull String name, final int elementType, final @NotNull Collection<Tag> elements);
+
+        /**
+         * Sets the value of the tag with the given name to the result of
+         * applying the given builder function to a new builder.
+         *
+         * @param name the name
+         * @param builder the builder
+         * @return this builder
+         */
+        @Contract(value = "_, _ -> this", mutates = "this")
+        @NotNull Builder putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.Builder> builder);
+
+        /**
+         * Removes the value for the given key from this builder.
+         *
+         * @param key the key to remove
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder remove(final @NotNull String key);
+
+        /**
+         * Adds all the tags from the given other builder to this builder.
+         *
+         * @param other the other builder
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder from(final @NotNull Builder other);
+
+        /**
+         * Adds all the values from the other tag to this builder.
+         *
+         * @param other the other tag
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        @NotNull Builder from(final @NotNull CompoundTag other);
+
+        /**
+         * Builds this builder into a compound tag.
+         *
+         * @return the built compound tag
+         */
+        @Contract(value = "-> new", pure = true)
+        @NotNull CompoundTag build();
+    }
+}

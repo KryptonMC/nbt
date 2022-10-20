@@ -1,11 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-    kotlin("jvm")
-    id("org.jetbrains.dokka")
     id("org.cadixdev.licenser")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator")
+    `java-library`
     `maven-publish`
     signing
 }
@@ -14,17 +11,10 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    explicitApi()
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 dependencies {
-    api(kotlin("stdlib"))
-    api("org.jetbrains.kotlinx", "kotlinx-collections-immutable", "0.3.5")
-    testImplementation(kotlin("test-junit5"))
+    compileOnly("org.jetbrains", "annotations", "23.0.0")
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.9.1")
+    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.9.1")
 }
 
 license {
@@ -35,12 +25,12 @@ license {
 val sourceSets = extensions.getByName("sourceSets") as SourceSetContainer
 
 task<Jar>("sourcesJar") {
-    from(sourceSets.named("main").get().allSource)
+    from(sourceSets.named("main").get().java)
     archiveClassifier.set("sources")
 }
 
 task<Jar>("javadocJar") {
-    from(tasks["dokkaJavadoc"])
+    from(tasks["javadoc"])
     archiveClassifier.set("javadoc")
 }
 
@@ -53,12 +43,12 @@ publishing {
             credentials(PasswordCredentials::class)
         }
     }
-    publications.create<MavenPublication>("mavenKotlin") {
+    publications.create<MavenPublication>("mavenJava") {
         groupId = rootProject.group as String
         artifactId = project.name
         version = rootProject.version as String
 
-        from(components["kotlin"])
+        from(components["java"])
         artifact(tasks["sourcesJar"])
         artifact(tasks["javadocJar"])
 
@@ -93,19 +83,13 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["mavenKotlin"])
+    sign(publishing.publications["mavenJava"])
 }
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
         options.release.set(17)
-    }
-    withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "17"
-            freeCompilerArgs = listOf("-Xjvm-default=all")
-        }
     }
     withType<Test> {
         useJUnitPlatform()

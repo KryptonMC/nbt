@@ -1,0 +1,204 @@
+{% macro notNullIfObject(type) %}{{ type.value.type == 'object' or type.value.type == 'compound' ? "@NotNull " : "" }}{% endmacro %}
+package org.kryptonmc.nbt;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
+import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.io.TagReader;
+import org.kryptonmc.nbt.io.TagWriter;
+import org.kryptonmc.nbt.util.ByteConsumer;
+import org.kryptonmc.nbt.util.FloatConsumer;
+import org.kryptonmc.nbt.util.ShortConsumer;
+import org.kryptonmc.nbt.util.Types;
+import org.pcollections.TreePVector;
+
+abstract sealed class AbstractListTag<T extends ListTag> implements ListTag permits MutableListTagImpl, ImmutableListTagImpl {
+
+    static TagReader<ListTag> READER = (input, depth) -> {
+        if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+        final int type = input.readByte();
+        final int size = input.readInt();
+        if (type == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
+        final TagReader<? extends Tag> reader = Types.of(type).reader();
+        final List<Tag> data = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            data.add(reader.read(input, depth + 1));
+        }
+        return new ImmutableListTagImpl(TreePVector.from(data), type);
+    };
+    static TagWriter<ListTag> WRITER = (output, value) -> {
+        final List<Tag> data = value.getData();
+        output.writeByte(value.elementType());
+        output.writeInt(data.size());
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).write(output);
+        }
+    };
+
+    @Override
+    public final int id() {
+        return ID;
+    }
+
+    @Override
+    public final @NotNull TagType<ListTag> type() {
+        return TYPE;
+    }
+
+    @Override
+    public final int size() {
+        return getData().size();
+    }
+
+    @Override
+    public final boolean isEmpty() {
+        return getData().isEmpty();
+    }
+
+    @Override
+    public final boolean contains(final @NotNull Tag element) {
+        return getData().contains(element);
+    }
+
+    @Override
+    @SuppressWarnings("SlowListContainsAll") // It's a delegate method. Performance should match that of the delegate.
+    public final boolean containsAll(final @NotNull Collection<? extends Tag> elements) {
+        return getData().containsAll(elements);
+    }
+
+    @Override
+    public final @NotNull Tag get(final int index) {
+        return getData().get(index);
+    }
+{% for type in variants %}
+
+    @Override
+    public final {{ notNullIfObject(type) }}{{ type.value.e }} get{{ type.value.E }}(final int index, final {{ notNullIfObject(type) }}{{ type.value.e }} defaultValue) {
+        if (index < 0 || index >= size()) return defaultValue;
+        final Tag tag = get(index);
+{% if type.value.E == 'Boolean' %}
+        return tag instanceof final ByteTag typedTag ? typedTag.value() != 0 : defaultValue;
+{% elseif type.value.type == 'compound' %}
+        return tag instanceof final {{ type.value.E }}Tag typedTag ? typedTag : defaultValue;
+{% else %}
+        return tag instanceof final {{ type.value.E }}Tag typedTag ? typedTag.{{ type.value.type == 'array' ? "getData" : "value" }}() : defaultValue;
+{% endif %}
+    }
+{% endfor %}
+
+    @Override
+    public abstract @NotNull T set(final int index, final @NotNull Tag tag);
+{% for type in variants %}
+{% if type.value.type != 'compound' %}
+
+    @Override
+    public final @NotNull T set{{ type.value.E }}(final int index, final {{ notNullIfObject(type) }}{{ type.value.e }} value) {
+{% if type.value.E == 'Boolean' %}
+        return set(index, ByteTag.of(value));
+{% else %}
+        return set(index, {{ type.value.E }}Tag.of(value));
+{% endif %}
+    }
+{% if type.value.type == 'array' %}
+
+    @Override
+    public final @NotNull T set{{ type.value.plural }}(final int index, final {{ type.value.componentType }}@NotNull... values) {
+        return set(index, {{ type.value.E }}Tag.of(values));
+    }
+{% endif %}
+{% endif %}
+{% endfor %}
+{% for type in variants %}
+{% if type.value.E != 'Boolean' %}
+
+    @Override
+    public final void forEach{{ type.value.E }}(final @NotNull {{ type.value.consumer }} action) {
+        for (int i = 0; i < size(); i++) {
+            action.accept(get{{ type.value.E }}(i));
+        }
+    }
+{% endif %}
+{% endfor %}
+
+    @Override
+    public final @NotNull Iterator<Tag> iterator() {
+        return getData().iterator();
+    }
+
+    @Override
+    public final @NotNull Stream<Tag> stream() {
+        return getData().stream();
+    }
+
+    @Override
+    public final void write(final @NotNull DataOutput output) throws IOException {
+        WRITER.write(output, this);
+    }
+
+    @Override
+    public final <U> void visit(final @NotNull TagVisitor<U> visitor) {
+        visitor.visitList(this);
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return this == obj || (obj instanceof final AbstractListTag<?> other && getData().equals(other.getData()));
+    }
+
+    @Override
+    public final int hashCode() {
+        return getData().hashCode();
+    }
+
+    @SuppressWarnings("unchecked")
+    static abstract sealed class Builder<B extends Builder<B, T>, T extends ListTag> implements ListTag.Builder permits ImmutableListTagImpl.Builder, MutableListTagImpl.Builder {
+
+        protected final List<Tag> data;
+        protected int elementType;
+
+        protected Builder(final List<Tag> data, final int elementType) {
+            this.data = data;
+            this.elementType = elementType;
+        }
+
+        @Override
+        public @NotNull B add(final @NotNull Tag tag) {
+            if (!data.isEmpty() && elementType != tag.id()) {
+                throw new IllegalArgumentException("Cannot append element of type " + tag.id() + " to a builder for type " + elementType + "!");
+            }
+            data.add(tag);
+            elementType = tag.id();
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B remove(final @NotNull Tag element) {
+            data.remove(element);
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B from(final ListTag.@NotNull Builder other) {
+            data.addAll(((Builder<?, ?>) other).data);
+            return (B) this;
+        }
+
+        @Override
+        public @NotNull B from(final @NotNull ListTag other) {
+            data.addAll(other.getData());
+            return (B) this;
+        }
+
+        @Override
+        public abstract @NotNull T build();
+    }
+}

@@ -1,0 +1,141 @@
+package org.kryptonmc.nbt;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
+import {{ConsumerImport}};
+
+final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<{{E}}Tag> implements {{E}}ArrayTag {
+
+    static final {{e}}[] EMPTY_DATA = new {{e}}[0];
+
+    private {{e}}[] data;
+
+    {{E}}ArrayTagImpl(final {{e}}[] data) {
+        this.data = data;
+    }
+
+    @Override
+    public {{e}}@NotNull[] getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(final {{e}}@NotNull[] data) {
+        this.data = data;
+    }
+
+    @Override
+    public int size() {
+        return data.length;
+    }
+
+    @Override
+    public int elementType() {
+        return {{E}}Tag.ID;
+    }
+
+    @Override
+    public int id() {
+        return ID;
+    }
+
+    @Override
+    public @NotNull TagType<{{E}}ArrayTag> type() {
+        return TYPE;
+    }
+
+    @Override
+    public @NotNull {{E}}Tag get(final int index) {
+        return {{E}}Tag.of(data[index]);
+    }
+
+    @Override
+    public void set(final int index, final {{e}} value) {
+        data[index] = value;
+    }
+
+    @Override
+    public @NotNull {{E}}Tag set(final int index, final @NotNull {{E}}Tag element) {
+        final {{E}}Tag old = get(index);
+        set(index, element.value());
+        return old;
+    }
+
+    @Override
+    public void add(final {{e}} value) {
+        data = Arrays.copyOf(data, data.length + 1);
+        data[data.length - 1] = value;
+    }
+
+    @Override
+    public void add(final int index, final {{e}} value) {
+        data = ArrayUtil.add(data, index, value);
+    }
+
+    @Override
+    public void add(final int index, final @NotNull {{E}}Tag element) {
+        add(index, element.value());
+    }
+
+    @Override
+    public @NotNull {{E}}Tag remove(final int index) {
+        final {{E}}Tag old = get(index);
+        data = ArrayUtil.remove(data, index);
+        return old;
+    }
+
+    @Override
+    public void forEach{{E}}(final @NotNull {{E}}Consumer action) {
+        for (final {{e}} element : data) {
+            action.accept(element);
+        }
+    }
+
+    @Override
+    public void clear() {
+        data = EMPTY_DATA;
+    }
+
+    @Override
+    public @NotNull Stream<{{E}}Tag> stream() {
+{% if E == 'Byte' %}
+        return IntStream.range(0, data.length).mapToObj(index -> {{E}}Tag.of(data[index]));
+{% else %}
+        return Arrays.stream(data).mapToObj({{E}}Tag::of);
+{% endif %}
+    }
+
+    @Override
+    public void write(final @NotNull DataOutput output) throws IOException {
+        WRITER.write(output, this);
+    }
+
+    @Override
+    public <T> void visit(final @NotNull TagVisitor<T> visitor) {
+        visitor.visit{{E}}Array(this);
+    }
+
+    @Override
+    public @NotNull {{E}}ArrayTag copy() {
+        return new {{E}}ArrayTagImpl(Arrays.copyOf(data, data.length));
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return this == obj || (obj instanceof final {{E}}ArrayTagImpl other && Arrays.equals(data, other.data));
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(data);
+    }
+
+    @Override
+    public String toString() {
+        return "{{E}}ArrayTagImpl{data=" + Arrays.toString(data) + '}';
+    }
+}
