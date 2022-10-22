@@ -159,6 +159,16 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
         return getData().hashCode();
     }
 
+    protected final boolean canAdd(final Tag tag) {
+        if (tag.id() == EndTag.ID) return false;
+        if (elementType() == EndTag.ID) return true;
+        return elementType() == tag.id();
+    }
+
+    protected static void addUnsupported(final int tagType, final int elementType) {
+        throw new UnsupportedOperationException("Cannot add tag of type " + tagType + " to list of type " + elementType + "!");
+    }
+
     @SuppressWarnings("unchecked")
     static abstract sealed class Builder<B extends Builder<B, T>, T extends ListTag> implements ListTag.Builder permits ImmutableListTagImpl.Builder, MutableListTagImpl.Builder {
 

@@ -9,6 +9,7 @@
 package org.kryptonmc.nbt;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.pcollections.PSequence;
@@ -36,10 +37,16 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
 
     @Override
     public @NotNull ImmutableListTag add(final @NotNull Tag tag) {
-        if (tag.id() == EndTag.ID) addUnsupported(tag.id(), elementType());
-        if (elementType() == EndTag.ID) return new ImmutableListTagImpl(data.plus(tag), tag.id());
-        if (elementType() != tag.id()) addUnsupported(tag.id(), elementType());
+        if (!canAdd(tag)) addUnsupported(tag.id(), elementType());
         return new ImmutableListTagImpl(data.plus(tag), elementType());
+    }
+
+    @Override
+    public @NotNull ImmutableListTag addAll(final @NotNull Collection<? extends Tag> tags) {
+        for (final var tag : tags) {
+            if (!canAdd(tag)) addUnsupported(tag.id(), elementType());
+        }
+        return new ImmutableListTagImpl(data.plusAll(tags), elementType());
     }
 
     @Override
@@ -58,7 +65,7 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
     public @NotNull ImmutableListTag remove(final int index) {
         // Optimization: If we only have one element, we can only remove that element, which will result in an empty list,
         // therefore we return the empty list.
-        if (data.isEmpty() || (data.size() == 1 && index == 0)) return (ImmutableListTag) EMPTY;
+        if (data.isEmpty() || (data.size() == 1 && index == 0)) return EMPTY;
         return new ImmutableListTagImpl(data.minus(index), elementType());
     }
 
@@ -66,12 +73,15 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
     public @NotNull ImmutableListTag remove(final @NotNull Tag tag) {
         // Optimization: If we only have one element, we can only remove that element, which will result in an empty list,
         // therefore we return the empty list.
-        if (data.isEmpty() || (data.size() == 1 && tag.equals(data.get(0)))) return (ImmutableListTag) EMPTY;
+        if (data.isEmpty() || (data.size() == 1 && tag.equals(data.get(0)))) return EMPTY;
         return new ImmutableListTagImpl(data.minus(tag), elementType());
     }
 
-    private static void addUnsupported(final int tagType, final int elementType) {
-        throw new UnsupportedOperationException("Cannot add tag of type " + tagType + " to list of type " + elementType + "!");
+    @Override
+    public @NotNull ImmutableListTag removeAll(final @NotNull Collection<?> tags) {
+        // Optimization: We can't remove any data from an empty list.
+        if (data.isEmpty()) return EMPTY;
+        return new ImmutableListTagImpl(data.minusAll(tags), elementType());
     }
 
     @Override

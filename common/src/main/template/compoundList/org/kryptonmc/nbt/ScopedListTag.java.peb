@@ -1,6 +1,8 @@
 {% macro notNullIfObject(type) %}{{ type.value.type == 'object' ? "@NotNull " : "" }}{% endmacro %}
 package org.kryptonmc.nbt;
 
+import java.util.Collection;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
 sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permits ImmutableListTag, MutableListTag {
@@ -9,10 +11,16 @@ sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permi
     @NotNull T add(final @NotNull Tag tag);
 
     @Override
+    @NotNull T addAll(final @NotNull Collection<? extends Tag> tags);
+
+    @Override
     @NotNull T remove(final int index);
 
     @Override
     @NotNull T remove(final @NotNull Tag tag);
+
+    @Override
+    @NotNull T removeAll(final @NotNull Collection<?> tags);
 
     @Override
     @NotNull T set(final int index, final @NotNull Tag tag);

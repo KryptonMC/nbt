@@ -6,10 +6,10 @@ package org.kryptonmc.nbt;
 final class ArrayUtil {
 {% for type in variants %}
 
-    static {{ type.value.element }}[] add(final {{ type.value.element }}[] original, final int index, final {{ type.value.element }} value) {
+    static {{ type.value.e }}[] add(final {{ type.value.e }}[] original, final int index, final {{ type.value.e }} value) {
         final int length = original.length;
         if (index > length || index < 0) throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds for length " + length + "!");
-        final {{ type.value.element }}[] result = new {{ type.value.element }}[length + 1];
+        final {{ type.value.e }}[] result = new {{ type.value.e }}[length + 1];
         System.arraycopy(original, 0, result, 0, index);
         result[index] = value;
         if (index < length) System.arraycopy(original, index, result, index + 1, length - index);
@@ -18,10 +18,10 @@ final class ArrayUtil {
 {% endfor %}
 {% for type in variants %}
 
-    static {{ type.value.element }}[] remove(final {{ type.value.element }}[] original, final int index) {
+    static {{ type.value.e }}[] remove(final {{ type.value.e }}[] original, final int index) {
         final int length = original.length;
         if (index < 0 || index >= length) throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds for length " + length + "!");
-        final {{ type.value.element }}[] result = new {{ type.value.element }}[length - 1];
+        final {{ type.value.e }}[] result = new {{ type.value.e }}[length - 1];
         System.arraycopy(original, 0, result, 0, index);
         if (index < length - 1) System.arraycopy(original, index + 1, result, index, length - index - 1);
         return result;

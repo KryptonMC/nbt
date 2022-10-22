@@ -24,7 +24,7 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
     /**
      * The empty list tag.
      */
-    @NotNull ListTag EMPTY = new ImmutableListTagImpl(TreePVector.empty(), EndTag.ID);
+    @NotNull ImmutableListTag EMPTY = new ImmutableListTagImpl(TreePVector.empty(), EndTag.ID);
 
     /**
      * The ID of this type of tag.
@@ -136,6 +136,20 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
     @NotNull ListTag add(final @NotNull Tag tag);
 
     /**
+     * Adds all the given tags to this list and returns the resulting list.
+     *
+     * <p>If the ID of any of the tags does not match the
+     * {@link #elementType()} of this list tag, this method will throw an
+     * {@link java.lang.UnsupportedOperationException}.</p>
+     *
+     * @param tags the tags to add
+     * @return the resulting list tag
+     * @throws UnsupportedOperationException if any of the given tags are not
+     * of the correct type for this list
+     */
+    @NotNull ListTag addAll(final @NotNull Collection<? extends Tag> tags);
+
+    /**
      * Removes the tag at the given index from this list and returns the
      * resulting list tag.
      *
@@ -151,6 +165,15 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
      * @return the resulting list tag
      */
     @NotNull ListTag remove(final @NotNull Tag tag);
+
+    /**
+     * Removes all the given tags from this list and returns the resulting
+     * list.
+     *
+     * @param tags the tags to remove
+     * @return the resulting list tag
+     */
+    @NotNull ListTag removeAll(final @NotNull Collection<?> tags);
 
     /**
      * Sets the tag at the given index in this list to the given tag and

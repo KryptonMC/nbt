@@ -9,6 +9,7 @@
 package org.kryptonmc.nbt;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.kryptonmc.nbt.util.Types;
@@ -43,6 +44,15 @@ final class MutableListTagImpl extends AbstractListTag<MutableListTag> implement
     }
 
     @Override
+    public @NotNull MutableListTag addAll(final @NotNull Collection<? extends Tag> tags) {
+        for (final var tag : tags) {
+            if (!canAdd(tag)) addUnsupported(tag.id(), elementType());
+            data.add(tag);
+        }
+        return this;
+    }
+
+    @Override
     public boolean tryAdd(final int index, final @NotNull Tag tag) {
         if (tag.id() == EndTag.ID || !updateType(tag)) return false;
         data.add(index, tag);
@@ -66,6 +76,13 @@ final class MutableListTagImpl extends AbstractListTag<MutableListTag> implement
     public @NotNull MutableListTag remove(final @NotNull Tag tag) {
         data.remove(tag);
         if (data.isEmpty()) elementType = EndTag.ID;
+        return this;
+    }
+
+    @Override
+    public @NotNull MutableListTag removeAll(final @NotNull Collection<?> tags) {
+        //noinspection SuspiciousMethodCalls
+        data.removeAll(tags);
         return this;
     }
 
