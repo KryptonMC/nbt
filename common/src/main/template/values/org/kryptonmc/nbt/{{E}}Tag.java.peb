@@ -80,7 +80,7 @@ public sealed interface {{E}}Tag extends NumberTag permits {{E}}TagImpl {
      *
      * @return the value
      */
-     {{e}} value();
+    {{e}} value();
 
     @Override
     @NotNull {{E}}Tag copy();

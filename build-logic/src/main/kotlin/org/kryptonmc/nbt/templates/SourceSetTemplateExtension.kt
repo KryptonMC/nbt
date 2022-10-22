@@ -35,8 +35,6 @@ interface SourceSetTemplateExtension {
 
     val templateSets: NamedDomainObjectContainer<TemplateSet>
 
-    fun singleSet(properties: Action<TemplateSet>)
-
     fun templateSets(configurer: Action<NamedDomainObjectContainer<TemplateSet>>) {
         Configurable.configure(templateSets, configurer)
     }

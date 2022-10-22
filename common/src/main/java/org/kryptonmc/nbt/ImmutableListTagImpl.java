@@ -56,16 +56,18 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
 
     @Override
     public @NotNull ImmutableListTag remove(final int index) {
-        return determineElementTypeAfterRemove(data.minus(index));
+        // Optimization: If we only have one element, we can only remove that element, which will result in an empty list,
+        // therefore we return the empty list.
+        if (data.isEmpty() || (data.size() == 1 && index == 0)) return (ImmutableListTag) EMPTY;
+        return new ImmutableListTagImpl(data.minus(index), elementType());
     }
 
     @Override
     public @NotNull ImmutableListTag remove(final @NotNull Tag tag) {
-        return determineElementTypeAfterRemove(data.minus(tag));
-    }
-
-    private @NotNull ImmutableListTag determineElementTypeAfterRemove(final @NotNull PSequence<Tag> result) {
-        return new ImmutableListTagImpl(result, result.isEmpty() ? EndTag.ID : elementType());
+        // Optimization: If we only have one element, we can only remove that element, which will result in an empty list,
+        // therefore we return the empty list.
+        if (data.isEmpty() || (data.size() == 1 && tag.equals(data.get(0)))) return (ImmutableListTag) EMPTY;
+        return new ImmutableListTagImpl(data.minus(tag), elementType());
     }
 
     private static void addUnsupported(final int tagType, final int elementType) {

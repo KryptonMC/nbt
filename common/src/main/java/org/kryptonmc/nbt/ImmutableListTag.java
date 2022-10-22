@@ -27,6 +27,8 @@ public sealed interface ImmutableListTag extends ScopedListTag<ImmutableListTag>
      * @return a new immutable list tag
      */
     static @NotNull ImmutableListTag of(final @NotNull List<? extends Tag> data, final int elementType) {
+        // Optimization: For empty data, the element type is always EndTag, so we can just return the empty list.
+        if (data.isEmpty()) return (ImmutableListTag) EMPTY;
         return new ImmutableListTagImpl(TreePVector.from(data), elementType);
     }
 

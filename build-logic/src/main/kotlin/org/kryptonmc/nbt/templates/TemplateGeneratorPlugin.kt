@@ -30,7 +30,7 @@ class TemplateGeneratorPlugin : ProjectPlugin {
                 extension.templateSets.all templateSet@{
                     val templateSetOutput = outputDir.map { it.dir(name) }
                     val generateTask = tasks.register<GenerateTemplates>(this@sourceSet.getTaskName("generate", "${name}Templates")) {
-                        group = GENERATION_GROUP
+                        group = "generation"
                         baseSet.set(this@templateSet)
                         sourceDirectory.set(inputDir.dir(this@templateSet.name))
                         this.outputDir.set(templateSetOutput)
@@ -39,10 +39,5 @@ class TemplateGeneratorPlugin : ProjectPlugin {
                 }
             }
         }
-    }
-
-    companion object {
-
-        private const val GENERATION_GROUP = "generation"
     }
 }

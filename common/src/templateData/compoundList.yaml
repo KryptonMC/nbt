@@ -3,7 +3,6 @@ variants:
     E: "Boolean"
     e: "boolean"
     type: "primitive"
-    consumer: "-Error-"
     default: "false"
     name: "boolean"
     defaultName: "false"

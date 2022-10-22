@@ -25,6 +25,8 @@ public sealed interface ImmutableCompoundTag extends ScopedCompoundTag<Immutable
      * @return a new immutable compound tag
      */
     static @NotNull ImmutableCompoundTag of(final @NotNull Map<? extends String, ? extends Tag> data) {
+        // Optimization: If the data is empty, we can just return the empty compound.
+        if (data.isEmpty()) return (ImmutableCompoundTag) EMPTY;
         return new ImmutableCompoundTagImpl(HashTreePMap.from(data));
     }
 
