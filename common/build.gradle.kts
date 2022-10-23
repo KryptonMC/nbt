@@ -1,7 +1,6 @@
 plugins {
-    id("nbt.common")
+    id("nbt.common-conventions")
     id("nbt.templates")
-    id("org.gradlex.extra-java-module-info")
 }
 
 val arraysData = file("src/templateData/arrays.yaml")
@@ -40,10 +39,11 @@ sourceSets {
 }
 
 dependencies {
-    api("org.pcollections", "pcollections", "4.0.0")
+    api(libs.pcollections)
 }
 
 extraJavaModuleInfo {
+    failOnMissingModuleInfo.set(false)
     module("pcollections-4.0.0.jar", "org.pcollections", "4.0.0") {
         exports("org.pcollections")
     }

@@ -8,8 +8,8 @@
  */
 module nbt.stream {
 
-    requires nbt.common;
-    requires org.jetbrains.annotations;
+    requires transitive nbt.common;
+    requires transitive org.jetbrains.annotations;
 
     exports org.kryptonmc.nbt.stream;
 }

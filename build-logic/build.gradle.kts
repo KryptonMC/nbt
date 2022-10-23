@@ -3,18 +3,18 @@ plugins {
     `java-gradle-plugin`
 }
 
-repositories {
-    gradlePluginPortal()
+dependencies {
+    implementation(libs.plugin.indra)
+    implementation(libs.plugin.licenser)
+    implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.extraModuleInfo)
+    implementation(libs.mammoth)
+    implementation(libs.pebble)
+    implementation(libs.snakeyaml)
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.7.10")
-    implementation("gradle.plugin.org.cadixdev.gradle", "licenser", "0.6.1")
-    implementation("info.solidsoft.gradle.pitest", "gradle-pitest-plugin", "1.7.4")
-    implementation("org.gradlex", "extra-java-module-info", "1.0")
-    implementation("io.pebbletemplates", "pebble", "3.1.6")
-    implementation("net.kyori", "mammoth", "1.2.0")
-    implementation("org.snakeyaml", "snakeyaml-engine", "2.4")
+    compileOnly(files(libs::class.java.protectionDomain.codeSource.location))
 }
 
 gradlePlugin {
@@ -26,6 +26,7 @@ gradlePlugin {
     }
 }
 
-tasks.compileJava {
-    options.release.set(8)
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

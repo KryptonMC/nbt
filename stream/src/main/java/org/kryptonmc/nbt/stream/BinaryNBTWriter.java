@@ -168,7 +168,7 @@ public final class BinaryNBTWriter implements NBTWriter {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         output.close();
     }
 

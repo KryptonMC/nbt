@@ -1,7 +1,8 @@
 plugins {
-    id("nbt.common")
+    id("nbt.common-conventions")
+    id("nbt.templates")
 }
 
 dependencies {
-    api(project(":nbt-common"))
+    api(projects.common)
 }

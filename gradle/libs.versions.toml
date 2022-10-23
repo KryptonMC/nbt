@@ -1,0 +1,38 @@
+metadata.format.version = "1.1"
+
+[versions]
+# Dependencies
+annotations = "23.0.0"
+junit = "5.9.1"
+pcollections = "4.0.0"
+kotlin = "1.7.20"
+
+# Plugins
+indra = "2.1.1"
+licenser = "0.6.1"
+extraModuleInfo = "1.0"
+
+# Plugin dependencies
+mammoth = "1.2.0"
+pebble = "3.1.6"
+snakeyaml = "2.4"
+
+[libraries]
+
+# Dependencies
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+pcollections = { group = "org.pcollections", name = "pcollections", version.ref = "pcollections" }
+
+# Plugins as dependencies
+plugin-indra = { group = "net.kyori", name = "indra-common", version.ref = "indra" }
+plugin-licenser = { group = "gradle.plugin.org.cadixdev.gradle", name = "licenser", version.ref = "licenser" }
+plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-extraModuleInfo = { group = "org.gradlex", name = "extra-java-module-info", version.ref = "extraModuleInfo" }
+
+# Plugin dependencies
+mammoth = { group = "net.kyori", name = "mammoth", version.ref = "mammoth" }
+pebble = { group = "io.pebbletemplates", name = "pebble", version.ref = "pebble" }
+snakeyaml = { group = "org.snakeyaml", name = "snakeyaml-engine", version.ref = "snakeyaml" }

@@ -119,4 +119,7 @@ public interface NBTWriter extends AutoCloseable {
             default -> throw new IllegalStateException("Don't know how to write " + value + "!");
         }
     }
+
+    @Override
+    void close() throws IOException;
 }

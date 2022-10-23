@@ -13,7 +13,7 @@
  */
 module nbt.common {
 
-    requires org.jetbrains.annotations;
+    requires transitive org.jetbrains.annotations;
     requires org.pcollections;
 
     exports org.kryptonmc.nbt;

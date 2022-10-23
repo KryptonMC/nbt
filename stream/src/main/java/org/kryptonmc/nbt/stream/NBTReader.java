@@ -131,4 +131,7 @@ public interface NBTReader extends AutoCloseable {
             default -> throw new IllegalStateException("Unknown tag type: " + nextType);
         };
     }
+
+    @Override
+    void close() throws IOException;
 }

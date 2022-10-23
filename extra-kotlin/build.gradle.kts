@@ -1,13 +1,13 @@
 plugins {
-    kotlin("jvm")
-    id("nbt.common")
-}
-
-dependencies {
-    api(project(":nbt-common"))
-    api(kotlin("stdlib"))
+    id("nbt.common-conventions")
+    id("nbt.templates")
 }
 
 kotlin {
     explicitApi()
+}
+
+dependencies {
+    api(projects.common)
+    api(libs.kotlin.stdlib)
 }

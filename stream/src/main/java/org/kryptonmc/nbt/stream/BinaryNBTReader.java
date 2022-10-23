@@ -12,7 +12,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.kryptonmc.nbt.ByteArrayTag;
 import org.kryptonmc.nbt.ByteTag;
 import org.kryptonmc.nbt.CompoundTag;
@@ -32,7 +31,7 @@ public final class BinaryNBTReader implements NBTReader {
     private final DataInputStream input;
     private int stackSize = 1;
     private int[] scopes = new int[32];
-    private @Nullable String deferredName;
+    private String deferredName;
 
     public BinaryNBTReader(final @NotNull DataInputStream input) {
         this.input = input;
@@ -105,8 +104,9 @@ public final class BinaryNBTReader implements NBTReader {
     }
 
     @Override
-    public void endCompound() {
+    public void endCompound() throws IOException {
         close(NBTScope.COMPOUND);
+        nextEnd();
     }
 
     @Override
@@ -176,7 +176,7 @@ public final class BinaryNBTReader implements NBTReader {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         input.close();
     }
 
@@ -214,6 +214,7 @@ public final class BinaryNBTReader implements NBTReader {
             final int readType = input.readByte();
             if (type != readType) throw new IllegalStateException("Expected " + type + ", got " + readType + "!");
             deferredName = input.readUTF();
+            return;
         }
         deferredName = null;
     }
