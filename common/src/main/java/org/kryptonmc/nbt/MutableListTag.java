@@ -30,6 +30,15 @@ public sealed interface MutableListTag extends ScopedListTag<MutableListTag> per
     }
 
     /**
+     * Creates a new empty mutable list tag.
+     *
+     * @return a new empty mutable list tag
+     */
+    static @NotNull MutableListTag empty() {
+        return new MutableListTagImpl(new ArrayList<>(), EndTag.ID);
+    }
+
+    /**
      * Creates a new builder for building a mutable list tag with the given
      * element type.
      *

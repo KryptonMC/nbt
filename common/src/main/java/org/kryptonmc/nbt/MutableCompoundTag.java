@@ -30,6 +30,16 @@ public sealed interface MutableCompoundTag extends ScopedCompoundTag<MutableComp
     }
 
     /**
+     * Creates a new empty mutable compound tag.
+     *
+     * @return a new empty mutable compound tag
+     */
+    @Contract(value = "-> new", pure = true)
+    static @NotNull MutableCompoundTag empty() {
+        return new MutableCompoundTagImpl(new LinkedHashMap<>());
+    }
+
+    /**
      * Creates a new builder for building a mutable compound tag.
      *
      * @return a new builder

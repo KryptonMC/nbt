@@ -119,10 +119,10 @@ final class MutableListTagImpl extends AbstractListTag<MutableListTag> implement
 
     @Override
     public @NotNull MutableListTag copy() {
-        return new MutableListTagImpl(copyData(data, elementType), elementType);
+        return new MutableListTagImpl(deepCopy(data, elementType), elementType);
     }
 
-    private static List<Tag> copyData(final List<Tag> data, final int elementType) {
+    private static List<Tag> deepCopy(final List<Tag> data, final int elementType) {
         if (Types.of(elementType).isValue()) return new ArrayList<>(data);
         final var result = new ArrayList<Tag>();
         for (final var tag : data) {
