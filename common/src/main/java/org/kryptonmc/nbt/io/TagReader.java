@@ -19,7 +19,7 @@ import org.kryptonmc.nbt.Tag;
  * @param <T> the type of tags that can be read by this reader
  */
 @FunctionalInterface
-public interface TagReader<T extends Tag> {
+public interface TagReader<T extends @NotNull Tag> {
 
     /**
      * Reads the tag from the given input.

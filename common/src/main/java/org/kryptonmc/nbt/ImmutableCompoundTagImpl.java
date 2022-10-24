@@ -23,7 +23,7 @@ final class ImmutableCompoundTagImpl extends AbstractCompoundTag<ImmutableCompou
     }
 
     @Override
-    public @NotNull PMap<String, Tag> getData() {
+    public @NotNull Map<String, Tag> getData() {
         return data;
     }
 
@@ -36,7 +36,7 @@ final class ImmutableCompoundTagImpl extends AbstractCompoundTag<ImmutableCompou
     public @NotNull ImmutableCompoundTag remove(final @NotNull String name) {
         // Optimization: If we have no entries, we can't remove anything, so we return the empty compound. If we have one entry, and that
         // one entry's key is the name, we know we would end up with an empty map, so we just return the empty compound.
-        if (data.isEmpty() || (data.size() == 1 && data.get(name) != null)) return (ImmutableCompoundTag) EMPTY;
+        if (data.isEmpty() || (data.size() == 1 && data.get(name) != null)) return EMPTY;
         return new ImmutableCompoundTagImpl(data.minus(name));
     }
 

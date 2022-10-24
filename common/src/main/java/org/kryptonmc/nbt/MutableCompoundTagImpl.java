@@ -45,10 +45,10 @@ final class MutableCompoundTagImpl extends AbstractCompoundTag<MutableCompoundTa
 
     @Override
     public @NotNull MutableCompoundTag copy() {
-        return new MutableCompoundTagImpl(copyData(data));
+        return new MutableCompoundTagImpl(deepCopy(data));
     }
 
-    private static Map<String, Tag> copyData(final Map<String, Tag> data) {
+    private static Map<String, Tag> deepCopy(final Map<String, Tag> data) {
         final var result = new LinkedHashMap<String, Tag>();
         for (final var entry : data.entrySet()) {
             result.put(entry.getKey(), entry.getValue().copy());

@@ -25,7 +25,7 @@ record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
     }
 
     @Override
-    public @NotNull TagType<{{E}}Tag> type() {
+    public @NotNull TagType<@NotNull {{E}}Tag> type() {
         return TYPE;
     }
 
@@ -35,7 +35,7 @@ record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<T> visitor) {
+    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
         visitor.visit{{E}}(this);
     }
 

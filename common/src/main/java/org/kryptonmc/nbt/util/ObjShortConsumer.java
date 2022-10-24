@@ -8,6 +8,8 @@
  */
 package org.kryptonmc.nbt.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A primitive specialization of {@link java.util.function.BiConsumer} for
  * an object and a short.
@@ -21,5 +23,5 @@ public interface ObjShortConsumer<T> {
      * @param t the input object
      * @param s the input short
      */
-    void accept(final T t, final short s);
+    void accept(final @NotNull T t, final short s);
 }

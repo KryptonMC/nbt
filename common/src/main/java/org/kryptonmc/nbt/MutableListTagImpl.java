@@ -11,6 +11,7 @@ package org.kryptonmc.nbt;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.kryptonmc.nbt.util.Types;
 import org.pcollections.TreePVector;
@@ -80,9 +81,14 @@ final class MutableListTagImpl extends AbstractListTag<MutableListTag> implement
     }
 
     @Override
-    public @NotNull MutableListTag removeAll(final @NotNull Collection<?> tags) {
-        //noinspection SuspiciousMethodCalls
+    public @NotNull MutableListTag removeAll(final @NotNull Collection<? extends Tag> tags) {
         data.removeAll(tags);
+        return this;
+    }
+
+    @Override
+    public @NotNull MutableListTag removeIf(final @NotNull Predicate<? super Tag> predicate) {
+        data.removeIf(predicate);
         return this;
     }
 

@@ -31,7 +31,7 @@ import org.kryptonmc.nbt.TagType;
  */
 public final class Types {
 
-    private static final TagType<? extends Tag>[] TYPES = new TagType<?>[]{
+    private static final TagType<? extends @NotNull Tag>[] TYPES = new TagType<?>[]{
             EndTag.TYPE,
             ByteTag.TYPE,
             ShortTag.TYPE,
@@ -54,7 +54,7 @@ public final class Types {
      * @return the corresponding tag type
      * @throws IllegalArgumentException if the provided type ID is not valid
      */
-    public static @NotNull TagType<? extends Tag> of(final int type) {
+    public static @NotNull TagType<? extends @NotNull Tag> of(final int type) {
         if (type < 0 || type >= TYPES.length) throw new IllegalArgumentException("Invalid tag type ID: " + type);
         return TYPES[type];
     }

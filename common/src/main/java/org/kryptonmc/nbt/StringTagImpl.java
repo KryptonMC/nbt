@@ -20,7 +20,7 @@ record StringTagImpl(@NotNull String value) implements StringTag {
     }
 
     @Override
-    public @NotNull TagType<StringTag> type() {
+    public @NotNull TagType<@NotNull StringTag> type() {
         return TYPE;
     }
 

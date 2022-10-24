@@ -23,24 +23,24 @@ import org.pcollections.TreePVector;
 
 abstract sealed class AbstractListTag<T extends ListTag> implements ListTag permits MutableListTagImpl, ImmutableListTagImpl {
 
-    static TagReader<ListTag> READER = (input, depth) -> {
+    static TagReader<@NotNull ListTag> READER = (input, depth) -> {
         if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
         final int type = input.readByte();
         final int size = input.readInt();
         if (type == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
-        final TagReader<? extends Tag> reader = Types.of(type).reader();
+        final TagReader<? extends @NotNull Tag> reader = Types.of(type).reader();
         final List<Tag> data = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             data.add(reader.read(input, depth + 1));
         }
         return new ImmutableListTagImpl(TreePVector.from(data), type);
     };
-    static TagWriter<ListTag> WRITER = (output, value) -> {
+    static TagWriter<@NotNull ListTag> WRITER = (output, value) -> {
         final List<Tag> data = value.getData();
         output.writeByte(value.elementType());
         output.writeInt(data.size());
-        for (int i = 0; i < data.size(); i++) {
-            data.get(i).write(output);
+        for (final var element : data) {
+            element.write(output);
         }
     };
 
@@ -50,7 +50,7 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
     }
 
     @Override
-    public final @NotNull TagType<ListTag> type() {
+    public final @NotNull TagType<@NotNull ListTag> type() {
         return TYPE;
     }
 
@@ -71,7 +71,7 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
 
     @Override
     @SuppressWarnings("SlowListContainsAll") // It's a delegate method. Performance should match that of the delegate.
-    public final boolean containsAll(final @NotNull Collection<? extends Tag> elements) {
+    public final boolean containsAll(final @NotNull Collection<? extends @NotNull Tag> elements) {
         return getData().containsAll(elements);
     }
 
@@ -130,12 +130,12 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
 {% endfor %}
 
     @Override
-    public final @NotNull Iterator<Tag> iterator() {
+    public final @NotNull Iterator<@NotNull Tag> iterator() {
         return getData().iterator();
     }
 
     @Override
-    public final @NotNull Stream<Tag> stream() {
+    public final @NotNull Stream<@NotNull Tag> stream() {
         return getData().stream();
     }
 
@@ -145,7 +145,7 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
     }
 
     @Override
-    public final <U> void visit(final @NotNull TagVisitor<U> visitor) {
+    public final <U> void visit(final @NotNull TagVisitor<@NotNull U> visitor) {
         visitor.visitList(this);
     }
 

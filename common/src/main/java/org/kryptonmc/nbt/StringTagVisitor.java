@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A tag visitor that visits a tag and converts it in to standard SNBT form.
  */
-public final class StringTagVisitor implements TagVisitor<String> {
+public final class StringTagVisitor implements TagVisitor<@NotNull String> {
 
     private static final Pattern VALUE_REGEX = Pattern.compile("[A-Za-z0-9._+-]+");
     private static final char NULL_CHARACTER = 0;

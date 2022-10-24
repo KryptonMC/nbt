@@ -16,7 +16,7 @@ import org.kryptonmc.nbt.io.TagWriter;
 /**
  * The tag representing the end of a compound tag.
  */
-public final class EndTag implements ScopedTag<EndTag> {
+public final class EndTag implements ScopedTag<@NotNull EndTag> {
 
     /**
      * The singleton instance that represents an end tag.
@@ -33,15 +33,15 @@ public final class EndTag implements ScopedTag<EndTag> {
     /**
      * The reader for reading end tags.
      */
-    public static final @NotNull TagReader<EndTag> READER = (input, depth) -> INSTANCE;
+    public static final @NotNull TagReader<@NotNull EndTag> READER = (input, depth) -> INSTANCE;
     /**
      * The writer for writing end tags.
      */
-    public static final @NotNull TagWriter<EndTag> WRITER = (output, value) -> {};
+    public static final @NotNull TagWriter<@NotNull EndTag> WRITER = (output, value) -> {};
     /**
      * The tag type for this tag.
      */
-    public static final @NotNull TagType<EndTag> TYPE = new TagType<>("TAG_End", true, READER);
+    public static final @NotNull TagType<@NotNull EndTag> TYPE = new TagType<>("TAG_End", true, READER);
 
     private EndTag() {
     }
@@ -52,7 +52,7 @@ public final class EndTag implements ScopedTag<EndTag> {
     }
 
     @Override
-    public @NotNull TagType<EndTag> type() {
+    public @NotNull TagType<@NotNull EndTag> type() {
         return TYPE;
     }
 
@@ -62,7 +62,7 @@ public final class EndTag implements ScopedTag<EndTag> {
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<T> visitor) {
+    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
         visitor.visitEnd(this);
     }
 

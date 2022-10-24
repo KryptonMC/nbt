@@ -10,8 +10,7 @@ package org.kryptonmc.nbt;
 
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
-import org.pcollections.HashTreePMap;
-import org.pcollections.PMap;
+import org.pcollections.OrderedPMap;
 
 /**
  * An immutable compound tag.
@@ -24,10 +23,10 @@ public sealed interface ImmutableCompoundTag extends ScopedCompoundTag<Immutable
      * @param data the data
      * @return a new immutable compound tag
      */
-    static @NotNull ImmutableCompoundTag of(final @NotNull Map<? extends String, ? extends Tag> data) {
+    static @NotNull ImmutableCompoundTag of(final @NotNull Map<? extends @NotNull String, ? extends @NotNull Tag> data) {
         // Optimization: If the data is empty, we can just return the empty compound.
-        if (data.isEmpty()) return (ImmutableCompoundTag) EMPTY;
-        return new ImmutableCompoundTagImpl(HashTreePMap.from(data));
+        if (data.isEmpty()) return EMPTY;
+        return new ImmutableCompoundTagImpl(OrderedPMap.from(data));
     }
 
     /**
@@ -38,9 +37,6 @@ public sealed interface ImmutableCompoundTag extends ScopedCompoundTag<Immutable
     static @NotNull Builder builder() {
         return new ImmutableCompoundTagImpl.Builder();
     }
-
-    @Override
-    @NotNull PMap<String, Tag> getData();
 
     @Override
     @NotNull Builder toBuilder();

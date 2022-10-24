@@ -13,7 +13,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.jetbrains.annotations.NotNull;
 import org.kryptonmc.nbt.CompoundTag;
 import org.kryptonmc.nbt.EndTag;
 import org.kryptonmc.nbt.Tag;
@@ -23,7 +22,7 @@ final class TagUtil {
 
     private static final NamedTag END_NAMED = new NamedTag("", EndTag.INSTANCE);
 
-    static @NotNull Tag readUnnamedTag(final @NotNull InputStream inputStream) throws IOException {
+    static Tag readUnnamedTag(final InputStream inputStream) throws IOException {
         final var input = ensureDataInput(inputStream);
         final var type = input.read();
         if (type == EndTag.ID) return EndTag.INSTANCE;
@@ -31,7 +30,7 @@ final class TagUtil {
         return Types.of(type).read(input, 0);
     }
 
-    static @NotNull NamedTag readNamedTag(final @NotNull InputStream inputStream) throws IOException {
+    static NamedTag readNamedTag(final InputStream inputStream) throws IOException {
         final var input = ensureDataInput(inputStream);
         final var type = input.read();
         if (type == EndTag.ID) return END_NAMED;
@@ -40,7 +39,7 @@ final class TagUtil {
         return new NamedTag(name, tag);
     }
 
-    static void writeNamedTag(final @NotNull OutputStream outputStream, final @NotNull String name, final @NotNull Tag value) throws IOException {
+    static void writeNamedTag(final OutputStream outputStream, final String name, final Tag value) throws IOException {
         final var output = outputStream instanceof final DataOutputStream data ? data : new DataOutputStream(outputStream);
         output.writeByte(value.id());
         if (value.id() == EndTag.ID) return;
@@ -48,12 +47,12 @@ final class TagUtil {
         value.write(output);
     }
 
-    static @NotNull CompoundTag ensureCompound(final @NotNull Tag tag) throws IOException {
+    static CompoundTag ensureCompound(final Tag tag) throws IOException {
         if (tag instanceof final CompoundTag compound) return compound;
         throw new IOException("Root tag must be an unnamed compound!");
     }
 
-    private static @NotNull DataInputStream ensureDataInput(final @NotNull InputStream input) {
+    private static DataInputStream ensureDataInput(final InputStream input) {
         return input instanceof final DataInputStream data ? data : new DataInputStream(input);
     }
 

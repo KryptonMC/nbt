@@ -10,7 +10,6 @@ package org.kryptonmc.nbt;
 
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
-import org.pcollections.PSequence;
 import org.pcollections.TreePVector;
 
 /**
@@ -26,7 +25,7 @@ public sealed interface ImmutableListTag extends ScopedListTag<ImmutableListTag>
      * @param elementType the element type
      * @return a new immutable list tag
      */
-    static @NotNull ImmutableListTag of(final @NotNull List<? extends Tag> data, final int elementType) {
+    static @NotNull ImmutableListTag of(final @NotNull List<? extends @NotNull Tag> data, final int elementType) {
         // Optimization: For empty data, the element type is always EndTag, so we can just return the empty list.
         if (data.isEmpty()) return EMPTY;
         return new ImmutableListTagImpl(TreePVector.from(data), elementType);
@@ -53,9 +52,6 @@ public sealed interface ImmutableListTag extends ScopedListTag<ImmutableListTag>
     static @NotNull Builder builder() {
         return builder(EndTag.ID);
     }
-
-    @Override
-    @NotNull PSequence<Tag> getData();
 
     @Override
     @NotNull Builder toBuilder();

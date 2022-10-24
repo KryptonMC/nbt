@@ -27,7 +27,7 @@ import org.pcollections.HashTreePMap;
 
 abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements CompoundTag permits MutableCompoundTagImpl, ImmutableCompoundTagImpl {
 
-    static TagReader<CompoundTag> READER = (input, depth) -> {
+    static TagReader<@NotNull CompoundTag> READER = (input, depth) -> {
         if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
         final Map<String, Tag> result = new HashMap<>();
         for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
@@ -37,7 +37,7 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
         }
         return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
     };
-    static TagWriter<CompoundTag> WRITER = (output, value) -> {
+    static TagWriter<@NotNull CompoundTag> WRITER = (output, value) -> {
         for (final var entry : value.getData().entrySet()) {
             output.writeByte(entry.getValue().id());
             System.out.println("Name: " + entry.getKey() + ", Tag: " + entry.getValue().type().name() + ", ID: " + entry.getValue().id());
@@ -54,7 +54,7 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
     }
 
     @Override
-    public final @NotNull TagType<CompoundTag> type() {
+    public final @NotNull TagType<@NotNull CompoundTag> type() {
         return TYPE;
     }
 
@@ -69,12 +69,12 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
     }
 
     @Override
-    public final @NotNull Set<String> keySet() {
+    public final @NotNull Set<@NotNull String> keySet() {
         return getData().keySet();
     }
 
     @Override
-    public final @NotNull Collection<Tag> values() {
+    public final @NotNull Collection<@NotNull Tag> values() {
         return getData().values();
     }
 
@@ -145,12 +145,12 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
 {% endfor %}
 
     @Override
-    public final @NotNull T update(final @NotNull String name, final @NotNull Function<CompoundTag, CompoundTag> action) {
+    public final @NotNull T update(final @NotNull String name, final @NotNull Function<@NotNull CompoundTag, @NotNull CompoundTag> action) {
         return put(name, action.apply(getCompound(name)));
     }
 
     @Override
-    public final @NotNull T update(final @NotNull String name, final int type, final @NotNull Function<ListTag, ListTag> action) {
+    public final @NotNull T update(final @NotNull String name, final int type, final @NotNull Function<@NotNull ListTag, @NotNull ListTag> action) {
         return put(name, action.apply(getList(name, type)));
     }
 {% for type in variants %}
@@ -171,7 +171,7 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
     }
 
     @Override
-    public final <U> void visit(final @NotNull TagVisitor<U> visitor) {
+    public final <U> void visit(final @NotNull TagVisitor<@NotNull U> visitor) {
         visitor.visitCompound(this);
     }
 

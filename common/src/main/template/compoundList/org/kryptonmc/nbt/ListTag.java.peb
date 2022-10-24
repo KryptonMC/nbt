@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.kryptonmc.nbt.io.TagReader;
@@ -19,7 +20,7 @@ import org.pcollections.TreePVector;
 /**
  * A list tag.
  */
-public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> permits AbstractListTag, ScopedListTag {
+public sealed interface ListTag extends CollectionTag<@NotNull Tag>, ScopedTag<@NotNull ListTag> permits AbstractListTag, ScopedListTag {
 
     /**
      * The empty list tag.
@@ -36,22 +37,22 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
     /**
      * The reader for reading list tags.
      */
-    @NotNull TagReader<ListTag> READER = AbstractListTag.READER;
+    @NotNull TagReader<@NotNull ListTag> READER = AbstractListTag.READER;
     /**
      * The writer for writing list tags.
      */
-    @NotNull TagWriter<ListTag> WRITER = AbstractListTag.WRITER;
+    @NotNull TagWriter<@NotNull ListTag> WRITER = AbstractListTag.WRITER;
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<ListTag> TYPE = new TagType<>("TAG_List", false, READER);
+    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, READER);
 
     /**
      * Gets the backing data for this list tag.
      *
      * @return the backing data
      */
-    @NotNull List<Tag> getData();
+    @NotNull List<@NotNull Tag> getData();
 
     @Override
     int elementType();
@@ -88,7 +89,7 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
      * @param elements the elements
      * @return true if this list tag contains all the elements, false otherwise
      */
-    boolean containsAll(final @NotNull Collection<? extends Tag> elements);
+    boolean containsAll(final @NotNull Collection<? extends @NotNull Tag> elements);
 
     /**
      * Gets the tag at the given index.
@@ -147,7 +148,7 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
      * @throws UnsupportedOperationException if any of the given tags are not
      * of the correct type for this list
      */
-    @NotNull ListTag addAll(final @NotNull Collection<? extends Tag> tags);
+    @NotNull ListTag addAll(final @NotNull Collection<? extends @NotNull Tag> tags);
 
     /**
      * Removes the tag at the given index from this list and returns the
@@ -173,7 +174,16 @@ public sealed interface ListTag extends CollectionTag<Tag>, ScopedTag<ListTag> p
      * @param tags the tags to remove
      * @return the resulting list tag
      */
-    @NotNull ListTag removeAll(final @NotNull Collection<?> tags);
+    @NotNull ListTag removeAll(final @NotNull Collection<? extends @NotNull Tag> tags);
+
+    /**
+     * Removes all tags from this list that match the given predicate and
+     * returns the resulting list.
+     *
+     * @param predicate the predicate to test tags against
+     * @return the resulting list tag
+     */
+    @NotNull ListTag removeIf(final @NotNull Predicate<? super @NotNull Tag> predicate);
 
     /**
      * Sets the tag at the given index in this list to the given tag and

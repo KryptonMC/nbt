@@ -23,12 +23,12 @@ import org.pcollections.HashTreePMap;
 /**
  * A tag that holds a map of keys to tags.
  */
-public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits AbstractCompoundTag, ScopedCompoundTag {
+public sealed interface CompoundTag extends ScopedTag<@NotNull CompoundTag> permits AbstractCompoundTag, ScopedCompoundTag {
 
     /**
      * The empty compound tag.
      */
-    @NotNull CompoundTag EMPTY = new ImmutableCompoundTagImpl(HashTreePMap.empty());
+    @NotNull ImmutableCompoundTag EMPTY = new ImmutableCompoundTagImpl(HashTreePMap.empty());
 
     /**
      * The ID of this type of tag.
@@ -40,22 +40,22 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
     /**
      * The reader for reading compound tags.
      */
-    @NotNull TagReader<CompoundTag> READER = AbstractCompoundTag.READER;
+    @NotNull TagReader<@NotNull CompoundTag> READER = AbstractCompoundTag.READER;
     /**
      * The writer for writing compound tags.
      */
-    @NotNull TagWriter<CompoundTag> WRITER = AbstractCompoundTag.WRITER;
+    @NotNull TagWriter<@NotNull CompoundTag> WRITER = AbstractCompoundTag.WRITER;
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<CompoundTag> TYPE = new TagType<>("TAG_Compound", false, READER);
+    @NotNull TagType<@NotNull CompoundTag> TYPE = new TagType<>("TAG_Compound", false, READER);
 
     /**
      * Gets the backing data for this compound tag.
      *
      * @return the backing data
      */
-    @NotNull Map<String, Tag> getData();
+    @NotNull Map<@NotNull String, @NotNull Tag> getData();
 
     /**
      * Checks if this compound tag is a mutable compound tag.
@@ -94,14 +94,14 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
      *
      * @return the keys
      */
-    @NotNull Set<String> keySet();
+    @NotNull Set<@NotNull String> keySet();
 
     /**
      * Gets the values in this compound tag.
      *
      * @return the values
      */
-    @NotNull Collection<Tag> values();
+    @NotNull Collection<@NotNull Tag> values();
 
     /**
      * Gets the type of the tag with the given name.
@@ -224,7 +224,7 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
      * @param action the action to apply
      * @return the resulting compound tag
      */
-    @NotNull CompoundTag update(final @NotNull String name, final @NotNull Function<CompoundTag, CompoundTag> action);
+    @NotNull CompoundTag update(final @NotNull String name, final @NotNull Function<@NotNull CompoundTag, @NotNull CompoundTag> action);
 
     /**
      * Gets the list tag with the given name, storing elements of the given
@@ -236,7 +236,7 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
      * @param action the action to apply
      * @return the resulting compound tag
      */
-    @NotNull CompoundTag update(final @NotNull String name, final int type, final @NotNull Function<ListTag, ListTag> action);
+    @NotNull CompoundTag update(final @NotNull String name, final int type, final @NotNull Function<@NotNull ListTag, @NotNull ListTag> action);
 {% for type in variants %}
 {% if type.value.E != 'Boolean' %}
 
@@ -326,7 +326,7 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
          * @return this builder
          */
         @Contract(value = "_, _ -> this", mutates = "this")
-        @NotNull Builder putList(final @NotNull String name, final @NotNull Consumer<ListTag.Builder> builder);
+        @NotNull Builder putList(final @NotNull String name, final @NotNull Consumer<ListTag.@NotNull Builder> builder);
 
         /**
          * Sets the value of the tag with the given name to the given value.
@@ -348,7 +348,7 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
          * @return this builder
          */
         @Contract(value = "_, _, _ -> this", mutates = "this")
-        @NotNull Builder putList(final @NotNull String name, final int elementType, final @NotNull Collection<Tag> elements);
+        @NotNull Builder putList(final @NotNull String name, final int elementType, final @NotNull Collection<@NotNull Tag> elements);
 
         /**
          * Sets the value of the tag with the given name to the result of
@@ -359,7 +359,7 @@ public sealed interface CompoundTag extends ScopedTag<CompoundTag> permits Abstr
          * @return this builder
          */
         @Contract(value = "_, _ -> this", mutates = "this")
-        @NotNull Builder putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.Builder> builder);
+        @NotNull Builder putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.@NotNull Builder> builder);
 
         /**
          * Removes the value for the given key from this builder.

@@ -11,7 +11,7 @@ sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permi
     @NotNull T add(final @NotNull Tag tag);
 
     @Override
-    @NotNull T addAll(final @NotNull Collection<? extends Tag> tags);
+    @NotNull T addAll(final @NotNull Collection<? extends @NotNull Tag> tags);
 
     @Override
     @NotNull T remove(final int index);
@@ -20,7 +20,10 @@ sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permi
     @NotNull T remove(final @NotNull Tag tag);
 
     @Override
-    @NotNull T removeAll(final @NotNull Collection<?> tags);
+    @NotNull T removeAll(final @NotNull Collection<? extends @NotNull Tag> tags);
+
+    @Override
+    @NotNull T removeIf(final @NotNull Predicate<? super @NotNull Tag> predicate);
 
     @Override
     @NotNull T set(final int index, final @NotNull Tag tag);
@@ -69,7 +72,7 @@ sealed interface ScopedListTag<T extends ScopedListTag<T>> extends ListTag permi
         @NotNull B remove(final @NotNull Tag element);
 
         @Override
-        @NotNull B from(final @NotNull ListTag.Builder other);
+        @NotNull B from(final ListTag.@NotNull Builder other);
 
         @Override
         @NotNull B from(final @NotNull ListTag other);

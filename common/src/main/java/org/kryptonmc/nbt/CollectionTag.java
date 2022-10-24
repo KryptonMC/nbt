@@ -8,6 +8,7 @@
  */
 package org.kryptonmc.nbt;
 
+import java.util.Iterator;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the type of tag held by this collection tag
  */
-public sealed interface CollectionTag<T extends Tag> extends Iterable<T>, Tag permits ListCollectionTag, ListTag {
+public sealed interface CollectionTag<T extends @NotNull Tag> extends Iterable<@NotNull T>, Tag permits ListCollectionTag, ListTag {
 
     /**
      * Gets the type of the tags that are stored by this collection tag.
@@ -63,10 +64,13 @@ public sealed interface CollectionTag<T extends Tag> extends Iterable<T>, Tag pe
      */
     boolean tryAdd(final @NotNull T tag);
 
+    @Override
+    @NotNull Iterator<@NotNull T> iterator();
+
     /**
      * Creates a new stream of the elements in this collection.
      *
      * @return a stream
      */
-    @NotNull Stream<T> stream();
+    @NotNull Stream<@NotNull T> stream();
 }

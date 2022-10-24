@@ -7,7 +7,7 @@ import org.kryptonmc.nbt.io.TagWriter;
 /**
  * A tag that holds a byte value.
  */
-public sealed interface {{E}}Tag extends NumberTag permits {{E}}TagImpl {
+public sealed interface {{E}}Tag extends NumberTag, ScopedTag<@NotNull {{E}}Tag> permits {{E}}TagImpl {
 
     /**
      * The {{e}} tag representing the constant zero.
@@ -36,15 +36,15 @@ public sealed interface {{E}}Tag extends NumberTag permits {{E}}TagImpl {
     /**
      * The reader for reading {{e}} tags.
      */
-    @NotNull TagReader<{{E}}Tag> READER = (input, depth) -> of(input.read{{E}}());
+    @NotNull TagReader<@NotNull {{E}}Tag> READER = (input, depth) -> of(input.read{{E}}());
     /**
      * The writer for writing {{e}} tags.
      */
-    @NotNull TagWriter<{{E}}Tag> WRITER = (output, value) -> output.write{{E}}(value.value());
+    @NotNull TagWriter<@NotNull {{E}}Tag> WRITER = (output, value) -> output.write{{E}}(value.value());
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<{{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, READER);
+    @NotNull TagType<@NotNull {{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, READER);
 
     /**
      * Gets {{ E == 'Int' ? "an" : "a" }} {{e}} tag representing the given value.
@@ -81,7 +81,4 @@ public sealed interface {{E}}Tag extends NumberTag permits {{E}}TagImpl {
      * @return the value
      */
     {{e}} value();
-
-    @Override
-    @NotNull {{E}}Tag copy();
 }

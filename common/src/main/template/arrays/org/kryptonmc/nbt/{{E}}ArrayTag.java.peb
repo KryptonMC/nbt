@@ -8,7 +8,7 @@ import {{ConsumerImport}};
 /**
  * A tag that holds a {{e}} array.
  */
-public sealed interface {{E}}ArrayTag extends ListCollectionTag<{{E}}Tag>, ScopedTag<{{E}}ArrayTag> permits {{E}}ArrayTagImpl {
+public sealed interface {{E}}ArrayTag extends ListCollectionTag<@NotNull {{E}}Tag>, ScopedTag<@NotNull {{E}}ArrayTag> permits {{E}}ArrayTagImpl {
 
     /**
      * The ID of this type of tag.
@@ -26,7 +26,7 @@ public sealed interface {{E}}ArrayTag extends ListCollectionTag<{{E}}Tag>, Scope
     /**
      * The reader for reading {{e}} array tags.
      */
-    @NotNull TagReader<{{E}}ArrayTag> READER = (input, depth) -> {
+    @NotNull TagReader<@NotNull {{E}}ArrayTag> READER = (input, depth) -> {
         final int length = input.readInt();
         final {{e}}[] data = new {{e}}[length];
 {% if E == 'Byte' %}
@@ -41,7 +41,7 @@ public sealed interface {{E}}ArrayTag extends ListCollectionTag<{{E}}Tag>, Scope
     /**
      * The writer for writing {{e}} array tags.
      */
-    @NotNull TagWriter<{{E}}ArrayTag> WRITER = (output, value) -> {
+    @NotNull TagWriter<@NotNull {{E}}ArrayTag> WRITER = (output, value) -> {
         output.writeInt(value.getData().length);
 {% if E == 'Byte' %}
         output.write(value.getData());
@@ -54,7 +54,7 @@ public sealed interface {{E}}ArrayTag extends ListCollectionTag<{{E}}Tag>, Scope
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<{{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, READER);
+    @NotNull TagType<@NotNull {{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, READER);
 
     /**
      * Creates a new {{e}} array tag with the given data.

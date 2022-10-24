@@ -11,6 +11,7 @@ package org.kryptonmc.nbt;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.pcollections.PSequence;
 import org.pcollections.TreePVector;
@@ -31,7 +32,7 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
     }
 
     @Override
-    public @NotNull PSequence<Tag> getData() {
+    public @NotNull List<Tag> getData() {
         return data;
     }
 
@@ -78,10 +79,24 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
     }
 
     @Override
-    public @NotNull ImmutableListTag removeAll(final @NotNull Collection<?> tags) {
+    public @NotNull ImmutableListTag removeAll(final @NotNull Collection<? extends Tag> tags) {
         // Optimization: We can't remove any data from an empty list.
         if (data.isEmpty()) return EMPTY;
         return new ImmutableListTagImpl(data.minusAll(tags), elementType());
+    }
+
+    @Override
+    public @NotNull ImmutableListTag removeIf(final @NotNull Predicate<? super Tag> predicate) {
+        if (data.isEmpty()) return EMPTY;
+        var result = data;
+        for (int i = 0; i < data.size(); i++) {
+            if (predicate.test(data.get(i))) result = result.minus(i);
+        }
+        // Optimization: If the sizes match, we removed nothing, so just return this tag.
+        if (result.size() == data.size()) return this;
+        // Optimization: If the result is empty, we removed everything, so just return the empty list tag.
+        if (result.isEmpty()) return EMPTY;
+        return new ImmutableListTagImpl(result, elementType());
     }
 
     @Override

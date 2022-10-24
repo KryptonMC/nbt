@@ -3,12 +3,14 @@ package org.kryptonmc.nbt;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+{% if E == 'Byte' %}
 import java.util.stream.IntStream;
+{% endif %}
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import {{ConsumerImport}};
 
-final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<{{E}}Tag> implements {{E}}ArrayTag {
+final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<@NotNull {{E}}Tag> implements {{E}}ArrayTag {
 
     static final {{e}}[] EMPTY_DATA = new {{e}}[0];
 
@@ -44,7 +46,7 @@ final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<{{E}}Tag> implem
     }
 
     @Override
-    public @NotNull TagType<{{E}}ArrayTag> type() {
+    public @NotNull TagType<@NotNull {{E}}ArrayTag> type() {
         return TYPE;
     }
 
@@ -101,7 +103,7 @@ final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<{{E}}Tag> implem
     }
 
     @Override
-    public @NotNull Stream<{{E}}Tag> stream() {
+    public @NotNull Stream<@NotNull {{E}}Tag> stream() {
 {% if E == 'Byte' %}
         return IntStream.range(0, data.length).mapToObj(index -> {{E}}Tag.of(data[index]));
 {% else %}
@@ -115,7 +117,7 @@ final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<{{E}}Tag> implem
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<T> visitor) {
+    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
         visitor.visit{{E}}Array(this);
     }
 

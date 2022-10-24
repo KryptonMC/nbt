@@ -29,7 +29,7 @@ public sealed interface Tag permits ScopedTag, CollectionTag, NumberTag, StringT
      *
      * @return the type of this tag
      */
-    @NotNull TagType<? extends Tag> type();
+    @NotNull TagType<? extends @NotNull Tag> type();
 
     /**
      * Writes this tag's contents to the given output.
@@ -45,7 +45,7 @@ public sealed interface Tag permits ScopedTag, CollectionTag, NumberTag, StringT
      * @param visitor the visitor
      * @param <T> the type of the visitor's result
      */
-    <T> void visit(final @NotNull TagVisitor<T> visitor);
+    <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor);
 
     /**
      * Converts this tag in to its SNBT form.

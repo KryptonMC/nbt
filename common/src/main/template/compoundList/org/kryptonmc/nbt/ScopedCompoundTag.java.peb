@@ -56,7 +56,7 @@ sealed interface ScopedCompoundTag<T extends ScopedCompoundTag<T>> extends Compo
 {% endfor %}
 
         @Override
-        default @NotNull B putList(final @NotNull String name, final @NotNull Consumer<ListTag.Builder> builder) {
+        default @NotNull B putList(final @NotNull String name, final @NotNull Consumer<ListTag.@NotNull Builder> builder) {
             final var list = ImmutableListTag.builder();
             builder.accept(list);
             return put(name, list.build());
@@ -68,12 +68,12 @@ sealed interface ScopedCompoundTag<T extends ScopedCompoundTag<T>> extends Compo
         }
 
         @Override
-        default @NotNull B putList(final @NotNull String name, final int elementType, final @NotNull Collection<Tag> elements) {
+        default @NotNull B putList(final @NotNull String name, final int elementType, final @NotNull Collection<@NotNull Tag> elements) {
             return put(name, ImmutableListTag.of(TreePVector.from(elements), elementType));
         }
 
         @Override
-        default @NotNull B putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.Builder> builder) {
+        default @NotNull B putCompound(final @NotNull String name, final @NotNull Consumer<CompoundTag.@NotNull Builder> builder) {
             final var compound = ImmutableCompoundTag.builder();
             builder.accept(compound);
             return put(name, compound.build());
@@ -83,7 +83,7 @@ sealed interface ScopedCompoundTag<T extends ScopedCompoundTag<T>> extends Compo
         @NotNull B remove(final @NotNull String name);
 
         @Override
-        @NotNull B from(final @NotNull CompoundTag.Builder other);
+        @NotNull B from(final CompoundTag.@NotNull Builder other);
 
         @Override
         @NotNull B from(final @NotNull CompoundTag other);

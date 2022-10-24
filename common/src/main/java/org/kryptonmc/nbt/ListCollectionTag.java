@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
-sealed interface ListCollectionTag<T extends Tag> extends CollectionTag<T>, List<T> permits AbstractListCollectionTag, ByteArrayTag, IntArrayTag, LongArrayTag {
+sealed interface ListCollectionTag<T extends @NotNull Tag> extends CollectionTag<@NotNull T>, List<@NotNull T>
+        permits AbstractListCollectionTag, ByteArrayTag, IntArrayTag, LongArrayTag {
 
     @Override
     boolean isEmpty();
 
     @Override
-    @NotNull Stream<T> stream();
+    @NotNull Stream<@NotNull T> stream();
 }

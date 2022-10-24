@@ -25,7 +25,7 @@ public sealed interface MutableCompoundTag extends ScopedCompoundTag<MutableComp
      * @return a new mutable compound tag
      */
     @Contract(value = "_ -> new", pure = true)
-    static @NotNull MutableCompoundTag of(final @NotNull Map<? extends String, ? extends Tag> data) {
+    static @NotNull MutableCompoundTag of(final @NotNull Map<? extends @NotNull String, ? extends @NotNull Tag> data) {
         return new MutableCompoundTagImpl(new LinkedHashMap<>(data));
     }
 

@@ -11,7 +11,7 @@ package org.kryptonmc.nbt;
 import java.util.AbstractList;
 import org.jetbrains.annotations.NotNull;
 
-abstract non-sealed class AbstractListCollectionTag<T extends Tag> extends AbstractList<T> implements ListCollectionTag<T> {
+abstract non-sealed class AbstractListCollectionTag<T extends @NotNull Tag> extends AbstractList<@NotNull T> implements ListCollectionTag<@NotNull T> {
 
     @Override
     public final boolean tryAdd(final int index, final @NotNull T tag) {

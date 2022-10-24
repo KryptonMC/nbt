@@ -8,6 +8,8 @@
  */
 package org.kryptonmc.nbt.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A primitive specialization of {@link java.util.function.BiConsumer} for
  * an object and a float.
@@ -21,5 +23,5 @@ public interface ObjFloatConsumer<T> {
      * @param t the input object
      * @param f the input float
      */
-    void accept(final T t, final float f);
+    void accept(final @NotNull T t, final float f);
 }

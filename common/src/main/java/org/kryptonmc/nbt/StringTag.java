@@ -32,15 +32,15 @@ public sealed interface StringTag extends Tag permits StringTagImpl {
     /**
      * The reader for reading string tags.
      */
-    @NotNull TagReader<StringTag> READER = (input, depth) -> of(input.readUTF());
+    @NotNull TagReader<@NotNull StringTag> READER = (input, depth) -> of(input.readUTF());
     /**
      * The writer for writing string tags.
      */
-    @NotNull TagWriter<StringTag> WRITER = (output, value) -> output.writeUTF(value.value());
+    @NotNull TagWriter<@NotNull StringTag> WRITER = (output, value) -> output.writeUTF(value.value());
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<StringTag> TYPE = new TagType<>("TAG_String", true, READER);
+    @NotNull TagType<@NotNull StringTag> TYPE = new TagType<>("TAG_String", true, READER);
 
     /**
      * Gets a string tag that represents the given value.

@@ -19,7 +19,7 @@ import org.kryptonmc.nbt.io.TagReader;
  * @param name the name of the tag type
  * @param isValue if the tag is a value tag
  */
-public record TagType<T extends Tag>(@NotNull String name, boolean isValue, @NotNull TagReader<T> reader) {
+public record TagType<T extends @NotNull Tag>(@NotNull String name, boolean isValue, @NotNull TagReader<T> reader) {
 
     /**
      * Reads the tag from the given input using this tag type's reader.

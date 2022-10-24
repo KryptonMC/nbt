@@ -10,10 +10,10 @@ package org.kryptonmc.nbt;
 
 import org.jetbrains.annotations.NotNull;
 
-non-sealed interface ScopedTag<T extends ScopedTag<T>> extends Tag {
+non-sealed interface ScopedTag<T extends @NotNull ScopedTag<T>> extends Tag {
 
     @Override
-    @NotNull TagType<T> type();
+    @NotNull TagType<@NotNull T> type();
 
     @Override
     @NotNull T copy();

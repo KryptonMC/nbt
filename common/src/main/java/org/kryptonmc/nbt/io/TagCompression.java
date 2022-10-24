@@ -24,7 +24,8 @@ import org.jetbrains.annotations.NotNull;
  * @param decompressor the decompressor function
  * @param compressor the compressor function
  */
-public record TagCompression(@NotNull CompressorFunction<InputStream> decompressor, @NotNull CompressorFunction<OutputStream> compressor) {
+public record TagCompression(@NotNull CompressorFunction<@NotNull InputStream> decompressor,
+                             @NotNull CompressorFunction<@NotNull OutputStream> compressor) {
 
     /**
      * The compression type for uncompressed NBT data.
@@ -68,7 +69,7 @@ public record TagCompression(@NotNull CompressorFunction<InputStream> decompress
      * @param <T> the type of the value
      */
     @FunctionalInterface
-    public interface CompressorFunction<T extends Closeable> {
+    public interface CompressorFunction<T extends @NotNull Closeable> {
 
         /**
          * Performs this function on the given value.

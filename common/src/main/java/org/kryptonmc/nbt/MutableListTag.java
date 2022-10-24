@@ -25,7 +25,7 @@ public sealed interface MutableListTag extends ScopedListTag<MutableListTag> per
      * @param elementType the element type
      * @return a new mutable list tag
      */
-    static @NotNull MutableListTag of(final @NotNull List<? extends Tag> data, final int elementType) {
+    static @NotNull MutableListTag of(final @NotNull List<? extends @NotNull Tag> data, final int elementType) {
         return new MutableListTagImpl(new ArrayList<>(data), elementType);
     }
 

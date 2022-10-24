@@ -19,7 +19,7 @@ import org.kryptonmc.nbt.Tag;
  * @param <T> the type of tags that can be written by this writer
  */
 @FunctionalInterface
-public interface TagWriter<T extends Tag> {
+public interface TagWriter<T extends @NotNull Tag> {
 
     /**
      * Writes the given value to the given output.
