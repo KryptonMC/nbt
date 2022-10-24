@@ -11,6 +11,8 @@ package org.kryptonmc.nbt;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.pcollections.OrderedPMap;
+import org.pcollections.TreePVector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -49,7 +51,9 @@ final class VisitingTests {
 
     @Test
     void visitCompound() {
-        final Map<String, Tag> tags = Map.of("hello_world", ByteTag.of((byte) 1), "goodbye_world", LongTag.of(8));
-        assertEquals("{goodbye_world:8L,hello_world:1b}", new StringTagVisitor().visit(ImmutableCompoundTag.of(tags)));
+        final var tags = OrderedPMap.<String, Tag>empty()
+                .plus("hello_world", ByteTag.ONE)
+                .plus("goodbye_world", LongTag.of(8));
+        assertEquals("{hello_world:1b,goodbye_world:8L}", new StringTagVisitor().visit(ImmutableCompoundTag.of(tags)));
     }
 }
