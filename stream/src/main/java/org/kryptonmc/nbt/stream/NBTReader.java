@@ -77,8 +77,7 @@ public interface NBTReader extends AutoCloseable {
         final int nextType = peekType();
         return switch (nextType) {
             case ByteArrayTag.ID -> {
-                final int size = beginByteArray();
-                final byte[] bytes = new byte[size];
+                final byte[] bytes = new byte[beginByteArray()];
                 for (int i = 0; hasNext(); i++) {
                     bytes[i] = nextByte();
                 }
@@ -86,8 +85,7 @@ public interface NBTReader extends AutoCloseable {
                 yield ByteArrayTag.of(bytes);
             }
             case IntArrayTag.ID -> {
-                final int size = beginIntArray();
-                final int[] ints = new int[size];
+                final int[] ints = new int[beginIntArray()];
                 for (int i = 0; hasNext(); i++) {
                     ints[i] = nextInt();
                 }
@@ -95,8 +93,7 @@ public interface NBTReader extends AutoCloseable {
                 yield IntArrayTag.of(ints);
             }
             case LongArrayTag.ID -> {
-                final int size = beginLongArray();
-                final long[] longs = new long[size];
+                final long[] longs = new long[beginLongArray()];
                 for (int i = 0; hasNext(); i++) {
                     longs[i] = nextLong();
                 }
@@ -105,16 +102,15 @@ public interface NBTReader extends AutoCloseable {
             }
             case ListTag.ID -> {
                 final int elementType = nextType();
-                final int size = beginList(elementType);
-                if (elementType == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for non-empty list tag!");
                 final ListTag.Builder builder = ImmutableListTag.builder(elementType);
-                while (hasNext()) {
+                for (int i = 0, size = beginList(elementType); i < size; i++) {
                     builder.add(read());
                 }
                 endList();
                 yield builder.build();
             }
             case CompoundTag.ID -> {
+                beginCompound();
                 final CompoundTag.Builder builder = ImmutableCompoundTag.builder();
                 for (int type = nextType(); type != EndTag.ID; type = nextType()) {
                     builder.put(nextName(), read());

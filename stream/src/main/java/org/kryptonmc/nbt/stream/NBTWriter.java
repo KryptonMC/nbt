@@ -93,25 +93,25 @@ public interface NBTWriter extends AutoCloseable {
                 endCompound();
             }
             case ByteArrayTag.ID -> {
-                final ByteArrayTag byteArray = (ByteArrayTag) value;
-                beginByteArray(byteArray.size());
-                for (final byte element : byteArray.getData()) {
+                final ByteArrayTag array = (ByteArrayTag) value;
+                beginByteArray(array.size());
+                for (final byte element : array.getData()) {
                     value(element);
                 }
                 endByteArray();
             }
             case IntArrayTag.ID -> {
-                final IntArrayTag intArray = (IntArrayTag) value;
-                beginByteArray(intArray.size());
-                for (final int element : intArray.getData()) {
+                final IntArrayTag array = (IntArrayTag) value;
+                beginByteArray(array.size());
+                for (final int element : array.getData()) {
                     value(element);
                 }
                 endByteArray();
             }
             case LongArrayTag.ID -> {
-                final LongArrayTag longArray = (LongArrayTag) value;
-                beginByteArray(longArray.size());
-                for (final long element : longArray.getData()) {
+                final LongArrayTag array = (LongArrayTag) value;
+                beginByteArray(array.size());
+                for (final long element : array.getData()) {
                     value(element);
                 }
                 endByteArray();

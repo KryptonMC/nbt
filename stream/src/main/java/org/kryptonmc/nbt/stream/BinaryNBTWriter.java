@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.kryptonmc.nbt.ByteArrayTag;
 import org.kryptonmc.nbt.ByteTag;
 import org.kryptonmc.nbt.CompoundTag;
@@ -33,7 +32,7 @@ public final class BinaryNBTWriter implements NBTWriter {
     private final DataOutputStream output;
     private int stackSize = 1;
     private int[] scopes = new int[32];
-    private @Nullable String deferredName;
+    private String deferredName;
 
     public BinaryNBTWriter(final @NotNull DataOutputStream output) {
         this.output = output;
@@ -83,7 +82,7 @@ public final class BinaryNBTWriter implements NBTWriter {
     @Override
     public void beginList(final int elementType, final int size) throws IOException {
         if (size < 0) throw new IllegalArgumentException("Cannot write a list with a size less than 0!");
-        if (elementType == 0 && size > 0) throw new IllegalStateException("Invalid list! Element type must not be 0 for non-empty lists!");
+        if (elementType == 0 && size > 0) throw new IllegalArgumentException("Invalid list! Element type must not be 0 for non-empty lists!");
         writeNameAndType(ListTag.ID);
         open(NBTScope.LIST);
         output.writeByte(elementType);
@@ -109,15 +108,14 @@ public final class BinaryNBTWriter implements NBTWriter {
 
     @Override
     public void name(final @NotNull String name) {
-        final int context = peekScope();
-        if (context != NBTScope.COMPOUND) throw new IllegalStateException("Nesting problem!");
+        if (peekScope() != NBTScope.COMPOUND) throw new IllegalStateException("Nesting problem!");
         deferredName = name;
     }
 
     @Override
     public void value(final boolean value) throws IOException {
         writeNameAndType(ByteTag.ID);
-        output.writeByte(value ? 1 : 0);
+        output.writeBoolean(value);
     }
 
     @Override
@@ -194,8 +192,7 @@ public final class BinaryNBTWriter implements NBTWriter {
     }
 
     private void close(final int scope) {
-        final int context = peekScope();
-        if (context != scope) throw new IllegalStateException("Nesting problem!");
+        if (peekScope() != scope) throw new IllegalStateException("Nesting problem!");
         if (deferredName != null) throw new IllegalStateException("Dangling name: " + deferredName + "!");
         stackSize--;
     }
@@ -203,9 +200,8 @@ public final class BinaryNBTWriter implements NBTWriter {
     // Only writes the type and the name if the current scope is not a list
     private void writeNameAndType(final int type) throws IOException {
         if (peekScope() != NBTScope.COMPOUND) return;
-        final String name = Objects.requireNonNull(deferredName, "All binary tags must be named!");
         output.writeByte(type);
-        output.writeUTF(name);
+        output.writeUTF(Objects.requireNonNull(deferredName, "All binary tags must be named!"));
         deferredName = null;
     }
 }

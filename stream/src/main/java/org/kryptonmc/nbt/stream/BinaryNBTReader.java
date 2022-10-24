@@ -89,7 +89,9 @@ public final class BinaryNBTReader implements NBTReader {
         open(NBTScope.LIST);
         final int readType = input.readByte();
         if (elementType != readType) throw new IllegalStateException("Expected list of type " + elementType + ", got " + readType + "!");
-        return input.readInt();
+        final int size = input.readInt();
+        if (elementType == EndTag.ID && size > 0) throw new IllegalStateException("Missing required type for non-empty list tag!");
+        return size;
     }
 
     @Override
@@ -121,8 +123,7 @@ public final class BinaryNBTReader implements NBTReader {
 
     @Override
     public @NotNull String nextName() throws IOException {
-        final int context = peekScope();
-        if (context != NBTScope.COMPOUND) throw new IllegalStateException("Nesting problem!");
+        if (peekScope() != NBTScope.COMPOUND) throw new IllegalStateException("Nesting problem!");
         input.readByte();
         return deferredName = input.readUTF();
     }
@@ -202,8 +203,7 @@ public final class BinaryNBTReader implements NBTReader {
     }
 
     private void close(final int scope) {
-        final int context = peekScope();
-        if (context != scope) throw new IllegalStateException("Nesting problem!");
+        if (peekScope() != scope) throw new IllegalStateException("Nesting problem!");
         if (deferredName != null) throw new IllegalStateException("Dangling name: " + deferredName + "!");
         stackSize--;
     }
