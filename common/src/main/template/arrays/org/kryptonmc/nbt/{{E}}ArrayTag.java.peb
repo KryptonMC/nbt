@@ -54,7 +54,7 @@ public sealed interface {{E}}ArrayTag extends ListCollectionTag<@NotNull {{E}}Ta
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull {{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, READER);
+    @NotNull TagType<@NotNull {{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, () -> READER);
 
     /**
      * Creates a new {{e}} array tag with the given data.

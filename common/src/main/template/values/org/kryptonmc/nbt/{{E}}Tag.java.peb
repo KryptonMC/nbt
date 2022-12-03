@@ -44,7 +44,7 @@ public sealed interface {{E}}Tag extends NumberTag, ScopedTag<@NotNull {{E}}Tag>
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull {{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, READER);
+    @NotNull TagType<@NotNull {{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, () -> READER);
 
     /**
      * Gets {{ E == 'Int' ? "an" : "a" }} {{e}} tag representing the given value.

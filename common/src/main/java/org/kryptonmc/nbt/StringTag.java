@@ -40,7 +40,7 @@ public sealed interface StringTag extends Tag permits StringTagImpl {
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull StringTag> TYPE = new TagType<>("TAG_String", true, READER);
+    @NotNull TagType<@NotNull StringTag> TYPE = new TagType<>("TAG_String", true, () -> READER);
 
     /**
      * Gets a string tag that represents the given value.

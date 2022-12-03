@@ -45,7 +45,7 @@ public sealed interface ListTag extends CollectionTag<@NotNull Tag>, ScopedTag<@
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, READER);
+    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, () -> READER);
 
     /**
      * Gets the backing data for this list tag.
