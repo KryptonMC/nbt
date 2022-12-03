@@ -40,15 +40,15 @@ public sealed interface CompoundTag extends ScopedTag<@NotNull CompoundTag> perm
     /**
      * The reader for reading compound tags.
      */
-    @NotNull TagReader<@NotNull CompoundTag> READER = AbstractCompoundTag.READER;
+    @NotNull TagReader<@NotNull CompoundTag> READER = AbstractCompoundTag.createReader();
     /**
      * The writer for writing compound tags.
      */
-    @NotNull TagWriter<@NotNull CompoundTag> WRITER = AbstractCompoundTag.WRITER;
+    @NotNull TagWriter<@NotNull CompoundTag> WRITER = AbstractCompoundTag.createWriter();
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull CompoundTag> TYPE = new TagType<>("TAG_Compound", false, () -> READER);
+    @NotNull TagType<@NotNull CompoundTag> TYPE = new TagType<>("TAG_Compound", false, READER);
 
     /**
      * Gets the backing data for this compound tag.

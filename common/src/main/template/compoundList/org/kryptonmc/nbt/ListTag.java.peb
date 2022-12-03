@@ -37,15 +37,15 @@ public sealed interface ListTag extends CollectionTag<@NotNull Tag>, ScopedTag<@
     /**
      * The reader for reading list tags.
      */
-    @NotNull TagReader<@NotNull ListTag> READER = AbstractListTag.READER;
+    @NotNull TagReader<@NotNull ListTag> READER = AbstractListTag.createReader();
     /**
      * The writer for writing list tags.
      */
-    @NotNull TagWriter<@NotNull ListTag> WRITER = AbstractListTag.WRITER;
+    @NotNull TagWriter<@NotNull ListTag> WRITER = AbstractListTag.createWriter();
     /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, () -> READER);
+    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, READER);
 
     /**
      * Gets the backing data for this list tag.

@@ -23,26 +23,31 @@ import org.pcollections.TreePVector;
 
 abstract sealed class AbstractListTag<T extends ListTag> implements ListTag permits MutableListTagImpl, ImmutableListTagImpl {
 
-    static TagReader<@NotNull ListTag> READER = (input, depth) -> {
-        if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
-        final int type = input.readByte();
-        final int size = input.readInt();
-        if (type == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
-        final TagReader<? extends @NotNull Tag> reader = Types.of(type).reader();
-        final List<Tag> data = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            data.add(reader.read(input, depth + 1));
-        }
-        return new ImmutableListTagImpl(TreePVector.from(data), type);
-    };
-    static TagWriter<@NotNull ListTag> WRITER = (output, value) -> {
-        final List<Tag> data = value.getData();
-        output.writeByte(value.elementType());
-        output.writeInt(data.size());
-        for (final var element : data) {
-            element.write(output);
-        }
-    };
+    static TagReader<@NotNull ListTag> createReader() {
+        return (input, depth) -> {
+            if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+            final int type = input.readByte();
+            final int size = input.readInt();
+            if (type == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
+            final TagReader<? extends @NotNull Tag> reader = Types.of(type).reader();
+            final List<Tag> data = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                data.add(reader.read(input, depth + 1));
+            }
+            return new ImmutableListTagImpl(TreePVector.from(data), type);
+        };
+    }
+
+    static TagWriter<@NotNull ListTag> createWriter() {
+        return (output, value) -> {
+            final List<Tag> data = value.getData();
+            output.writeByte(value.elementType());
+            output.writeInt(data.size());
+            for (final var element : data) {
+                element.write(output);
+            }
+        };
+    }
 
     @Override
     public final int id() {

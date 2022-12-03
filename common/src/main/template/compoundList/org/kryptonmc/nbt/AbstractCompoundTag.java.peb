@@ -27,26 +27,30 @@ import org.pcollections.HashTreePMap;
 
 abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements CompoundTag permits MutableCompoundTagImpl, ImmutableCompoundTagImpl {
 
-    static TagReader<@NotNull CompoundTag> READER = (input, depth) -> {
-        if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
-        final Map<String, Tag> result = new HashMap<>();
-        for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
-            final String name = input.readUTF();
-            final Tag tag = Types.of(type).read(input, depth + 1);
-            result.put(name, tag);
-        }
-        return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
-    };
-    static TagWriter<@NotNull CompoundTag> WRITER = (output, value) -> {
-        for (final var entry : value.getData().entrySet()) {
-            output.writeByte(entry.getValue().id());
-            System.out.println("Name: " + entry.getKey() + ", Tag: " + entry.getValue().type().name() + ", ID: " + entry.getValue().id());
-            if (entry.getValue().id() == EndTag.ID) continue;
-            output.writeUTF(entry.getKey());
-            entry.getValue().write(output);
-        }
-        output.writeByte(EndTag.ID);
-    };
+    static TagReader<@NotNull CompoundTag> createReader() {
+        return (input, depth) -> {
+            if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+            final Map<String, Tag> result = new HashMap<>();
+            for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
+                final String name = input.readUTF();
+                final Tag tag = Types.of(type).read(input, depth + 1);
+                result.put(name, tag);
+            }
+            return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
+        };
+    }
+
+    static TagWriter<@NotNull CompoundTag> createWriter() {
+        return (output, value) -> {
+            for (final var entry : value.getData().entrySet()) {
+                output.writeByte(entry.getValue().id());
+                if (entry.getValue().id() == EndTag.ID) continue;
+                output.writeUTF(entry.getKey());
+                entry.getValue().write(output);
+            }
+            output.writeByte(EndTag.ID);
+        };
+    }
 
     @Override
     public final int id() {

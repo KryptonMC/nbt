@@ -41,7 +41,7 @@ public final class EndTag implements ScopedTag<@NotNull EndTag> {
     /**
      * The tag type for this tag.
      */
-    public static final @NotNull TagType<@NotNull EndTag> TYPE = new TagType<>("TAG_End", true, () -> READER);
+    public static final @NotNull TagType<@NotNull EndTag> TYPE = new TagType<>("TAG_End", true, READER);
 
     private EndTag() {
     }
