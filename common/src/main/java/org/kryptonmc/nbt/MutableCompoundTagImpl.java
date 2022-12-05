@@ -71,6 +71,11 @@ final class MutableCompoundTagImpl extends AbstractCompoundTag<MutableCompoundTa
         return new ImmutableCompoundTagImpl(OrderedPMap.from(data));
     }
 
+    @Override
+    public String toString() {
+        return "MutableCompoundTagImpl{data=" + data + '}';
+    }
+
     static final class Builder extends AbstractCompoundTag.Builder<Builder, MutableCompoundTag> implements MutableCompoundTag.Builder {
 
         private Builder(final Map<String, Tag> data) {

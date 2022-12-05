@@ -124,6 +124,11 @@ final class ImmutableListTagImpl extends AbstractListTag<ImmutableListTag> imple
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "ImmutableListTagImpl{data=" + data + ", elementType=" + elementType + '}';
+    }
+
     static final class Builder extends AbstractListTag.Builder<Builder, ImmutableListTag> implements ImmutableListTag.Builder {
 
         private Builder(final List<Tag> data, final int elementType) {

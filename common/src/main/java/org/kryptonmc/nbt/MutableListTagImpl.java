@@ -146,6 +146,11 @@ final class MutableListTagImpl extends AbstractListTag<MutableListTag> implement
         return new ImmutableListTagImpl(TreePVector.from(data), elementType);
     }
 
+    @Override
+    public String toString() {
+        return "MutableListTagImpl{data=" + data + ", elementType=" + elementType + '}';
+    }
+
     static final class Builder extends AbstractListTag.Builder<Builder, MutableListTag> implements MutableListTag.Builder {
 
         private Builder(final List<Tag> data, final int elementType) {

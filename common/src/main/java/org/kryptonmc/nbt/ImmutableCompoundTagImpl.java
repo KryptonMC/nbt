@@ -60,6 +60,11 @@ final class ImmutableCompoundTagImpl extends AbstractCompoundTag<ImmutableCompou
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "ImmutableCompoundTagImpl{data=" + data + '}';
+    }
+
     static final class Builder extends AbstractCompoundTag.Builder<Builder, ImmutableCompoundTag> implements ImmutableCompoundTag.Builder {
 
         private Builder(final Map<String, Tag> data) {
