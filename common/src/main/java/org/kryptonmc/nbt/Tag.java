@@ -11,6 +11,9 @@ package org.kryptonmc.nbt;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.StringTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 
 /**
  * The base supertype for all NBT tags.
@@ -29,7 +32,7 @@ public sealed interface Tag permits ScopedTag, CollectionTag, NumberTag, StringT
      *
      * @return the type of this tag
      */
-    @NotNull TagType<? extends @NotNull Tag> type();
+    @NotNull TagType<?> type();
 
     /**
      * Writes this tag's contents to the given output.
@@ -43,9 +46,16 @@ public sealed interface Tag permits ScopedTag, CollectionTag, NumberTag, StringT
      * Visits this tag's contents using the given visitor.
      *
      * @param visitor the visitor
-     * @param <T> the type of the visitor's result
      */
-    <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor);
+    void visit(final @NotNull TagVisitor visitor);
+
+    /**
+     * Visits this tag's contents using the given visitor.
+     *
+     * @param visitor the visitor
+     * @return the result
+     */
+    StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor);
 
     /**
      * Converts this tag in to its SNBT form.

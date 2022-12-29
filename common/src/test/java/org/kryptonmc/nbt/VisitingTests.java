@@ -9,10 +9,9 @@
 package org.kryptonmc.nbt;
 
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.kryptonmc.nbt.visitor.StringTagVisitor;
 import org.pcollections.OrderedPMap;
-import org.pcollections.TreePVector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

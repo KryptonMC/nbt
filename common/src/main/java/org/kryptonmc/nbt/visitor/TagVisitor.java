@@ -6,24 +6,27 @@
  * This project is licensed under the terms of the MIT license.
  * For more details, please reference the LICENSE file in the top-level directory.
  */
-package org.kryptonmc.nbt;
+package org.kryptonmc.nbt.visitor;
 
 import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.ByteArrayTag;
+import org.kryptonmc.nbt.ByteTag;
+import org.kryptonmc.nbt.CompoundTag;
+import org.kryptonmc.nbt.DoubleTag;
+import org.kryptonmc.nbt.EndTag;
+import org.kryptonmc.nbt.FloatTag;
+import org.kryptonmc.nbt.IntArrayTag;
+import org.kryptonmc.nbt.IntTag;
+import org.kryptonmc.nbt.ListTag;
+import org.kryptonmc.nbt.LongArrayTag;
+import org.kryptonmc.nbt.LongTag;
+import org.kryptonmc.nbt.ShortTag;
+import org.kryptonmc.nbt.StringTag;
 
 /**
  * A visitor that can be used to visit tags.
- *
- * @param <T> the type of the result
  */
-public interface TagVisitor<T> {
-
-    /**
-     * Visits the given tag and returns the completed result of the visit.
-     *
-     * @param tag the tag to visit
-     * @return the result of the visit
-     */
-    @NotNull T visit(final @NotNull Tag tag);
+public interface TagVisitor {
 
     /**
      * Visits the end tag.

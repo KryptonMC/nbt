@@ -6,15 +6,29 @@
  * This project is licensed under the terms of the MIT license.
  * For more details, please reference the LICENSE file in the top-level directory.
  */
-package org.kryptonmc.nbt;
+package org.kryptonmc.nbt.visitor;
 
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.ByteArrayTag;
+import org.kryptonmc.nbt.ByteTag;
+import org.kryptonmc.nbt.CompoundTag;
+import org.kryptonmc.nbt.DoubleTag;
+import org.kryptonmc.nbt.EndTag;
+import org.kryptonmc.nbt.FloatTag;
+import org.kryptonmc.nbt.IntArrayTag;
+import org.kryptonmc.nbt.IntTag;
+import org.kryptonmc.nbt.ListTag;
+import org.kryptonmc.nbt.LongArrayTag;
+import org.kryptonmc.nbt.LongTag;
+import org.kryptonmc.nbt.ShortTag;
+import org.kryptonmc.nbt.StringTag;
+import org.kryptonmc.nbt.Tag;
 
 /**
  * A tag visitor that visits a tag and converts it in to standard SNBT form.
  */
-public final class StringTagVisitor implements TagVisitor<@NotNull String> {
+public final class StringTagVisitor implements TagVisitor {
 
     private static final Pattern VALUE_REGEX = Pattern.compile("[A-Za-z0-9._+-]+");
     private static final char NULL_CHARACTER = 0;
@@ -30,7 +44,6 @@ public final class StringTagVisitor implements TagVisitor<@NotNull String> {
     public StringTagVisitor() {
     }
 
-    @Override
     public @NotNull String visit(final @NotNull Tag tag) {
         tag.visit(this);
         return builder.toString();

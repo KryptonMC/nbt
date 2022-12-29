@@ -13,8 +13,6 @@ import java.util.function.ObjLongConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 import org.kryptonmc.nbt.util.ObjByteConsumer;
 import org.kryptonmc.nbt.util.ObjFloatConsumer;
 import org.kryptonmc.nbt.util.ObjShortConsumer;
@@ -38,17 +36,9 @@ public sealed interface CompoundTag extends ScopedTag<@NotNull CompoundTag> perm
      */
     int ID = 10;
     /**
-     * The reader for reading compound tags.
-     */
-    @NotNull TagReader<@NotNull CompoundTag> READER = AbstractCompoundTag.createReader();
-    /**
-     * The writer for writing compound tags.
-     */
-    @NotNull TagWriter<@NotNull CompoundTag> WRITER = AbstractCompoundTag.createWriter();
-    /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull CompoundTag> TYPE = new TagType<>("TAG_Compound", false, READER);
+    @NotNull TagType<@NotNull CompoundTag> TYPE = AbstractCompoundTag.createType();
 
     /**
      * Gets the backing data for this compound tag.

@@ -1,6 +1,7 @@
 {% macro notNullIfObject(type) %}{{ type.value.type == 'object' or type.value.type == 'compound' ? "@NotNull " : "" }}{% endmacro %}
 package org.kryptonmc.nbt;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,38 +14,101 @@ import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 import org.kryptonmc.nbt.util.ByteConsumer;
 import org.kryptonmc.nbt.util.FloatConsumer;
 import org.kryptonmc.nbt.util.ShortConsumer;
 import org.kryptonmc.nbt.util.Types;
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 import org.pcollections.TreePVector;
 
 abstract sealed class AbstractListTag<T extends ListTag> implements ListTag permits MutableListTagImpl, ImmutableListTagImpl {
 
-    static TagReader<@NotNull ListTag> createReader() {
-        return (input, depth) -> {
-            if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
-            final int type = input.readByte();
-            final int size = input.readInt();
-            if (type == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
-            final TagReader<? extends @NotNull Tag> reader = Types.of(type).reader();
-            final List<Tag> data = new ArrayList<>(size);
-            for (int i = 0; i < size; i++) {
-                data.add(reader.read(input, depth + 1));
+    static TagType<ListTag> createType() {
+        return new TagType.VariableSize<>() {
+            @Override
+            public @NotNull String name() {
+                return "LIST";
             }
-            return new ImmutableListTagImpl(TreePVector.from(data), type);
-        };
-    }
 
-    static TagWriter<@NotNull ListTag> createWriter() {
-        return (output, value) -> {
-            final List<Tag> data = value.getData();
-            output.writeByte(value.elementType());
-            output.writeInt(data.size());
-            for (final var element : data) {
-                element.write(output);
+            @Override
+            public @NotNull String prettyName() {
+                return "TAG_List";
+            }
+
+            @Override
+            public @NotNull ListTag load(final @NotNull DataInput input, final int depth) throws IOException {
+                if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+                final int id = input.readByte();
+                final int size = input.readInt();
+                if (id == EndTag.ID && size > 0) throw new RuntimeException("Missing required type for list tag!");
+                final TagType<?> type = Types.of(id);
+                final List<Tag> data = new ArrayList<>(size);
+                for (int i = 0; i < size; i++) {
+                    data.add(type.load(input, depth + 1));
+                }
+                return new ImmutableListTagImpl(TreePVector.from(data), id);
+            }
+
+            @Override
+            public StreamingTagVisitor.@NotNull ValueResult parse(final @NotNull DataInput input,
+                                                                  final @NotNull StreamingTagVisitor visitor) throws IOException {
+                final TagType<?> type = Types.of(input.readByte());
+                final int size = input.readInt();
+                switch (visitor.visitList(type, size)) {
+                    case HALT -> {
+                        return StreamingTagVisitor.ValueResult.HALT;
+                    }
+                    case BREAK -> {
+                        type.skip(input, size);
+                        return visitor.visitContainerEnd();
+                    }
+                    default -> {
+                        int i = 0;
+                        while (true) {
+                            if (i >= size) {
+                                final int remaining = size - 1 - i;
+                                if (remaining > 0) type.skip(input, remaining);
+                                return visitor.visitContainerEnd();
+                            }
+                            switch (visitor.visitElement(type, i)) {
+                                case HALT -> {
+                                    return StreamingTagVisitor.ValueResult.HALT;
+                                }
+                                case BREAK -> {
+                                    type.skip(input);
+                                    final int remaining = size - 1 - i;
+                                    if (remaining > 0) type.skip(input, remaining);
+                                    return visitor.visitContainerEnd();
+                                }
+                                case SKIP -> {
+                                    type.skip(input);
+                                    ++i;
+                                }
+                                default -> {
+                                    switch (type.parse(input, visitor)) {
+                                        case HALT -> {
+                                            return StreamingTagVisitor.ValueResult.HALT;
+                                        }
+                                        case BREAK -> {
+                                            final int remaining = size - 1 - i;
+                                            if (remaining > 0) type.skip(input, remaining);
+                                            return visitor.visitContainerEnd();
+                                        }
+                                        default -> ++i;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void skip(final @NotNull DataInput input) throws IOException {
+                final TagType<?> type = Types.of(input.readByte());
+                final int size = input.readInt();
+                type.skip(input, size);
             }
         };
     }
@@ -146,12 +210,56 @@ abstract sealed class AbstractListTag<T extends ListTag> implements ListTag perm
 
     @Override
     public final void write(final @NotNull DataOutput output) throws IOException {
-        WRITER.write(output, this);
+        final List<Tag> data = getData();
+        output.writeByte(elementType());
+        output.writeInt(data.size());
+        for (final var element : data) {
+            element.write(output);
+        }
     }
 
     @Override
-    public final <U> void visit(final @NotNull TagVisitor<@NotNull U> visitor) {
+    public final void visit(final @NotNull TagVisitor visitor) {
         visitor.visitList(this);
+    }
+
+    @Override
+    public final StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor) {
+        final int size = getData().size();
+        switch (visitor.visitList(Types.of(id()), size)) {
+            case HALT -> {
+                return StreamingTagVisitor.ValueResult.HALT;
+            }
+            case BREAK -> {
+                return visitor.visitContainerEnd();
+            }
+            default -> {
+                int i = 0;
+                while (i < size) {
+                    final Tag value = get(i);
+                    // This is an old switch because we want to fall through after matching the default case.
+                    switch (visitor.visitElement(value.type(), i)) {
+                        case HALT:
+                            return StreamingTagVisitor.ValueResult.HALT;
+                        case BREAK:
+                            return visitor.visitContainerEnd();
+                        default:
+                            switch (value.visit(visitor)) {
+                                case HALT -> {
+                                    return StreamingTagVisitor.ValueResult.HALT;
+                                }
+                                case BREAK -> {
+                                    return visitor.visitContainerEnd();
+                                }
+                            }
+                        // If the above case matched, and the result of visiting the value wasn't HALT or BREAK, we will fall through to this case.
+                        case SKIP:
+                            ++i;
+                    }
+                }
+                return visitor.visitContainerEnd();
+            }
+        }
     }
 
     @Override

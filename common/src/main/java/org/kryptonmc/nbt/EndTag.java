@@ -8,10 +8,11 @@
  */
 package org.kryptonmc.nbt;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 
 /**
  * The tag representing the end of a compound tag.
@@ -31,17 +32,45 @@ public final class EndTag implements ScopedTag<@NotNull EndTag> {
      */
     public static final int ID = 0;
     /**
-     * The reader for reading end tags.
-     */
-    public static final @NotNull TagReader<@NotNull EndTag> READER = (input, depth) -> INSTANCE;
-    /**
-     * The writer for writing end tags.
-     */
-    public static final @NotNull TagWriter<@NotNull EndTag> WRITER = (output, value) -> {};
-    /**
      * The tag type for this tag.
      */
-    public static final @NotNull TagType<@NotNull EndTag> TYPE = new TagType<>("TAG_End", true, READER);
+    public static final @NotNull TagType<@NotNull EndTag> TYPE = new TagType<>() {
+        @Override
+        public @NotNull String name() {
+            return "END";
+        }
+
+        @Override
+        public @NotNull String prettyName() {
+            return "TAG_End";
+        }
+
+        @Override
+        public boolean isValue() {
+            return true;
+        }
+
+        @Override
+        public @NotNull EndTag load(final @NotNull DataInput input, final int depth) {
+            return EndTag.INSTANCE;
+        }
+
+        @Override
+        public StreamingTagVisitor.@NotNull ValueResult parse(final @NotNull DataInput input, final @NotNull StreamingTagVisitor visitor) {
+            return visitor.visitEnd();
+        }
+
+        @Override
+        public void skip(final @NotNull DataInput input, final int bytes) {
+            // Will never be anything to skip.
+        }
+
+        @Override
+        public void skip(final @NotNull DataInput input) {
+            // Will never be anything to skip.
+
+        }
+    };
 
     private EndTag() {
     }
@@ -62,8 +91,13 @@ public final class EndTag implements ScopedTag<@NotNull EndTag> {
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
+    public void visit(final @NotNull TagVisitor visitor) {
         visitor.visitEnd(this);
+    }
+
+    @Override
+    public StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor) {
+        return visitor.visitEnd();
     }
 
     @Override

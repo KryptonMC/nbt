@@ -19,4 +19,5 @@ module nbt.common {
     exports org.kryptonmc.nbt;
     exports org.kryptonmc.nbt.io;
     exports org.kryptonmc.nbt.util;
+    exports org.kryptonmc.nbt.visitor;
 }

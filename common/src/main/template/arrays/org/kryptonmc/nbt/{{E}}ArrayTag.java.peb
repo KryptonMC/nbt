@@ -1,8 +1,6 @@
 package org.kryptonmc.nbt;
 
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 import {{ConsumerImport}};
 
 /**
@@ -24,37 +22,9 @@ public sealed interface {{E}}ArrayTag extends ListCollectionTag<@NotNull {{E}}Ta
     int ID = 12;
 {% endif %}
     /**
-     * The reader for reading {{e}} array tags.
-     */
-    @NotNull TagReader<@NotNull {{E}}ArrayTag> READER = (input, depth) -> {
-        final int length = input.readInt();
-        final {{e}}[] data = new {{e}}[length];
-{% if E == 'Byte' %}
-        input.readFully(data);
-{% else %}
-        for (int i = 0; i < length; i++) {
-            data[i] = input.read{{E}}();
-        }
-{% endif %}
-        return new {{E}}ArrayTagImpl(data);
-    };
-    /**
-     * The writer for writing {{e}} array tags.
-     */
-    @NotNull TagWriter<@NotNull {{E}}ArrayTag> WRITER = (output, value) -> {
-        output.writeInt(value.getData().length);
-{% if E == 'Byte' %}
-        output.write(value.getData());
-{% else %}
-        for (final {{e}} element : value.getData()) {
-            output.write{{E}}(element);
-        }
-{% endif %}
-    };
-    /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull {{E}}ArrayTag> TYPE = new TagType<>("TAG_{{E}}_Array", false, READER);
+    @NotNull TagType<@NotNull {{E}}ArrayTag> TYPE = {{E}}ArrayTagImpl.createType();
 
     /**
      * Creates a new {{e}} array tag with the given data.

@@ -1,8 +1,6 @@
 package org.kryptonmc.nbt;
 
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 
 /**
  * A tag that holds a byte value.
@@ -34,17 +32,9 @@ public sealed interface {{E}}Tag extends NumberTag, ScopedTag<@NotNull {{E}}Tag>
      */
     int ID = {{ id }};
     /**
-     * The reader for reading {{e}} tags.
-     */
-    @NotNull TagReader<@NotNull {{E}}Tag> READER = (input, depth) -> of(input.read{{E}}());
-    /**
-     * The writer for writing {{e}} tags.
-     */
-    @NotNull TagWriter<@NotNull {{E}}Tag> WRITER = (output, value) -> output.write{{E}}(value.value());
-    /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull {{E}}Tag> TYPE = new TagType<>("TAG_{{E}}", true, READER);
+    @NotNull TagType<@NotNull {{E}}Tag> TYPE = {{E}}TagImpl.createType();
 
     /**
      * Gets {{ E == 'Int' ? "an" : "a" }} {{e}} tag representing the given value.

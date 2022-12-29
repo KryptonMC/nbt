@@ -26,8 +26,8 @@ final class TagUtil {
         final var input = ensureDataInput(inputStream);
         final var type = input.read();
         if (type == EndTag.ID) return EndTag.INSTANCE;
-        input.readUTF();
-        return Types.of(type).read(input, 0);
+        input.skipBytes(input.readUnsignedShort());
+        return Types.of(type).load(input, 0);
     }
 
     static NamedTag readNamedTag(final InputStream inputStream) throws IOException {
@@ -35,7 +35,7 @@ final class TagUtil {
         final var type = input.read();
         if (type == EndTag.ID) return END_NAMED;
         final var name = input.readUTF();
-        final var tag = Types.of(type).read(input, 0);
+        final var tag = Types.of(type).load(input, 0);
         return new NamedTag(name, tag);
     }
 

@@ -2,30 +2,45 @@ variants:
   byte:
     E: "Byte"
     e: "byte"
+    name: "BYTE"
+    prettyName: "TAG_Byte"
+    sizeBytes: 1
     type: "whole"
     cached: "all"
     id: 1
   short:
     E: "Short"
     e: "short"
+    name: "SHORT"
+    prettyName: "TAG_Short"
+    sizeBytes: 2
     type: "whole"
     cached: "some"
     id: 2
   int:
     E: "Int"
     e: "int"
+    name: "INT"
+    prettyName: "TAG_Int"
+    sizeBytes: 4
     type: "whole"
     cached: "some"
     id: 3
   long:
     E: "Long"
     e: "long"
+    name: "LONG"
+    prettyName: "TAG_Long"
+    sizeBytes: 8
     type: "whole"
     cached: "some"
     id: 4
   float:
     E: "Float"
     e: "float"
+    name: "FLOAT"
+    prettyName: "TAG_Float"
+    sizeBytes: 4
     type: "real"
     cached: "none"
     zero: "0.0F"
@@ -33,6 +48,9 @@ variants:
   double:
     E: "Double"
     e: "double"
+    name: "DOUBLE"
+    prettyName: "TAG_Double"
+    sizeBytes: 8
     type: "real"
     cached: "none"
     zero: "0.0D"

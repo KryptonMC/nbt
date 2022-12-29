@@ -1,8 +1,11 @@
 package org.kryptonmc.nbt;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 
 record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
 {% if cached != 'none' %}
@@ -19,6 +22,41 @@ record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
     }
 {% endif %}
 
+    static TagType<{{E}}Tag> createType() {
+        return new TagType.StaticSize<>() {
+            @Override
+            public @NotNull String name() {
+                return "{{name}}";
+            }
+
+            @Override
+            public @NotNull String prettyName() {
+                return "{{prettyName}}";
+            }
+
+            @Override
+            public boolean isValue() {
+                return true;
+            }
+
+            @Override
+            public int size() {
+                return {{sizeBytes}};
+            }
+
+            @Override
+            public @NotNull {{E}}Tag load(final @NotNull DataInput input, final int depth) throws IOException {
+                return {% if cached == 'none' %}{{E}}Tag.{% endif %}of(input.read{{E}}());
+            }
+
+            @Override
+            public StreamingTagVisitor.@NotNull ValueResult parse(final @NotNull DataInput input,
+                                                                  final @NotNull StreamingTagVisitor visitor) throws IOException {
+                return visitor.visit(input.read{{E}}());
+            }
+        };
+    }
+
     @Override
     public int id() {
         return ID;
@@ -31,12 +69,17 @@ record {{E}}TagImpl({{e}} value) implements {{E}}Tag {
 
     @Override
     public void write(final @NotNull DataOutput output) throws IOException {
-        WRITER.write(output, this);
+        output.write{{E}}(value);
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
+    public void visit(final @NotNull TagVisitor visitor) {
         visitor.visit{{E}}(this);
+    }
+
+    @Override
+    public StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor) {
+        return visitor.visit(value);
     }
 
     @Override

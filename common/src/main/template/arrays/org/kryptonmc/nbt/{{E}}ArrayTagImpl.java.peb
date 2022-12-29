@@ -1,5 +1,6 @@
 package org.kryptonmc.nbt;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,10 +10,60 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import {{ConsumerImport}};
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 
 final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<@NotNull {{E}}Tag> implements {{E}}ArrayTag {
 
     static final {{e}}[] EMPTY_DATA = new {{e}}[0];
+
+    static TagType<{{E}}ArrayTag> createType() {
+        return new TagType.VariableSize<>() {
+            @Override
+            public @NotNull String name() {
+                return "{{name}}";
+            }
+
+            @Override
+            public @NotNull String prettyName() {
+                return "{{prettyName}}";
+            }
+
+            @Override
+            public @NotNull {{E}}ArrayTag load(final @NotNull DataInput input, final int depth) throws IOException {
+                final int length = input.readInt();
+                final {{e}}[] data = new {{e}}[length];
+{% if E == 'Byte' %}
+                input.readFully(data);
+{% else %}
+                for (int i = 0; i < length; i++) {
+                    data[i] = input.read{{E}}();
+                }
+{% endif %}
+                return new {{E}}ArrayTagImpl(data);
+            }
+
+            @Override
+            public StreamingTagVisitor.@NotNull ValueResult parse(final @NotNull DataInput input,
+                                                                  final @NotNull StreamingTagVisitor visitor) throws IOException {
+                final int length = input.readInt();
+                final {{e}}[] data = new {{e}}[length];
+{% if E == 'Byte' %}
+                input.readFully(data);
+{% else %}
+                for (int i = 0; i < length; i++) {
+                    data[i] = input.read{{E}}();
+                }
+{% endif %}
+                return visitor.visit(data);
+            }
+
+            @Override
+            public void skip(final @NotNull DataInput input) throws IOException {
+                input.skipBytes(input.readInt(){{sizeMultiplier}});
+            }
+        };
+    }
 
     private {{e}}[] data;
 
@@ -113,12 +164,24 @@ final class {{E}}ArrayTagImpl extends AbstractListCollectionTag<@NotNull {{E}}Ta
 
     @Override
     public void write(final @NotNull DataOutput output) throws IOException {
-        WRITER.write(output, this);
+        output.writeInt(data.length);
+{% if E == 'Byte' %}
+        output.write(data);
+{% else %}
+        for (final {{e}} element : data) {
+            output.write{{E}}(element);
+        }
+{% endif %}
     }
 
     @Override
-    public <T> void visit(final @NotNull TagVisitor<@NotNull T> visitor) {
+    public void visit(final @NotNull TagVisitor visitor) {
         visitor.visit{{E}}Array(this);
+    }
+
+    @Override
+    public StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor) {
+        return visitor.visit(data);
     }
 
     @Override

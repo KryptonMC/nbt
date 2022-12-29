@@ -4,6 +4,7 @@
 {% endmacro %}
 package org.kryptonmc.nbt;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
@@ -17,38 +18,96 @@ import java.util.function.ObjIntConsumer;
 import java.util.function.ObjLongConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 import org.kryptonmc.nbt.util.ObjByteConsumer;
 import org.kryptonmc.nbt.util.ObjFloatConsumer;
 import org.kryptonmc.nbt.util.ObjShortConsumer;
 import org.kryptonmc.nbt.util.Types;
+import org.kryptonmc.nbt.visitor.StreamingTagVisitor;
+import org.kryptonmc.nbt.visitor.TagVisitor;
 import org.pcollections.HashTreePMap;
 
 abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements CompoundTag permits MutableCompoundTagImpl, ImmutableCompoundTagImpl {
 
-    static TagReader<@NotNull CompoundTag> createReader() {
-        return (input, depth) -> {
-            if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
-            final Map<String, Tag> result = new HashMap<>();
-            for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
-                final String name = input.readUTF();
-                final Tag tag = Types.of(type).read(input, depth + 1);
-                result.put(name, tag);
+    static TagType<CompoundTag> createType() {
+        return new TagType.VariableSize<>() {
+            @Override
+            public @NotNull String name() {
+                return "COMPOUND";
             }
-            return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
-        };
-    }
 
-    static TagWriter<@NotNull CompoundTag> createWriter() {
-        return (output, value) -> {
-            for (final var entry : value.getData().entrySet()) {
-                output.writeByte(entry.getValue().id());
-                if (entry.getValue().id() == EndTag.ID) continue;
-                output.writeUTF(entry.getKey());
-                entry.getValue().write(output);
+            @Override
+            public @NotNull String prettyName() {
+                return "TAG_Compound";
             }
-            output.writeByte(EndTag.ID);
+
+            @Override
+            public @NotNull CompoundTag load(final @NotNull DataInput input, final int depth) throws IOException {
+                if (depth > 512) throw new RuntimeException("Depth too high! Given depth " + depth + " is higher than maximum depth 512!");
+                final Map<String, Tag> result = new HashMap<>();
+                for (int type = input.readByte(); type != EndTag.ID; type = input.readByte()) {
+                    final String name = input.readUTF();
+                    final Tag tag = Types.of(type).load(input, depth + 1);
+                    result.put(name, tag);
+                }
+                return new ImmutableCompoundTagImpl(HashTreePMap.from(result));
+            }
+
+            @Override
+            public StreamingTagVisitor.@NotNull ValueResult parse(final @NotNull DataInput input,
+                                                                  final @NotNull StreamingTagVisitor visitor) throws IOException {
+                while (true) {
+                    final byte id = input.readByte();
+                    if (id == 0) return visitor.visitContainerEnd();
+
+                    final TagType<?> type = Types.of(id);
+                    switch (visitor.visitEntry(type)) {
+                        case HALT -> {
+                            return StreamingTagVisitor.ValueResult.HALT;
+                        }
+                        case BREAK -> {
+                            StringTagImpl.skipString(input);
+                            type.skip(input);
+                            skipAllNamesAndTypes(input);
+                            return visitor.visitContainerEnd();
+                        }
+                        case SKIP -> {
+                            StringTagImpl.skipString(input);
+                            type.skip(input);
+                        }
+                        default -> {
+                            final String name = input.readUTF();
+                            switch (visitor.visitEntry(type, name)) {
+                                case HALT -> {
+                                    return StreamingTagVisitor.ValueResult.HALT;
+                                }
+                                case BREAK -> {
+                                    type.skip(input);
+                                    skipAllNamesAndTypes(input);
+                                    return visitor.visitContainerEnd();
+                                }
+                                case SKIP -> type.skip(input);
+                                default -> {
+                                    if (type.parse(input, visitor) == StreamingTagVisitor.ValueResult.HALT) {
+                                        return StreamingTagVisitor.ValueResult.HALT;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            private static void skipAllNamesAndTypes(final @NotNull DataInput input) throws IOException {
+                for (byte id = input.readByte(); id != EndTag.ID; id = input.readByte()) {
+                    StringTagImpl.skipString(input);
+                    Types.of(id).skip(input);
+                }
+            }
+
+            @Override
+            public void skip(final @NotNull DataInput input) throws IOException {
+                skipAllNamesAndTypes(input);
+            }
         };
     }
 
@@ -171,12 +230,53 @@ abstract sealed class AbstractCompoundTag<T extends CompoundTag> implements Comp
 
     @Override
     public final void write(final @NotNull DataOutput output) throws IOException {
-        WRITER.write(output, this);
+        for (final var entry : getData().entrySet()) {
+            output.writeByte(entry.getValue().id());
+            if (entry.getValue().id() == EndTag.ID) continue;
+            output.writeUTF(entry.getKey());
+            entry.getValue().write(output);
+        }
+        output.writeByte(EndTag.ID);
     }
 
     @Override
-    public final <U> void visit(final @NotNull TagVisitor<@NotNull U> visitor) {
+    public final void visit(final @NotNull TagVisitor visitor) {
         visitor.visitCompound(this);
+    }
+
+    @Override
+    public final StreamingTagVisitor.@NotNull ValueResult visit(final @NotNull StreamingTagVisitor visitor) {
+        for (final var entry : getData().entrySet()) {
+            final Tag tag = entry.getValue();
+            final TagType<?> entryType = tag.type();
+            switch (visitor.visitEntry(entryType)) {
+                case HALT:
+                    return StreamingTagVisitor.ValueResult.HALT;
+                case BREAK:
+                    return visitor.visitContainerEnd();
+                case SKIP:
+                    break;
+                default:
+                    switch (visitor.visitEntry(entryType, entry.getKey())) {
+                        case HALT:
+                            return StreamingTagVisitor.ValueResult.HALT;
+                        case BREAK:
+                            return visitor.visitContainerEnd();
+                        case SKIP:
+                            break;
+                        default:
+                            switch (tag.visit(visitor)) {
+                                case HALT -> {
+                                    return StreamingTagVisitor.ValueResult.HALT;
+                                }
+                                case BREAK -> {
+                                    return visitor.visitContainerEnd();
+                                }
+                            }
+                    }
+            }
+        }
+        return visitor.visitContainerEnd();
     }
 
     @Override

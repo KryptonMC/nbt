@@ -9,8 +9,6 @@
 package org.kryptonmc.nbt;
 
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 
 /**
  * A tag that holds a string value.
@@ -30,17 +28,9 @@ public sealed interface StringTag extends Tag permits StringTagImpl {
      */
     int ID = 8;
     /**
-     * The reader for reading string tags.
-     */
-    @NotNull TagReader<@NotNull StringTag> READER = (input, depth) -> of(input.readUTF());
-    /**
-     * The writer for writing string tags.
-     */
-    @NotNull TagWriter<@NotNull StringTag> WRITER = (output, value) -> output.writeUTF(value.value());
-    /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull StringTag> TYPE = new TagType<>("TAG_String", true, READER);
+    @NotNull TagType<@NotNull StringTag> TYPE = StringTagImpl.createType();
 
     /**
      * Gets a string tag that represents the given value.

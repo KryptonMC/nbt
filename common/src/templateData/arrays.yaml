@@ -2,12 +2,21 @@ variants:
   byte:
     e: "byte"
     E: "Byte"
+    name: "BYTE[]"
+    prettyName: "TAG_Byte_Array"
+    sizeMultiplier: ""
     ConsumerImport: "org.kryptonmc.nbt.util.ByteConsumer"
   int:
     e: "int"
     E: "Int"
+    name: "INT[]"
+    prettyName: "TAG_Int_Array"
+    sizeMultiplier: " * 4"
     ConsumerImport: "java.util.function.IntConsumer"
   long:
     e: "long"
     E: "Long"
+    name: "LONG[]"
+    prettyName: "TAG_Long_Array"
+    sizeMultiplier: " * 8"
     ConsumerImport: "java.util.function.LongConsumer"

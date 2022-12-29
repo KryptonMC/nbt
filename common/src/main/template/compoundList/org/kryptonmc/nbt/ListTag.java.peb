@@ -10,8 +10,6 @@ import java.util.function.LongConsumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.kryptonmc.nbt.io.TagReader;
-import org.kryptonmc.nbt.io.TagWriter;
 import org.kryptonmc.nbt.util.ByteConsumer;
 import org.kryptonmc.nbt.util.FloatConsumer;
 import org.kryptonmc.nbt.util.ShortConsumer;
@@ -35,17 +33,9 @@ public sealed interface ListTag extends CollectionTag<@NotNull Tag>, ScopedTag<@
      */
     int ID = 9;
     /**
-     * The reader for reading list tags.
-     */
-    @NotNull TagReader<@NotNull ListTag> READER = AbstractListTag.createReader();
-    /**
-     * The writer for writing list tags.
-     */
-    @NotNull TagWriter<@NotNull ListTag> WRITER = AbstractListTag.createWriter();
-    /**
      * The tag type for this tag.
      */
-    @NotNull TagType<@NotNull ListTag> TYPE = new TagType<>("TAG_List", false, READER);
+    @NotNull TagType<@NotNull ListTag> TYPE = AbstractListTag.createType();
 
     /**
      * Gets the backing data for this list tag.

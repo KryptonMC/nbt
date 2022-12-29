@@ -55,8 +55,7 @@ public final class Types {
      * @throws IllegalArgumentException if the provided type ID is not valid
      */
     public static @NotNull TagType<? extends @NotNull Tag> of(final int type) {
-        if (type < 0 || type >= TYPES.length) throw new IllegalArgumentException("Invalid tag type ID: " + type);
-        return TYPES[type];
+        return type >= 0 && type < TYPES.length ? TYPES[type] : TagType.createInvalid(type);
     }
 
     private Types() {
